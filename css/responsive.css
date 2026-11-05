@@ -1,0 +1,195 @@
+/* =========================
+   TABLETS
+========================= */
+
+@media (max-width: 992px) {
+  .nav-links {
+    gap: 18px;
+  }
+
+  .nav-btn {
+    display: none;
+  }
+
+  .hero-content {
+    gap: 35px;
+  }
+
+  .hero-image > img {
+    height: 400px;
+  }
+
+  .specialty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doctor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-content {
+    gap: 35px;
+  }
+
+  .hero-stats {
+    gap: 25px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .section {
+    padding: 65px 0;
+  }
+
+  .navbar {
+    min-height: 70px;
+    flex-wrap: wrap;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0;
+    padding: 15px 0;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 12px 0;
+  }
+
+  .hero {
+    padding: 55px 0 80px;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text h1 {
+    font-size: 42px;
+    letter-spacing: -1px;
+  }
+
+  .hero-text > p {
+    font-size: 15px;
+  }
+
+  .hero-image {
+    margin-top: 15px;
+  }
+
+  .hero-image > img {
+    height: 350px;
+  }
+
+  .floating-card {
+    left: 10px;
+    bottom: 15px;
+  }
+
+  .hero-stats {
+    gap: 25px;
+    margin-top: 35px;
+  }
+
+  .quick-info {
+    grid-template-columns: 1fr;
+    margin-top: -30px;
+  }
+
+  .section-heading h2,
+  .why-text h2 {
+    font-size: 29px;
+  }
+
+  .specialty-grid,
+  .doctor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-card > img {
+    height: 320px;
+  }
+
+  .why-content {
+    grid-template-columns: 1fr;
+  }
+
+  .why-image img {
+    height: 320px;
+  }
+
+  .cta-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cta-content h2 {
+    font-size: 25px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .container {
+    width: 92%;
+  }
+
+  .hero-text h1 {
+    font-size: 35px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-stats {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .hero-stats h3 {
+    font-size: 21px;
+  }
+
+  .info-card {
+    padding: 20px;
+  }
+
+  .doctor-card > img {
+    height: 260px;
+  }
+}
