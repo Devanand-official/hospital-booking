@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Appointments | MedCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/appointments.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/my-appointments.css">
+
+    <script src="../js/appointments.js" defer></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="navbar container">
+
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">✚</span>
+                MedCare
+            </a>
+
+            <button class="menu-toggle" id="menuToggle"
+                aria-label="Toggle navigation">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="doctors.html">Doctors</a></li>
+                <li><a href="appointments.html">Book Appointment</a></li>
+                <li><a href="my-appointments.html" class="active">My Appointments</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <a href="appointments.html" class="btn btn-primary nav-btn">
+                Book Now
+            </a>
+
+        </nav>
+    </header>
+
+
+    <!-- PAGE BANNER -->
+    <section class="my-appointments-banner">
+        <div class="container">
+
+            <span class="eyebrow">PATIENT PORTAL</span>
+
+            <h1>My Appointments</h1>
+
+            <p>
+                View and manage your hospital appointment bookings.
+            </p>
+
+        </div>
+    </section>
+
+
+    <!-- APPOINTMENTS SECTION -->
+    <section class="my-appointments-section">
+
+        <div class="container">
+
+            <div class="appointments-heading">
+
+                <div>
+                    <h2>Your Bookings</h2>
+                    <p>All appointments saved in this browser.</p>
+                </div>
+
+                <a href="appointments.html" class="btn btn-primary">
+                    + New Appointment
+                </a>
+
+            </div>
+
+
+            <!-- APPOINTMENT SUMMARY -->
+            <div class="appointment-summary">
+
+                <div class="summary-card">
+                    <span>Total Appointments</span>
+                    <h2 id="totalAppointments">0</h2>
+                </div>
+
+                <div class="summary-card">
+                    <span>Pending</span>
+                    <h2 id="pendingAppointments">0</h2>
+                </div>
+
+                <div class="summary-card">
+                    <span>Cancelled</span>
+                    <h2 id="cancelledAppointments">0</h2>
+                </div>
+
+            </div>
+
+
+            <!-- APPOINTMENT LIST -->
+            <div id="appointmentsList" class="appointments-list"></div>
+
+
+            <!-- EMPTY STATE -->
+            <div id="emptyState" class="empty-state" hidden>
+
+                <div class="empty-icon">📅</div>
+
+                <h2>No Appointments Yet</h2>
+
+                <p>
+                    You haven't booked any appointments.
+                    Find a doctor and schedule your first visit.
+                </p>
+
+                <a href="doctors.html" class="btn btn-primary">
+                    Find a Doctor →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="container footer-grid">
+
+            <div class="footer-about">
+
+                <a href="../index.html" class="logo footer-logo">
+                    <span class="logo-icon">✚</span>
+                    MedCare
+                </a>
+
+                <p>
+                    Your trusted healthcare partner,
+                    providing compassionate and quality medical care.
+                </p>
+
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="../index.html">Home</a>
+                <a href="doctors.html">Doctors</a>
+                <a href="appointments.html">Book Appointment</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Us</h3>
+                <p>Phone: +91 98765 43210</p>
+                <p>Email: info@medcare.example</p>
+                <p>Chennai, Tamil Nadu</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © <span id="currentYear"></span>
+                MedCare. All rights reserved.
+            </p>
+             <p>
+                Developed by
+                <strong>Semasa Digital Solutions Pvt. Ltd.</strong>
+            </p>
+        </div>
+
+    </footer>
+
+</body>
+</html>
