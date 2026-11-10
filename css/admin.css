@@ -1,0 +1,102 @@
+/* =================================
+   SemasaCare - Admin Dashboard CSS
+================================= */
+
+/* Admin Page */
+
+body {
+    background: #f0f5f8;
+}
+
+/* Admin Header */
+
+.header-left h2 {
+    color: #103b49;
+}
+
+/* Admin Statistics */
+
+.stats-grid .stat-card {
+    border-left: 4px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-grid .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.stats-grid .stat-card:nth-child(1) {
+    border-left-color: #2694d6;
+}
+
+.stats-grid .stat-card:nth-child(2) {
+    border-left-color: #27a46d;
+}
+
+.stats-grid .stat-card:nth-child(3) {
+    border-left-color: #e69b30;
+}
+
+.stats-grid .stat-card:nth-child(4) {
+    border-left-color: #8865cf;
+}
+
+/* Quick Actions */
+
+.quick-actions .action-card {
+    min-height: 110px;
+    background: #ffffff;
+}
+
+.quick-actions .action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(7, 139, 140, 0.08);
+}
+
+/* Recent Appointments */
+
+.dashboard-table th:first-child,
+.dashboard-table td:first-child {
+    padding-left: 18px;
+}
+
+.dashboard-table th:last-child,
+.dashboard-table td:last-child {
+    padding-right: 18px;
+}
+
+/* System Information */
+
+.system-card {
+    border-top: 3px solid #078b8c;
+}
+
+.system-info div {
+    background: #f5fafb;
+    padding: 12px 15px;
+    border-radius: 7px;
+}
+
+/* Admin Page Responsive */
+
+@media (max-width: 850px) {
+    .stats-grid .stat-card:hover {
+        transform: none;
+    }
+
+    .quick-actions .action-card:hover {
+        transform: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-actions .action-card {
+        min-height: 95px;
+        padding: 15px 8px;
+    }
+
+    .system-info div {
+        padding: 10px;
+    }
+}

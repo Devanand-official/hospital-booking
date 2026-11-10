@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration | SemasaCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/register.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="register-container">
+
+        <div class="register-header">
+            <a href="../index.html" class="brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </a>
+
+            <h1>Create Your Account</h1>
+            <p>Register as a patient and take the first step towards better healthcare.</p>
+        </div>
+
+        <form id="registerForm" action="#" method="post">
+
+            <h2>Personal Information</h2>
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName"
+                       placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email"
+                           placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone"
+                           placeholder="Enter phone number"
+                           pattern="[0-9]{10}" maxlength="10" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address"
+                          placeholder="Enter your address"
+                          rows="3" required></textarea>
+            </div>
+
+            <h2>Account Security</h2>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                       placeholder="Create a password"
+                       minlength="8" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword"
+                       name="confirmPassword"
+                       placeholder="Re-enter your password"
+                       minlength="8" required>
+            </div>
+
+            <div class="terms-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">
+                    I agree to the Terms and Conditions and Privacy Policy.
+                </label>
+            </div>
+
+            <p id="registerMessage" class="register-message"></p>
+
+            <button type="submit" class="register-btn">
+                Create Patient Account
+            </button>
+
+        </form>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="login.html">Login here</a>
+        </div>
+
+        <a href="../index.html" class="back-home">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/register.js"></script>
+
+</body>
+</html>

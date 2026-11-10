@@ -1,13 +1,6 @@
-
-/* =========================================
-   SEMASACARE - AUTHENTICATION MODULE
-   Frontend demonstration only
-========================================= */
-
 const SemasaAuth = (() => {
 
-    // Demo accounts for frontend testing only.
-    // Replace with server-side authentication in production.
+    // Demo accounts for testing
     const demoUsers = [
         {
             id: 1,
@@ -60,7 +53,7 @@ const SemasaAuth = (() => {
         }
     ];
 
-    // Dashboard locations
+    // Dashboard pages for each role
     const roleDashboards = {
         admin: "admin-dashboard.html",
         receptionist: "receptionist-dashboard.html",
@@ -71,13 +64,82 @@ const SemasaAuth = (() => {
         accountant: "accountant-dashboard.html"
     };
 
+    // Get registered users from localStorage
+    function getRegisteredUsers() {
+        try {
+            const users = JSON.parse(
+                localStorage.getItem("semasacareUsers")
+            );
 
-    // Authenticate user
+            return Array.isArray(users) ? users : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    // Save registered users
+    function saveRegisteredUsers(users) {
+        localStorage.setItem(
+            "semasacareUsers",
+            JSON.stringify(users)
+        );
+    }
+
+    // Register a new patient
+    function register(userData) {
+
+        const users = getRegisteredUsers();
+
+        const allUsers = [...demoUsers, ...users];
+
+        const email = userData.email.trim().toLowerCase();
+
+        // Check duplicate email
+        const emailExists = allUsers.some(
+            user => user.email.toLowerCase() === email
+        );
+
+        if (emailExists) {
+            return {
+                success: false,
+                message: "This email address is already registered."
+            };
+        }
+
+        // Create patient account
+        const newUser = {
+            id: Date.now(),
+            name: userData.name.trim(),
+            email: email,
+            phone: userData.phone,
+            dob: userData.dob,
+            gender: userData.gender,
+            address: userData.address,
+            password: userData.password,
+            role: "patient"
+        };
+
+        users.push(newUser);
+
+        saveRegisteredUsers(users);
+
+        return {
+            success: true,
+            message: "Patient account created successfully."
+        };
+    }
+
+    // Login function
     function login(email, password) {
 
-        const user = demoUsers.find((item) =>
-            item.email.toLowerCase() === email.toLowerCase() &&
-            item.password === password
+        const registeredUsers = getRegisteredUsers();
+
+        const allUsers = [...demoUsers, ...registeredUsers];
+
+        const user = allUsers.find(
+            user =>
+                user.email.toLowerCase() === email.trim().toLowerCase() &&
+                user.password === password
         );
 
         if (!user) {
@@ -87,7 +149,7 @@ const SemasaAuth = (() => {
             };
         }
 
-        // Store session information
+        // Create login session without storing password
         const session = {
             id: user.id,
             name: user.name,
@@ -107,55 +169,42 @@ const SemasaAuth = (() => {
         };
     }
 
-
     // Get current logged-in user
     function getCurrentUser() {
-
-        const session = localStorage.getItem("semasacareSession");
-
-        if (!session) {
-            return null;
-        }
-
         try {
-            return JSON.parse(session);
+            return JSON.parse(
+                localStorage.getItem("semasacareSession")
+            );
         } catch (error) {
-            localStorage.removeItem("semasacareSession");
             return null;
         }
     }
 
-
-    // Check whether user is logged in
+    // Check login status
     function isLoggedIn() {
         return getCurrentUser() !== null;
     }
 
-
-    // Redirect according to assigned role
+    // Redirect according to role
     function redirectByRole(role) {
 
         const dashboard = roleDashboards[role];
 
         if (!dashboard) {
-            alert("Dashboard not available for this role.");
+            console.error("Invalid user role.");
             return;
         }
 
         window.location.href = "dashboards/" + dashboard;
     }
 
-
-    // Logout user
+    // Logout
     function logout() {
-
         localStorage.removeItem("semasacareSession");
-
         window.location.href = "../login.html";
     }
 
-
-    // Protect pages from unauthenticated access
+    // Require login before accessing a page
     function requireLogin() {
 
         if (!isLoggedIn()) {
@@ -166,8 +215,7 @@ const SemasaAuth = (() => {
         return true;
     }
 
-
-    // Check whether the logged-in user has a required role
+    // Restrict access by role
     function requireRole(allowedRoles) {
 
         const user = getCurrentUser();
@@ -178,7 +226,7 @@ const SemasaAuth = (() => {
         }
 
         if (!allowedRoles.includes(user.role)) {
-            alert("You do not have permission to access this page.");
+            alert("You are not authorized to access this page.");
             redirectByRole(user.role);
             return false;
         }
@@ -186,9 +234,8 @@ const SemasaAuth = (() => {
         return true;
     }
 
-
-    // Public authentication functions
     return {
+        register,
         login,
         logout,
         getCurrentUser,

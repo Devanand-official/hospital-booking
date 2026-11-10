@@ -1,0 +1,234 @@
+/* ==============================
+   SemasaCare - Registration Page
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f7fa;
+    color: #263238;
+    min-height: 100vh;
+    padding: 30px 15px;
+}
+
+/* Main Container */
+
+.register-container {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 35px 40px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #078b8c;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.brand i {
+    font-size: 30px;
+}
+
+.register-header h1 {
+    font-size: 28px;
+    color: #163b4a;
+    margin-bottom: 10px;
+}
+
+.register-header p {
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Form Headings */
+
+#registerForm h2 {
+    font-size: 18px;
+    color: #078b8c;
+    margin: 25px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e3eeee;
+}
+
+/* Form Layout */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d5e1e5;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: #ffffff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #078b8c;
+    box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.12);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* Terms and Conditions */
+
+.terms-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 20px 0;
+    font-size: 13px;
+    color: #52616b;
+    line-height: 1.5;
+}
+
+.terms-group input {
+    margin-top: 3px;
+    accent-color: #078b8c;
+}
+
+.terms-group label {
+    cursor: pointer;
+}
+
+/* Registration Button */
+
+.register-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 7px;
+    background: #078b8c;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.register-btn:hover {
+    background: #066f70;
+}
+
+/* Messages */
+
+.register-message {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+    min-height: 18px;
+}
+
+/* Login Link */
+
+.login-link {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.login-link a {
+    color: #078b8c;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Back to Home */
+
+.back-home {
+    display: block;
+    text-align: center;
+    margin-top: 22px;
+    color: #078b8c;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.back-home:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+
+@media (max-width: 600px) {
+    body {
+        padding: 15px 10px;
+    }
+
+    .register-container {
+        padding: 25px 20px;
+    }
+
+    .register-header h1 {
+        font-size: 23px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .register-container {
+        padding: 22px 15px;
+    }
+
+    .register-header h1 {
+        font-size: 21px;
+    }
+}

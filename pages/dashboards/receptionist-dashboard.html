@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receptionist Dashboard | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+
+                <div>
+                    <h3 id="receptionistName">Receptionist</h3>
+                    <p>Receptionist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="receptionist-dashboard.html" class="menu-item active">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="../appointments.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Manage Appointments</span>
+                </a>
+
+                <a href="../patient-registration.html" class="menu-item">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Register Patient</span>
+                </a>
+
+                <a href="../patient-list.html" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Patient Records</span>
+                </a>
+
+                <a href="../doctors.html" class="menu-item">
+                    <i class="fas fa-user-doctor"></i>
+                    <span>Doctors</span>
+                </a>
+
+                <p class="menu-heading">RECEPTION SERVICES</p>
+
+                <a href="../appointments.html" class="menu-item">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>New Appointment</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button id="menuToggle" class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Receptionist Dashboard</h2>
+                        <p>Welcome back to SemasaCare!</p>
+                    </div>
+
+                </div>
+
+                <div class="header-right">
+
+                    <button class="notification-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+
+                    <div class="header-user">
+
+                        <div class="header-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+
+                        <div>
+                            <h4 id="headerName">Receptionist</h4>
+                            <p>Receptionist</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- Dashboard Content -->
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+
+                    <div>
+                        <h1>Reception Overview</h1>
+                        <p>Manage patient registration and hospital appointments.</p>
+                    </div>
+
+                    <div class="current-date" id="currentDate"></div>
+
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon patients-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Patients</p>
+                            <h2 id="totalPatients">0</h2>
+                        </div>
+                        
+
+                    </div>
+
+                    
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon doctors-icon">
+                            <i class="fas fa-user-doctor"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Doctors</p>
+                            <h2 id="totalDoctors">0</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon appointments-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Appointments</p>
+                            <h2 id="totalAppointments">0</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon staff-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+
+                        <div>
+                            <p>Pending Appointments</p>
+                            <h2 id="pendingAppointments">0</h2>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="section-card">
+
+                    <div class="section-heading">
+                        <h2>Quick Actions</h2>
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <a href="../patient-registration.html" class="action-card">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Register Patient</span>
+                        </a>
+
+                        <a href="../appointments.html" class="action-card">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Manage Appointments</span>
+                        </a>
+
+                        <a href="../patient-list.html" class="action-card">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Patient Records</span>
+                        </a>
+
+                        <a href="../doctors.html" class="action-card">
+                            <i class="fas fa-user-doctor"></i>
+                            <span>View Doctors</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- Recent Appointments -->
+                <div class="section-card">
+
+                    <div class="section-heading">
+                        <h2>Recent Appointments</h2>
+
+                        <a href="../appointments.html" class="view-all">
+                            View All
+                        </a>
+                    </div>
+
+                    <div class="table-container">
+
+                        <table class="dashboard-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Patient Name</th>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentAppointments">
+                                <tr>
+                                    <td colspan="5" class="empty-message">
+                                        No appointments available.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- Reception Information -->
+                <div class="section-card system-card">
+
+                    <div class="section-heading">
+                        <h2>Reception Information</h2>
+                    </div>
+
+                    <div class="system-info">
+
+                        <div>
+                            <i class="fas fa-hospital"></i>
+                            <span>SemasaCare Hospital</span>
+                        </div>
+
+                        <div>
+                            <i class="fas fa-user-shield"></i>
+                            <span>Receptionist Access</span>
+                        </div>
+
+                        <div>
+                            <i class="fas fa-heart"></i>
+                            <span>Your Health, Our Priority</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/receptionist.js"></script>
+
+</body>
+</html>
