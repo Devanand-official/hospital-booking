@@ -1,0 +1,194 @@
+
+/* =========================================
+   SemasaCare - Patient Registration
+========================================= */
+
+/* Registration card */
+.registration-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.registration-card .section-heading {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #edf1f2;
+}
+
+.registration-card .section-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.registration-card .section-heading h2 i {
+    color: #078b8c;
+}
+
+/* Form grid */
+.registration-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #294956;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dce6e9;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #263238;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input,
+.form-group select {
+    min-height: 44px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #078b8c;
+    box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.10);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a0adb3;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Form buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid #edf1f2;
+}
+
+.reset-btn,
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 7px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.reset-btn {
+    background: #edf2f4;
+    color: #52656d;
+}
+
+.reset-btn:hover {
+    background: #dfe8eb;
+}
+
+.submit-btn {
+    background: #078b8c;
+    color: #ffffff;
+}
+
+.submit-btn:hover {
+    background: #066f72;
+    transform: translateY(-1px);
+}
+
+/* Registration messages */
+.form-message {
+    display: none;
+    padding: 12px 15px;
+    margin-top: 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.form-message.success {
+    display: block;
+    background: #e5f7ed;
+    color: #218c55;
+    border: 1px solid #bce8ce;
+}
+
+.form-message.error {
+    display: block;
+    background: #fdebea;
+    color: #c43e3a;
+    border: 1px solid #f4c5c2;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    .registration-card {
+        padding: 20px 16px;
+    }
+
+    .registration-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .reset-btn,
+    .submit-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .registration-card {
+        padding: 16px 12px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 12px;
+    }
+}

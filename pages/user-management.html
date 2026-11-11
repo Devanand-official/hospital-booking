@@ -7,178 +7,333 @@
     <title>User Management | SemasaCare</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/user-management.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
-    <div class="user-management-container">
+<div class="dashboard-container">
 
-        <header class="page-header">
+    <!-- ADMIN SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
             <div>
-                <h1>User Management</h1>
-                <p>Manage SemasaCare patients and staff accounts.</p>
+                <h3>Administrator</h3>
+                <p>System Admin</p>
             </div>
+        </div>
 
-            <a href="dashboards/admin-dashboard.html" class="back-button">
-                Back to Dashboard
+        <nav class="sidebar-menu">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="dashboards/admin-dashboard.html" class="menu-item">
+                <i class="fas fa-chart-pie"></i>
+                Dashboard
             </a>
-        </header>
 
-        <section class="user-summary">
-            <div class="summary-card">
-                <h3>Total Users</h3>
-                <p id="totalUsers">0</p>
-            </div>
+            <a href="user-management.html" class="menu-item active">
+                <i class="fas fa-users"></i>
+                User Management
+            </a>
 
-            <div class="summary-card">
-                <h3>Patients</h3>
-                <p id="totalPatients">0</p>
-            </div>
+            <a href="patient-list.html" class="menu-item">
+                <i class="fas fa-user-injured"></i>
+                Patient Records
+            </a>
 
-            <div class="summary-card">
-                <h3>Staff</h3>
-                <p id="totalStaff">0</p>
-            </div>
-        </section>
+            <a href="appointments.html" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                Appointments
+            </a>
 
-        <section class="user-management-card">
+            <a href="doctors.html" class="menu-item">
+                <i class="fas fa-user-md"></i>
+                Doctors
+            </a>
 
-            <div class="section-heading">
-                <div>
-                    <h2>All Users</h2>
-                    <p>View and manage registered accounts.</p>
-                </div>
+            <a href="#" class="menu-item">
+                <i class="fas fa-hospital"></i>
+                Departments
+            </a>
 
-                <input
-                    type="search"
-                    id="searchUser"
-                    placeholder="Search by name or email..."
-                    aria-label="Search users"
-                >
-            </div>
+            <p class="menu-heading">HOSPITAL SERVICES</p>
 
-            <div class="filter-area">
-                <label for="roleFilter">Filter by role:</label>
+            <a href="#" class="menu-item">
+                <i class="fas fa-pills"></i>
+                Pharmacy
+            </a>
 
-                <select id="roleFilter">
-                    <option value="all">All Users</option>
-                    <option value="patient">Patients</option>
-                    <option value="admin">Administrators</option>
-                    <option value="receptionist">Receptionists</option>
-                    <option value="doctor">Doctors</option>
-                    <option value="pharmacist">Pharmacists</option>
-                    <option value="laboratory">Laboratory Technicians</option>
-                    <option value="accountant">Accountants</option>
-                </select>
-            </div>
+            <a href="#" class="menu-item">
+                <i class="fas fa-flask"></i>
+                Laboratory
+            </a>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Role</th>
-                            <th>Account Type</th>
-                        </tr>
-                    </thead>
+            <a href="#" class="menu-item">
+                <i class="fas fa-file-invoice-dollar"></i>
+                Billing & Payments
+            </a>
 
-                    <tbody id="usersTableBody">
-                        <tr>
-                            <td colspan="5">Loading users...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <p class="menu-heading">SYSTEM</p>
 
-            <p id="userMessage" class="user-message" aria-live="polite"></p>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                Reports
+            </a>
 
+        </nav>
 
-<section class="create-staff-card">
-    <div class="section-heading">
-        <div>
-            <h2>Create Staff Account</h2>
-            <p>Add a new employee to SemasaCare.</p>
-        </div>
-    </div>
-
-    <form id="createStaffForm">
-
-        <div class="staff-form-grid">
-
-            <div class="form-group">
-                <label for="staffName">Full Name</label>
-                <input
-                    type="text"
-                    id="staffName"
-                    placeholder="Enter full name"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="staffEmail">Email Address</label>
-                <input
-                    type="email"
-                    id="staffEmail"
-                    placeholder="Enter email address"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="staffPhone">Phone Number</label>
-                <input
-                    type="tel"
-                    id="staffPhone"
-                    placeholder="Enter phone number"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="staffRole">Staff Role</label>
-                <select id="staffRole" required>
-                    <option value="">Select staff role</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="receptionist">Receptionist</option>
-                    <option value="pharmacist">Pharmacist</option>
-                    <option value="laboratory">Laboratory Technician</option>
-                    <option value="accountant">Accountant</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="staffPassword">Temporary Password</label>
-                <input
-                    type="password"
-                    id="staffPassword"
-                    placeholder="Minimum 8 characters"
-                    minlength="8"
-                    required
-                >
-            </div>
-
-        </div>
-
-        <button type="submit" class="create-staff-btn">
-            Create Staff Account
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
         </button>
 
-        <p id="staffMessage" aria-live="polite"></p>
+    </aside>
 
-    </form>
-</section>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
+        <header class="top-header">
+
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <h2>User Management</h2>
+            </div>
+
+            <div class="header-right">
+                <div class="header-user">
+                    <div class="header-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+
+                        <div>
+                            <h4 id="adminName">Administrator</h4>
+                            <p>Admin</p>
+                        </div>
+                </div>
+            </div>
+
+        </header>
+
+        <section class="dashboard-content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>User Management</h1>
+                    <p>Manage SemasaCare patients and staff accounts.</p>
+                </div>
+            </div>
+
+            <!-- USER SUMMARY -->
+            <section class="user-summary">
+
+                <div class="summary-card">
+                    <h3>Total Users</h3>
+                    <p id="totalUsers">0</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Patients</h3>
+                    <p id="totalPatients">0</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Staff</h3>
+                    <p id="totalStaff">0</p>
+                </div>
+
+            </section>
+
+            <!-- ALL USERS -->
+            <section class="user-management-card">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>All Users</h2>
+                        <p>View and manage registered accounts.</p>
+                    </div>
+
+                    <input
+                        type="search"
+                        id="searchUser"
+                        placeholder="Search by name or email..."
+                        aria-label="Search users"
+                    >
+                </div>
+
+                <div class="filter-area">
+                    <label for="roleFilter">Filter by role:</label>
+
+                    <select id="roleFilter">
+                        <option value="all">All Users</option>
+                        <option value="patient">Patients</option>
+                        <option value="admin">Administrators</option>
+                        <option value="receptionist">Receptionists</option>
+                        <option value="doctor">Doctors</option>
+                        <option value="pharmacist">Pharmacists</option>
+                        <option value="laboratory">Laboratory Technicians</option>
+                        <option value="accountant">Accountants</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Account Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="5">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="userMessage" class="user-message"
+                   aria-live="polite"></p>
+
+            </section>
+
+            <!-- CREATE STAFF -->
+            <section class="create-staff-card">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Create Staff Account</h2>
+                        <p>Add a new employee to SemasaCare.</p>
+                    </div>
+                </div>
+
+                <form id="createStaffForm">
+
+                    <div class="staff-form-grid">
+
+                        <div class="form-group">
+                            <label for="staffName">Full Name</label>
+                            <input
+                                type="text"
+                                id="staffName"
+                                placeholder="Enter full name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="staffEmail">Email Address</label>
+                            <input
+                                type="email"
+                                id="staffEmail"
+                                placeholder="Enter email address"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="staffPhone">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="staffPhone"
+                                placeholder="Enter phone number"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="staffRole">Staff Role</label>
+                            <select id="staffRole" required>
+                                <option value="">Select staff role</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="receptionist">Receptionist</option>
+                                <option value="pharmacist">Pharmacist</option>
+                                <option value="laboratory">Laboratory Technician</option>
+                                <option value="accountant">Accountant</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="staffPassword">Temporary Password</label>
+                            <input
+                                type="password"
+                                id="staffPassword"
+                                placeholder="Minimum 8 characters"
+                                minlength="8"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="create-staff-btn">
+                        Create Staff Account
+                    </button>
+
+                    <p id="staffMessage" aria-live="polite"></p>
+
+                </form>
+
+            </section>
 
         </section>
-        
 
-    </div>
+    </main>
 
-    <script src="../js/auth.js"></script>
-    <script src="../js/user-management.js"></script>
+</div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/user-management.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sidebar = document.querySelector(".sidebar");
+    const menuToggle = document.getElementById("menuToggle");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminName = document.getElementById("adminName");
+
+    const currentUser = SemasaAuth.getCurrentUser();
+
+    if (currentUser && adminName) {
+        adminName.textContent = currentUser.name;
+    }
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("active");
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            localStorage.removeItem("semasacareSession");
+            window.location.href = "login.html";
+        });
+    }
+
+});
+</script>
 
 </body>
 </html>

@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Records | SemasaCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/patient-registration.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .records-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .records-toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .records-toolbar input {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 14px;
+            border: 1px solid #d5e0e5;
+            border-radius: 7px;
+        }
+
+        .records-count {
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .dashboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        .dashboard-table th,
+        .dashboard-table td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8eef1;
+        }
+
+        .dashboard-table th {
+            background: #f3f8fa;
+            color: #334155;
+        }
+
+        .view-btn {
+            background: #e0f2f1;
+            color: #087f78;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        .record-details {
+            margin-top: 20px;
+            padding: 18px;
+            background: #f4f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .record-details p {
+            margin: 9px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+        <i class="fas fa-heartbeat"></i>
+        <span>SemasaCare</span>
+    </div>
+
+    <div class="sidebar-profile">
+        <div class="profile-icon">
+            <i class="fas fa-user-tie"></i>
+        </div>
+
+        <div>
+            <h3 id="staffName">Receptionist</h3>
+            <p id="staffRole">Receptionist</p>
+        </div>
+    </div>
+
+    <nav class="sidebar-menu">
+
+        <p class="menu-heading">MAIN MENU</p>
+
+        <a href="dashboards/receptionist-dashboard.html" class="menu-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="appointments.html" class="menu-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Manage Appointments</span>
+        </a>
+
+        <a href="patient-registration.html" class="menu-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Register Patient</span>
+        </a>
+
+        <a href="patient-list.html" class="menu-item active">
+            <i class="fas fa-user-injured"></i>
+            <span>Patient Records</span>
+        </a>
+
+        <a href="doctors.html" class="menu-item">
+            <i class="fas fa-user-doctor"></i>
+            <span>Doctors</span>
+        </a>
+
+        <p class="menu-heading">RECEPTION SERVICES</p>
+
+        <a href="appointments.html" class="menu-item">
+            <i class="fas fa-calendar-plus"></i>
+            <span>New Appointment</span>
+        </a>
+
+    </nav>
+
+    <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </button>
+
+</aside>
+
+
+    <main class="main-content">
+
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Patient Records</h2>
+            </div>
+
+            <div class="header-right">
+                <div class="header-user">
+
+                        <div class="header-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+
+                        <div>
+                            <h4 id="headerName">Receptionist</h4>
+                            <p>Receptionist</p>
+                        </div>
+
+                    </div>
+            </div>
+        </header>
+
+        <section class="dashboard-content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Patient Records</h1>
+                    <p>View and search registered patient information.</p>
+                </div>
+            </div>
+
+            <div class="records-card">
+
+                <div class="records-toolbar">
+                    <input
+                        type="search"
+                        id="searchPatient"
+                        placeholder="Search by patient name, email or phone..."
+                    >
+                </div>
+
+                <p class="records-count" id="recordsCount">
+                    Total patients: 0
+                </p>
+
+                <div class="table-container">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Patient Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="patientsTableBody">
+                            <tr>
+                                <td colspan="6" class="empty-message">
+                                    Loading patient records...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="record-details" id="recordDetails"></div>
+
+            </div>
+
+        </section>
+    </main>
+</div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/patient-list.js"></script>
+
+</body>
+</html>
