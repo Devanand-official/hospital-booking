@@ -52,13 +52,33 @@ document.addEventListener("DOMContentLoaded", function () {
         headerNameElement.textContent = staffName;
     }
 
-    if (staffRoleElement) {
-        staffRoleElement.textContent = currentUser.role;
-    }
+   if (staffRoleElement) {
+    const roleName = {
+        admin: "System Admin",
+        receptionist: "Receptionist",
+        doctor: "Doctor",
+        pharmacist: "Pharmacist",
+        laboratory: "Laboratory Technician",
+        accountant: "Accountant"
+    };
 
-    if (headerRoleElement) {
-        headerRoleElement.textContent = currentUser.role;
-    }
+    staffRoleElement.textContent =
+        roleName[currentUser.role] || currentUser.role;
+}
+
+   if (headerRoleElement) {
+    const roleName = {
+        admin: "System Admin",
+        receptionist: "Receptionist",
+        doctor: "Doctor",
+        pharmacist: "Pharmacist",
+        laboratory: "Laboratory Technician",
+        accountant: "Accountant"
+    };
+
+    headerRoleElement.textContent =
+        roleName[currentUser.role] || currentUser.role;
+}
 
 
     // =========================================

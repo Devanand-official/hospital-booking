@@ -198,11 +198,18 @@ const SemasaAuth = (() => {
         window.location.href = "dashboards/" + dashboard;
     }
 
-    // Logout
-    function logout() {
-        localStorage.removeItem("semasacareSession");
+   // Logout
+function logout() {
+    localStorage.removeItem("semasacareSession");
+
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes("/dashboards/")) {
         window.location.href = "../login.html";
+    } else {
+        window.location.href = "login.html";
     }
+}
 
     // Require login before accessing a page
     function requireLogin() {

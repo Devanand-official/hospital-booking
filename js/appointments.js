@@ -29,7 +29,7 @@ function getAppointments() {
     try {
 
         const data = JSON.parse(
-            localStorage.getItem("medcareAppointments")
+            localStorage.getItem("semasacareAppointments")
         );
 
         return Array.isArray(data) ? data : [];
@@ -52,7 +52,7 @@ function saveAppointments(appointments) {
     try {
 
         localStorage.setItem(
-            "medcareAppointments",
+            "semasacareAppointments",
             JSON.stringify(appointments)
         );
 

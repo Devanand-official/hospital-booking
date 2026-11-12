@@ -16,23 +16,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-// Display logged-in staff details.
-document.getElementById("staffName").textContent = currentUser.name;
-document.getElementById("headerName").textContent = currentUser.name;
 
-const staffRoleElement = document.getElementById("staffRole");
-if (staffRoleElement) {
-    staffRoleElement.textContent =
-        currentUser.role === "admin" ? "System Admin" : "Receptionist";
+// Display consistent staff details.
+const isAdmin = currentUser.role === "admin";
+
+const roleNames = {
+    admin: "System Admin",
+    receptionist: "Receptionist",
+    doctor: "Doctor",
+    pharmacist: "Pharmacist",
+    laboratory: "Laboratory Technician",
+    accountant: "Accountant"
+};
+
+const displayName = isAdmin ? "Administrator" : currentUser.name;
+const displayRole = roleNames[currentUser.role] || currentUser.role;
+
+// Sidebar profile
+document.getElementById("staffName").textContent = displayName;
+document.getElementById("staffRole").textContent = displayRole;
+
+// Switch sidebar icon based on role
+const profileIcon = document.querySelector(".profile-icon i");
+
+if (profileIcon) {
+    profileIcon.className = isAdmin
+        ? "fas fa-user-shield"
+        : "fas fa-user-tie";
 }
 
-// Show the correct sidebar based on the logged-in role.
+// Header profile
+document.getElementById("headerName").textContent =
+    isAdmin ? "Hospital Admin" : currentUser.name;
 
-// Update sidebar profile.
-document.getElementById("staffName").textContent = currentUser.name;
+const headerRoleElement = document.getElementById("headerRole");
 
-document.getElementById("staffRole").textContent =
-    currentUser.role === "admin" ? "System Admin" : "Receptionist";
+if (headerRoleElement) {
+    headerRoleElement.textContent = displayRole;
+}
+// Switch navbar icon based on role
+const headerIcon = document.querySelector(".header-avatar i");
+
+if (headerIcon) {
+    headerIcon.className = isAdmin
+        ? "fas fa-user-shield"
+        : "fas fa-user-tie";
+}
 
 // Only replace the sidebar menu for Admin.
 // Receptionist keeps the original dashboard sidebar.

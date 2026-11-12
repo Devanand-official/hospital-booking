@@ -1,8 +1,6 @@
-
 // ==========================================
-// MEDCARE APPOINTMENT BOOKING SYSTEM
+// SEMASACARE APPOINTMENT BOOKING SYSTEM
 // ==========================================
-
 
 // 1. DOCTOR DATABASE
 
@@ -102,7 +100,7 @@ function getAppointments() {
     try {
         const savedAppointments =
             JSON.parse(
-                localStorage.getItem("medcareAppointments")
+                localStorage.getItem("semasacareAppointments")
             );
 
         return Array.isArray(savedAppointments)
@@ -124,7 +122,7 @@ function getAppointments() {
 
 function generateAppointmentID() {
 
-    return "MC" +
+    return "SC" +
         Date.now().toString().slice(-8) +
         Math.floor(Math.random() * 100);
 
@@ -288,7 +286,7 @@ appointmentForm.addEventListener("submit", function(event) {
         appointments.push(appointment);
 
         localStorage.setItem(
-            "medcareAppointments",
+            "semasacareAppointments",
             JSON.stringify(appointments)
         );
 
