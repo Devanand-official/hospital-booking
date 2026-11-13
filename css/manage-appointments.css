@@ -1,0 +1,384 @@
+
+/* ==========================================
+   SEMASACARE - MANAGE APPOINTMENTS
+========================================== */
+
+/* PAGE HEADING */
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    color: #183b4e;
+    margin-bottom: 7px;
+}
+
+.page-heading p {
+    color: #64748b;
+    margin: 0;
+}
+
+.new-appointment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 18px;
+    background: #087f78;
+    color: #fff;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.new-appointment-btn:hover {
+    background: #06645f;
+}
+
+
+/* APPOINTMENT SUMMARY */
+
+.appointment-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.appointment-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    min-width: 0;
+}
+
+.summary-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.total-icon {
+    background: #e0f2f1;
+    color: #087f78;
+}
+
+.pending-icon {
+    background: #fff4dc;
+    color: #d99418;
+}
+
+.confirmed-icon {
+    background: #e1f3ff;
+    color: #1683bd;
+}
+
+.completed-icon {
+    background: #e5f5e9;
+    color: #238449;
+}
+
+.appointment-summary-card p {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0 0 7px;
+}
+
+.appointment-summary-card h3 {
+    color: #183b4e;
+    font-size: 25px;
+    margin: 0;
+}
+
+
+/* APPOINTMENT MANAGEMENT CARD */
+
+.appointment-management-card {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    min-width: 0;
+}
+
+.appointment-management-card .section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.appointment-management-card .section-heading h2 {
+    color: #183b4e;
+    font-size: 19px;
+    margin: 0 0 6px;
+}
+
+.appointment-management-card .section-heading p {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0;
+}
+
+
+/* SEARCH AND FILTER */
+
+.appointment-toolbar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 180px 170px;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.appointment-toolbar input,
+.appointment-toolbar select {
+    width: 100%;
+    min-width: 0;
+    padding: 11px 13px;
+    border: 1px solid #d5e0e5;
+    border-radius: 7px;
+    background: #fff;
+    color: #334155;
+    font-size: 13px;
+    outline: none;
+}
+
+.appointment-toolbar input:focus,
+.appointment-toolbar select:focus {
+    border-color: #087f78;
+    box-shadow: 0 0 0 3px rgba(8, 127, 120, 0.1);
+}
+
+.appointment-count {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+
+/* APPOINTMENT TABLE */
+
+.appointment-management-card .table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.appointment-management-card .dashboard-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+}
+
+.appointment-management-card .dashboard-table th,
+.appointment-management-card .dashboard-table td {
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e8eef1;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.appointment-management-card .dashboard-table th {
+    background: #f3f8fa;
+    color: #334155;
+    font-weight: 600;
+}
+
+.appointment-management-card .dashboard-table td {
+    color: #475569;
+}
+
+.appointment-management-card .dashboard-table tbody tr:hover {
+    background: #f8fbfc;
+}
+
+.appointment-management-card .empty-message {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+}
+
+
+/* STATUS LABELS */
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff4dc;
+    color: #a66b00;
+}
+
+.status-confirmed {
+    background: #e1f3ff;
+    color: #0875ad;
+}
+
+.status-cancelled {
+    background: #ffe8e8;
+    color: #c03939;
+}
+
+.status-completed {
+    background: #e5f5e9;
+    color: #238449;
+}
+
+
+/* ACTION BUTTONS */
+
+.appointment-action-btn {
+    border: none;
+    padding: 7px 10px;
+    margin: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.view-appointment-btn {
+    background: #e0f2f1;
+    color: #087f78;
+}
+
+.confirm-appointment-btn {
+    background: #e5f5e9;
+    color: #238449;
+}
+
+.cancel-appointment-btn {
+    background: #ffe8e8;
+    color: #c03939;
+}
+
+.complete-appointment-btn {
+    background: #e1f3ff;
+    color: #0875ad;
+}
+
+.appointment-action-btn:hover {
+    filter: brightness(0.95);
+}
+
+
+/* APPOINTMENT DETAILS */
+
+.appointment-details {
+    display: none;
+    margin-top: 22px;
+    padding: 22px;
+    background: #f4f9fa;
+    border: 1px solid #e0ebee;
+    border-radius: 10px;
+}
+
+.details-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.details-heading h3 {
+    color: #183b4e;
+    margin: 0;
+    font-size: 17px;
+}
+
+.close-details-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: #e2e8f0;
+    color: #334155;
+    cursor: pointer;
+}
+
+#appointmentDetailsContent {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+#appointmentDetailsContent p {
+    margin: 0;
+    padding: 11px;
+    background: #fff;
+    border-radius: 6px;
+    color: #475569;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+#appointmentDetailsContent strong {
+    color: #183b4e;
+}
+
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1100px) {
+    .appointment-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .appointment-management-card {
+        padding: 16px;
+    }
+
+    .appointment-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-summary-card {
+        padding: 15px;
+    }
+
+    #appointmentDetailsContent {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .appointment-summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+    }
+
+    .new-appointment-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .appointment-management-card {
+        padding: 13px;
+    }
+}

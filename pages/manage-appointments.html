@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Appointments | SemasaCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/manage-appointments.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="icon" type="image/png" href="../assets/icons/Logo-1.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+
+            <div>
+                <h3 id="staffName">Receptionist</h3>
+                <p id="staffRole">Receptionist</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="dashboards/receptionist-dashboard.html"
+                class="menu-item">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="manage-appointments.html"
+                class="menu-item active">
+                <i class="fas fa-calendar-check"></i>
+                <span>Manage Appointments</span>
+            </a>
+
+            <a href="patient-registration.html" class="menu-item">
+                <i class="fas fa-user-plus"></i>
+                <span>Register Patient</span>
+            </a>
+
+            <a href="patient-list.html" class="menu-item">
+                <i class="fas fa-user-injured"></i>
+                <span>Patient Records</span>
+            </a>
+
+            <a href="doctors.html" class="menu-item">
+                <i class="fas fa-user-doctor"></i>
+                <span>Doctors</span>
+            </a>
+
+            <p class="menu-heading">RECEPTION SERVICES</p>
+
+            <a href="appointments.html" class="menu-item">
+                <i class="fas fa-calendar-plus"></i>
+                <span>New Appointment</span>
+            </a>
+
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+        <header class="top-header">
+
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle"
+                    aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <h2>Manage Appointments</h2>
+            </div>
+
+            <div class="header-right">
+
+                <div class="header-user">
+
+                    <div class="header-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+
+                    <div>
+                        <h4 id="headerName">Receptionist</h4>
+                        <p id="headerRole">Receptionist</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD CONTENT -->
+        <section class="dashboard-content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Manage Appointments</h1>
+                    <p>
+                        View, search and manage patient appointments.
+                    </p>
+                </div>
+
+                <a href="appointments.html" class="new-appointment-btn">
+                    <i class="fas fa-plus"></i>
+                    New Appointment
+                </a>
+            </div>
+
+
+            <!-- APPOINTMENT SUMMARY -->
+            <div class="appointment-summary">
+
+                <div class="appointment-summary-card">
+                    <div class="summary-icon total-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+
+                    <div>
+                        <p>Total Appointments</p>
+                        <h3 id="totalAppointments">0</h3>
+                    </div>
+                </div>
+
+                <div class="appointment-summary-card">
+                    <div class="summary-icon pending-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+
+                    <div>
+                        <p>Pending</p>
+                        <h3 id="pendingAppointments">0</h3>
+                    </div>
+                </div>
+
+                <div class="appointment-summary-card">
+                    <div class="summary-icon confirmed-icon">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+
+                    <div>
+                        <p>Confirmed</p>
+                        <h3 id="confirmedAppointments">0</h3>
+                    </div>
+                </div>
+
+                <div class="appointment-summary-card">
+                    <div class="summary-icon completed-icon">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+
+                    <div>
+                        <p>Completed</p>
+                        <h3 id="completedAppointments">0</h3>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- APPOINTMENT TABLE -->
+            <div class="section-card appointment-management-card">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Appointment List</h2>
+                        <p>All patient appointment bookings</p>
+                    </div>
+                </div>
+
+
+                <!-- SEARCH AND FILTER -->
+                <div class="appointment-toolbar">
+
+                    <input
+                        type="search"
+                        id="searchAppointment"
+                        placeholder="Search patient, doctor or appointment ID..."
+                        aria-label="Search appointments"
+                    >
+
+                    <select id="statusFilter"
+                        aria-label="Filter by appointment status">
+
+                        <option value="all">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Completed">Completed</option>
+
+                    </select>
+
+                    <input
+                        type="date"
+                        id="dateFilter"
+                        aria-label="Filter by appointment date"
+                    >
+
+                </div>
+
+
+                <p class="appointment-count" id="appointmentCount">
+                    Total appointments: 0
+                </p>
+
+
+                <!-- TABLE -->
+                <div class="table-container">
+
+                    <table class="dashboard-table">
+
+                        <thead>
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Patient Name</th>
+                                <th>Doctor</th>
+                                <th>Specialty</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="appointmentsTableBody">
+
+                            <tr>
+                                <td colspan="8" class="empty-message">
+                                    Loading appointments...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- APPOINTMENT DETAILS -->
+                <div class="appointment-details"
+                    id="appointmentDetails">
+
+                    <div class="details-heading">
+                        <h3>Appointment Details</h3>
+
+                        <button type="button"
+                            id="closeDetails"
+                            class="close-details-btn"
+                            aria-label="Close appointment details">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div id="appointmentDetailsContent"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- SCRIPTS -->
+<script src="../js/auth.js"></script>
+<script src="../js/manage-appointments.js"></script>
+
+</body>
+</html>
