@@ -64,6 +64,7 @@ body {
 .dashboard-table th:last-child,
 .dashboard-table td:last-child {
     padding-right: 18px;
+    margin-top: 9px;
 }
 
 /* System Information */
@@ -99,4 +100,48 @@ body {
     .system-info div {
         padding: 10px;
     }
+}
+/* ===== APPOINTMENT STATUS BADGES ===== */
+
+.dashboard-table .status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 95px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+/* Confirmed */
+.dashboard-table .status.confirmed {
+    color: #087443;
+    background: #e8f7ef;
+    border-color: #b8e8ce;
+}
+
+/* Pending */
+.dashboard-table .status.pending {
+    color: #946200;
+    background: #fff6df;
+    border-color: #f3dda0;
+}
+
+/* Completed */
+.dashboard-table .status.completed {
+    color: #1763a6;
+    background: #eaf3ff;
+    border-color: #c5dcfa;
+}
+
+/* Cancelled */
+.dashboard-table .status.cancelled {
+    color: #b42318;
+    background: #fff0ef;
+    border-color: #f5c4c0;
 }

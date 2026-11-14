@@ -86,44 +86,44 @@ if (currentUser.role === "admin") {
             <span>Patient Records</span>
         </a>
 
-        <a href="appointments.html" class="menu-item">
-            <i class="fas fa-calendar-check"></i>
-            <span>Appointments</span>
-        </a>
-
-        <a href="doctors.html" class="menu-item">
-            <i class="fas fa-user-md"></i>
-            <span>Doctors</span>
-        </a>
-
         <a href="#" class="menu-item">
-            <i class="fas fa-hospital"></i>
-            <span>Departments</span>
-        </a>
+                    <i class="fas fa-user-doctor"></i>
+                    <span>Doctors</span>
+                </a>
 
-        <p class="menu-heading">HOSPITAL SERVICES</p>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-hospital"></i>
+                    <span>Departments</span>
+                </a>
 
-        <a href="#" class="menu-item">
-            <i class="fas fa-pills"></i>
-            <span>Pharmacy</span>
-        </a>
+                <p class="menu-heading">HOSPITAL SERVICES</p>
 
-        <a href="#" class="menu-item">
-            <i class="fas fa-flask"></i>
-            <span>Laboratory</span>
-        </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-pills"></i>
+                    <span>Pharmacy</span>
+                </a>
 
-        <a href="#" class="menu-item">
-            <i class="fas fa-file-invoice-dollar"></i>
-            <span>Billing & Payments</span>
-        </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-flask"></i>
+                    <span>Laboratory</span>
+                </a>
 
-        <p class="menu-heading">SYSTEM</p>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Billing & Payments</span>
+                </a>
 
-        <a href="#" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Reports</span>
-        </a>
+                <p class="menu-heading">SYSTEM</p>
+
+                <a href="reports-analytics.html" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Reports & Analytics</span>
+                </a>
+
+                <a href="hospital-settings.html" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Hospital Settings</span>
+                </a>
     `;
 }
 

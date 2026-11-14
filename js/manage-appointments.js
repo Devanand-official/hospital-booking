@@ -300,102 +300,119 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // 12. DISPLAY APPOINTMENTS
+    
+// 12. DISPLAY APPOINTMENTS
 
-    function displayAppointments() {
+function displayAppointments() {
 
-        const appointments = getAppointments();
+    // Get appointments and sort by date and time
+const appointments = getAppointments().sort((a, b) => {
 
-        const searchText = searchInput.value
-            .trim()
-            .toLowerCase();
+    // First sort by date
+    const dateComparison = String(a.date || "")
+        .localeCompare(String(b.date || ""));
 
-        const selectedStatus = statusFilter.value;
-        const selectedDate = dateFilter.value;
+    if (dateComparison !== 0) {
+        return dateComparison;
+    }
 
-        const filteredAppointments = appointments.filter(a => {
+    // If dates are equal, sort by time
+    return convertToMinutes(a.time) - convertToMinutes(b.time);
 
-            const matchesSearch = [
-                a.id,
-                a.patientName,
-                a.doctorName,
-                a.specialty
-            ].some(value =>
-                String(value || "")
-                    .toLowerCase()
-                    .includes(searchText)
-            );
+});
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                a.status === selectedStatus;
+    const searchText = searchInput.value
+        .trim()
+        .toLowerCase();
 
-            const matchesDate =
-                !selectedDate || a.date === selectedDate;
+    const selectedStatus = statusFilter.value;
+    const selectedDate = dateFilter.value;
 
-            return matchesSearch && matchesStatus && matchesDate;
+    const filteredAppointments = appointments.filter(a => {
 
-        });
+        const matchesSearch = [
+            a.id,
+            a.patientName,
+            a.doctorName,
+            a.specialty
+        ].some(value =>
+            String(value || "")
+                .toLowerCase()
+                .includes(searchText)
+        );
 
-        appointmentsTableBody.replaceChildren();
+        const matchesStatus =
+            selectedStatus === "all" ||
+            a.status === selectedStatus;
 
-        updateSummary(appointments);
+        const matchesDate =
+            !selectedDate || a.date === selectedDate;
 
-        appointmentCount.textContent =
-            "Showing " + filteredAppointments.length +
-            " of " + appointments.length + " appointments";
+        return matchesSearch && matchesStatus && matchesDate;
 
+    });
 
-        if (filteredAppointments.length === 0) {
+    appointmentsTableBody.replaceChildren();
 
-            const row = document.createElement("tr");
-            const cell = document.createElement("td");
+    updateSummary(appointments);
 
-            cell.colSpan = 8;
-            cell.className = "empty-message";
-            cell.textContent = appointments.length === 0
-                ? "No appointments have been booked yet."
-                : "No matching appointments found.";
+    appointmentCount.textContent =
+        "Showing " + filteredAppointments.length +
+        " of " + appointments.length + " appointments";
 
-            row.appendChild(cell);
-            appointmentsTableBody.appendChild(row);
+    if (filteredAppointments.length === 0) {
 
-            return;
-        }
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
 
+        cell.colSpan = 8;
+        cell.className = "empty-message";
 
-        filteredAppointments.forEach(appointment => {
+        cell.textContent = appointments.length === 0
+            ? "No appointments have been booked yet."
+            : "No matching appointments found.";
 
-            const row = document.createElement("tr");
+        row.appendChild(cell);
+        appointmentsTableBody.appendChild(row);
 
-            row.appendChild(createCell(appointment.id));
-            row.appendChild(createCell(appointment.patientName));
-            row.appendChild(createCell(appointment.doctorName));
-            row.appendChild(createCell(appointment.specialty));
-            row.appendChild(createCell(formatDate(appointment.date)));
-            row.appendChild(createCell(appointment.time));
+        return;
+    }
 
-            // Status
-            const statusCell = document.createElement("td");
+    filteredAppointments.forEach(appointment => {
 
-            statusCell.appendChild(
-                createStatusLabel(appointment.status)
-            );
+        const row = document.createElement("tr");
 
-            row.appendChild(statusCell);
+        row.appendChild(createCell(appointment.id));
+        row.appendChild(createCell(appointment.patientName));
+        row.appendChild(createCell(appointment.doctorName));
+        row.appendChild(createCell(appointment.specialty));
+        row.appendChild(createCell(formatDate(appointment.date)));
+        row.appendChild(createCell(appointment.time));
 
+        // STATUS
+        const statusCell = document.createElement("td");
 
-            // Action buttons
-            const actionCell = document.createElement("td");
+        statusCell.appendChild(
+            createStatusLabel(appointment.status)
+        );
 
-            actionCell.appendChild(
-                createActionButton(
-                    "View",
-                    "view",
-                    "view-appointment-btn",
-                    appointment.id
-                )
-            );
+        row.appendChild(statusCell);
+
+        // ACTION BUTTONS
+        const actionCell = document.createElement("td");
+
+        // Both Admin and Receptionist can VIEW
+        actionCell.appendChild(
+            createActionButton(
+                "View",
+                "view",
+                "view-appointment-btn",
+                appointment.id
+            )
+        );
+
+        // Only Admin can modify appointment status
+        if (isAdmin) {
 
             if (appointment.status === "Pending") {
 
@@ -439,12 +456,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-            row.appendChild(actionCell);
+        }
 
-            appointmentsTableBody.appendChild(row);
+        row.appendChild(actionCell);
 
-        });
-    }
+        appointmentsTableBody.appendChild(row);
+
+    });
+}
+
 
 
     // 13. VIEW APPOINTMENT DETAILS
@@ -503,59 +523,65 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // 14. CHANGE APPOINTMENT STATUS
+    
+// 14. CHANGE APPOINTMENT STATUS
 
-    function changeAppointmentStatus(id, newStatus) {
+function changeAppointmentStatus(id, newStatus) {
 
-        const appointments = getAppointments();
-
-        const index = appointments.findIndex(
-            a => String(a.id) === String(id)
-        );
-
-        if (index === -1) {
-            alert("Appointment not found.");
-            return;
-        }
-
-        const appointment = appointments[index];
-
-        const allowedTransitions = {
-            Pending: ["Confirmed", "Cancelled"],
-            Confirmed: ["Completed", "Cancelled"],
-            Cancelled: [],
-            Completed: []
-        };
-
-        if (
-            !allowedTransitions[appointment.status] ||
-            !allowedTransitions[appointment.status].includes(newStatus)
-        ) {
-            alert("This status change is not allowed.");
-            return;
-        }
-
-        const confirmed = window.confirm(
-            "Are you sure you want to change the appointment status to " +
-            newStatus + "?"
-        );
-
-        if (!confirmed) return;
-
-        appointment.status = newStatus;
-
-        appointment.updatedAt = new Date().toISOString();
-
-        if (!saveAppointments(appointments)) return;
-
-        if (appointmentDetails.style.display === "block") {
-            viewAppointment(id);
-        }
-
-        displayAppointments();
-
-        alert("Appointment status updated successfully.");
+    // Receptionists cannot change appointment status
+    if (!isAdmin) {
+        alert("You do not have permission to modify appointments.");
+        return;
     }
+
+    const appointments = getAppointments();
+
+    const index = appointments.findIndex(
+        a => String(a.id) === String(id)
+    );
+
+    if (index === -1) {
+        alert("Appointment not found.");
+        return;
+    }
+
+    const appointment = appointments[index];
+
+    const allowedTransitions = {
+        Pending: ["Confirmed", "Cancelled"],
+        Confirmed: ["Completed", "Cancelled"],
+        Cancelled: [],
+        Completed: []
+    };
+
+    if (
+        !allowedTransitions[appointment.status] ||
+        !allowedTransitions[appointment.status].includes(newStatus)
+    ) {
+        alert("This status change is not allowed.");
+        return;
+    }
+
+    const confirmed = window.confirm(
+        "Are you sure you want to change the appointment status to " +
+        newStatus + "?"
+    );
+
+    if (!confirmed) return;
+
+    appointment.status = newStatus;
+    appointment.updatedAt = new Date().toISOString();
+
+    if (!saveAppointments(appointments)) return;
+
+    if (appointmentDetails.style.display === "block") {
+        viewAppointment(id);
+    }
+
+    displayAppointments();
+
+    alert("Appointment status updated successfully.");
+}
 
 
     // 15. HANDLE TABLE ACTIONS
@@ -586,6 +612,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
+
+
+// 15. HANDLE TABLE ACTIONS
+
+appointmentsTableBody.addEventListener("click", function(event) {
+
+    const button = event.target.closest("button[data-action]");
+
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const id = button.dataset.id;
+
+    if (action === "view") {
+        viewAppointment(id);
+        return;
+    }
+
+    // Only Admin can modify appointment status
+    if (!isAdmin) {
+        alert("You do not have permission to modify appointments.");
+        return;
+    }
+
+    if (action === "confirm") {
+        changeAppointmentStatus(id, "Confirmed");
+    }
+
+    if (action === "cancel") {
+        changeAppointmentStatus(id, "Cancelled");
+    }
+
+    if (action === "complete") {
+        changeAppointmentStatus(id, "Completed");
+    }
+
+});
+
 
 
     // 16. SEARCH AND FILTER EVENTS
