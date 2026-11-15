@@ -1,0 +1,306 @@
+/* ==========================================
+   SEMASACARE - HOSPITAL SETTINGS
+========================================== */
+
+/* SETTINGS PAGE LAYOUT */
+
+.settings-content {
+  padding: 30px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.settings-page-heading {
+  margin-bottom: 25px;
+}
+
+.settings-page-heading h1 {
+  color: #173f4d;
+  font-size: 24px;
+  margin-bottom: 7px;
+}
+
+.settings-page-heading p {
+  color: #81919a;
+  font-size: 13px;
+}
+
+/* SETTINGS CARDS */
+
+.settings-card {
+  background: #ffffff;
+  border: 1px solid #e5ecef;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.settings-card-header {
+  margin-bottom: 25px;
+}
+
+.settings-card-header h2 {
+  font-size: 18px;
+  color: #173f4d;
+  margin-bottom: 7px;
+}
+
+.settings-card-header p {
+  color: #82919a;
+  font-size: 13px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 20px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-content {
+    padding: 15px;
+  }
+
+  .settings-card {
+    padding: 18px;
+  }
+
+  .settings-page-heading h1 {
+    font-size: 21px;
+  }
+}
+
+.settings-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf0;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 22px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+}
+
+.settings-card-header {
+  margin-bottom: 25px;
+}
+
+.settings-card-header h2 {
+  font-size: 19px;
+  color: #263445;
+  margin: 0 0 7px;
+}
+
+.settings-card-header p {
+  color: #7b8794;
+  font-size: 13px;
+  margin: 0;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group > label,
+.toggle-group > div > label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d8dee7;
+  border-radius: 7px;
+  background: #fff;
+  color: #344054;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #168b83;
+  box-shadow: 0 0 0 3px rgba(22, 139, 131, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+/* Toggle Settings */
+
+.toggle-group {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.toggle-group > div > p {
+  color: #8993a1;
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #cbd2dc;
+  border-radius: 30px;
+  transition: 0.25s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.25s;
+}
+
+.switch input:checked + .slider {
+  background: #168b83;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* Save Button */
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+  padding: 5px 0 30px;
+}
+
+#saveMessage {
+  font-size: 13px;
+  margin: 0;
+}
+
+#saveMessage.success {
+  color: #16834a;
+}
+
+#saveMessage.error {
+  color: #c0392b;
+}
+
+.save-settings-btn {
+  border: none;
+  border-radius: 7px;
+  padding: 13px 25px;
+  background: #168b83;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-settings-btn:hover {
+  background: #10736d;
+}
+
+.menu-toggle {
+  display: none;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  color: #263445;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 15px;
+  }
+
+  .settings-card {
+    padding: 20px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: auto;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-settings-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-card {
+    padding: 16px;
+  }
+
+  .settings-card-header h2 {
+    font-size: 17px;
+  }
+}

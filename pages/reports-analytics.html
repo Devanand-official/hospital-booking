@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Reports & Analytics | SemasaCare</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/reports-analytics.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-heartbeat"></i>
+          <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <h3>Administrator</h3>
+            <p>System Admin</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <p class="menu-heading">MAIN MENU</p>
+
+          <a href="dashboards/admin-dashboard.html" class="menu-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="user-management.html" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+          </a>
+
+          <a href="patient-list.html" class="menu-item">
+            <i class="fas fa-user-injured"></i>
+            <span>Patient Records</span>
+          </a>
+
+          <a href="./admin/manage-doctors.html" class="menu-item">
+            <i class="fas fa-user-doctor"></i>
+            <span>Doctors</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-hospital"></i>
+            <span>Departments</span>
+          </a>
+
+          <p class="menu-heading">HOSPITAL SERVICES</p>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-pills"></i>
+            <span>Pharmacy</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-flask"></i>
+            <span>Laboratory</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>Billing & Payments</span>
+          </a>
+
+          <p class="menu-heading">SYSTEM</p>
+
+          <a href="reports-analytics.html" class="menu-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports & Analytics</span>
+          </a>
+
+          <a href="hospital-settings.html" class="menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Hospital Settings</span>
+          </a>
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="top-header">
+          <div class="header-left">
+            <button
+              id="menuToggle"
+              class="menu-toggle"
+              aria-label="Toggle sidebar"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+
+            <div>
+              <h2>Reports & Analytics</h2>
+              <p>Hospital performance overview</p>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <!-- <button class="notification-btn" aria-label="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-dot"></span>
+            </button> -->
+
+            <div class="header-user">
+              <div class="header-avatar">
+                <i class="fas fa-user-shield"></i>
+              </div>
+
+              <div>
+                <h4 id="adminName">Hospital Admin</h4>
+                <p>System Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="dashboard-content">
+          <div class="page-heading">
+            <div>
+              <h1>Reports & Analytics</h1>
+              <p>Monitor hospital statistics and appointment trends.</p>
+            </div>
+
+            <div class="current-date" id="currentDate"></div>
+          </div>
+
+          <!-- Summary Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon patients-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <p>Total Patients</p>
+                <h2 id="reportPatients">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon doctors-icon">
+                <i class="fas fa-user-doctor"></i>
+              </div>
+              <div>
+                <p>Total Doctors</p>
+                <h2 id="reportDoctors">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon appointments-icon">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div>
+                <p>Total Appointments</p>
+                <h2 id="reportAppointments">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon staff-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div>
+                <p>Total Staff</p>
+                <h2 id="reportStaff">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- Appointment Status -->
+          <div class="section-card">
+            <div class="section-heading">
+              <h2>Appointment Status Overview</h2>
+            </div>
+
+            <div class="report-status-list">
+              <div class="report-status-item">
+                <div>
+                  <span class="status-dot confirmed-dot"></span>
+                  Confirmed
+                </div>
+                <strong id="confirmedCount">0</strong>
+              </div>
+
+              <div class="report-status-item">
+                <div>
+                  <span class="status-dot pending-dot"></span>
+                  Pending
+                </div>
+                <strong id="pendingCount">0</strong>
+              </div>
+
+              <div class="report-status-item">
+                <div>
+                  <span class="status-dot completed-dot"></span>
+                  Completed
+                </div>
+                <strong id="completedCount">0</strong>
+              </div>
+
+              <div class="report-status-item">
+                <div>
+                  <span class="status-dot cancelled-dot"></span>
+                  Cancelled
+                </div>
+                <strong id="cancelledCount">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Appointments -->
+          <div class="section-card">
+            <div class="section-heading">
+              <h2>Monthly Appointment Statistics</h2>
+              <span class="report-subtitle">Last 6 months</span>
+            </div>
+
+            <div id="monthlyChart" class="monthly-chart"></div>
+          </div>
+
+          <!-- User Overview -->
+          <div class="section-card">
+            <div class="section-heading">
+              <h2>User Overview</h2>
+            </div>
+
+            <div class="report-user-grid">
+              <div class="report-user-box">
+                <i class="fas fa-user-injured"></i>
+                <span>Registered Patients</span>
+                <strong id="registeredPatients">0</strong>
+              </div>
+
+              <div class="report-user-box">
+                <i class="fas fa-user-doctor"></i>
+                <span>Registered Doctors</span>
+                <strong id="registeredDoctors">0</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/reports-analytics.js"></script>
+  </body>
+</html>

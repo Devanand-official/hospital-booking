@@ -1,0 +1,235 @@
+/* =====================================
+   SemasaCare - Doctor Appointments
+===================================== */
+
+/* PAGE FILTERS */
+
+.appointment-filters {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 22px 0;
+}
+
+.filter-search {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.filter-search i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+}
+
+.filter-search input {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border: 1px solid #dce6eb;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #173f4d;
+  font-size: 13px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 150px;
+}
+
+.filter-group label {
+  color: #526777;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 11px 12px;
+  border: 1px solid #dce6eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #173f4d;
+  font-size: 13px;
+  outline: none;
+}
+
+.filter-search input:focus,
+.filter-group input:focus,
+.filter-group select:focus {
+  border-color: #078b8c;
+  box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.1);
+}
+
+/* RESET BUTTON */
+
+.reset-filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border: 1px solid #dce6eb;
+  border-radius: 8px;
+  background: #f5f9fa;
+  color: #173f4d;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.reset-filter-btn:hover {
+  background: #e0f2f1;
+  border-color: #078b8c;
+  color: #087f78;
+}
+
+/* TABLE */
+
+#appointmentsTableBody td {
+  vertical-align: middle;
+}
+
+#appointmentsTableBody tr:hover {
+  background: #f8fbfc;
+}
+
+#appointmentsTableBody .empty-message {
+  padding: 35px 15px;
+  text-align: center;
+  color: #64748b;
+}
+
+/* APPOINTMENT STATUS */
+
+.doctor-appointment-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.doctor-appointment-status.pending {
+  background: #fff4db;
+  color: #b7791f;
+}
+
+.doctor-appointment-status.confirmed {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.doctor-appointment-status.completed {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.doctor-appointment-status.cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ACTION BUTTON */
+
+.appointment-action-btn {
+  padding: 7px 12px;
+  border: 1px solid #078b8c;
+  border-radius: 6px;
+  background: #e0f2f1;
+  color: #087f78;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.appointment-action-btn:hover {
+  background: #078b8c;
+  color: #fff;
+}
+
+/* APPOINTMENT COUNT */
+
+.appointment-count {
+  margin-top: 18px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.appointment-count strong {
+  color: #173f4d;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .appointment-filters {
+    align-items: stretch;
+  }
+
+  .filter-search {
+    flex-basis: 100%;
+  }
+
+  .filter-group {
+    flex: 1;
+  }
+}
+
+@media (max-width: 550px) {
+  .appointment-filters {
+    flex-direction: column;
+  }
+
+  .filter-search,
+  .filter-group {
+    width: 100%;
+  }
+
+  .reset-filter-btn {
+    width: 100%;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .dashboard-table {
+    min-width: 850px;
+  }
+}
+/* APPOINTMENT STATUS DROPDOWN */
+
+.appointment-status-select {
+  min-width: 125px;
+  padding: 8px 10px;
+  border: 1px solid #dce6eb;
+  border-radius: 7px;
+  background: #fff;
+  color: #173f4d;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.appointment-status-select:focus {
+  border-color: #078b8c;
+  box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.1);
+}
+
+.appointment-status-select:hover {
+  border-color: #078b8c;
+}

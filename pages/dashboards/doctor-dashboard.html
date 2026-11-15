@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Doctor Dashboard | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/admin.css" />
+    <link rel="stylesheet" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="../../css/doctor-dashboard.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-heartbeat"></i>
+          <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-icon">
+            <i class="fas fa-user-doctor"></i>
+          </div>
+
+          <div>
+            <h3 id="doctorName">Doctor</h3>
+            <p>Doctor</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <p class="menu-heading">MAIN MENU</p>
+
+          <a href="doctor-dashboard.html" class="menu-item active">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="../doctor/appointments.html" class="menu-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>My Appointments</span>
+          </a>
+
+          <a href="#profile" class="menu-item">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </a>
+
+          <p class="menu-heading">WORKSPACE</p>
+
+          <a href="#schedule" class="menu-item">
+            <i class="fas fa-calendar-days"></i>
+            <span>My Schedule</span>
+          </a>
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- HEADER -->
+        <header class="top-header">
+          <div class="header-left">
+            <button
+              id="menuToggle"
+              class="menu-toggle"
+              aria-label="Toggle sidebar"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+
+            <div>
+              <h2>Doctor Dashboard</h2>
+              <p>Welcome to your medical workspace.</p>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="header-user">
+              <div class="header-avatar">
+                <i class="fas fa-user-doctor"></i>
+              </div>
+
+              <div>
+                <h4 id="headerName">Doctor</h4>
+                <p>Doctor</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <section class="dashboard-content">
+          <div class="page-heading">
+            <div>
+              <h1 id="welcomeHeading">Welcome, Doctor!</h1>
+              <p>Here is your appointment overview.</p>
+            </div>
+
+            <div class="current-date" id="currentDate"></div>
+          </div>
+
+          <!-- STATISTICS -->
+          <div class="stats-grid">
+            <div class="stat-card doctor-stat-today">
+              <div class="stat-icon">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+
+              <div>
+                <p>Today's Appointments</p>
+                <h2 id="todayAppointments">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card doctor-stat-pending">
+              <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+
+              <div>
+                <p>Pending Appointments</p>
+                <h2 id="pendingAppointments">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card doctor-stat-completed">
+              <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+              </div>
+
+              <div>
+                <p>Completed Appointments</p>
+                <h2 id="completedAppointments">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card doctor-stat-upcoming">
+              <div class="stat-icon">
+                <i class="fas fa-calendar-week"></i>
+              </div>
+
+              <div>
+                <p>Upcoming Appointments</p>
+                <h2 id="upcomingAppointments">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFILE SUMMARY -->
+          <div class="section-card" id="profile">
+            <div class="section-heading">
+              <h2>My Professional Profile</h2>
+              <span class="profile-indicator" id="profileStatus">
+                Profile details
+              </span>
+            </div>
+
+            <div class="doctor-profile-grid">
+              <div class="doctor-profile-item">
+                <span>Full Name</span>
+                <strong id="profileName">-</strong>
+              </div>
+
+              <div class="doctor-profile-item">
+                <span>Email Address</span>
+                <strong id="profileEmail">-</strong>
+              </div>
+
+              <div class="doctor-profile-item">
+                <span>Phone Number</span>
+                <strong id="profilePhone">-</strong>
+              </div>
+
+              <div class="doctor-profile-item">
+                <span>Specialization</span>
+                <strong id="profileSpecialization">Not updated</strong>
+              </div>
+
+              <div class="doctor-profile-item">
+                <span>Qualification</span>
+                <strong id="profileQualification">Not updated</strong>
+              </div>
+
+              <div class="doctor-profile-item">
+                <span>Experience</span>
+                <strong id="profileExperience">Not updated</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- TODAY'S APPOINTMENTS -->
+          <div class="section-card" id="appointments">
+            <div class="section-heading">
+              <h2>Today's Appointments</h2>
+            </div>
+
+            <div class="table-container">
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="doctorAppointments">
+                  <tr>
+                    <td colspan="4" class="empty-message">
+                      Loading appointments...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SCHEDULE PLACEHOLDER -->
+          <div class="section-card" id="schedule">
+            <div class="section-heading">
+              <h2>My Schedule</h2>
+            </div>
+
+            <div class="doctor-placeholder">
+              <i class="fas fa-calendar-days"></i>
+              <h3>Schedule Management</h3>
+              <p>
+                Your working days, duty hours, breaks and leave management will
+                be available here.
+              </p>
+              <span>Coming in the next module</span>
+            </div>
+          </div>
+
+          <!-- FOOTER INFORMATION -->
+          <div class="section-card system-card">
+            <div class="system-info">
+              <div>
+                <i class="fas fa-hospital"></i>
+                <span>SemasaCare Hospital</span>
+              </div>
+
+              <div>
+                <i class="fas fa-user-doctor"></i>
+                <span>Doctor Access</span>
+              </div>
+
+              <div>
+                <i class="fas fa-heart"></i>
+                <span>Your Health, Our Priority</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/doctor-dashboard.js"></script>
+  </body>
+</html>

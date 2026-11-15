@@ -4,382 +4,375 @@
 
 // 1. DOCTOR DATABASE
 
-const doctors = [
-    {
-        id: 1,
-        name: "Dr. Arun Kumar",
-        specialty: "Cardiology"
-    },
-    {
-        id: 2,
-        name: "Dr. Priya Sharma",
-        specialty: "Pediatrics"
-    },
-    {
-        id: 3,
-        name: "Dr. Michael Raj",
-        specialty: "Neurology"
-    },
-    {
-        id: 4,
-        name: "Dr. Sneha Reddy",
-        specialty: "Dermatology"
-    },
-    {
-        id: 5,
-        name: "Dr. Rajesh Kumar",
-        specialty: "Orthopedics"
-    },
-    {
-        id: 6,
-        name: "Dr. Anjali Menon",
-        specialty: "General Medicine"
-    }
-];
+// const doctors = [
+//     {
+//         id: 1,
+//         name: "Dr. Arun Kumar",
+//         specialty: "Cardiology"
+//     },
+//     {
+//         id: 2,
+//         name: "Dr. Priya Sharma",
+//         specialty: "Pediatrics"
+//     },
+//     {
+//         id: 3,
+//         name: "Dr. Michael Raj",
+//         specialty: "Neurology"
+//     },
+//     {
+//         id: 4,
+//         name: "Dr. Sneha Reddy",
+//         specialty: "Dermatology"
+//     },
+//     {
+//         id: 5,
+//         name: "Dr. Rajesh Kumar",
+//         specialty: "Orthopedics"
+//     },
+//     {
+//         id: 6,
+//         name: "Dr. Anjali Menon",
+//         specialty: "General Medicine"
+//     }
+// ];
 
+// 1. LOAD DOCTORS FROM USER MANAGEMENT
+
+function getDoctors() {
+  try {
+    const users = JSON.parse(localStorage.getItem("semasacareUsers") || "[]");
+
+    const profiles = JSON.parse(
+      localStorage.getItem("semasacareDoctorProfiles") || "[]",
+    );
+
+    const registeredDoctors = users
+      .filter((user) => user.role === "doctor")
+      .map((user) => {
+        const profile = profiles.find(
+          (item) => String(item.userId) === String(user.id),
+        );
+
+        return {
+          id: String(user.id),
+          name: user.name,
+          email: user.email,
+          specialty: profile?.specialization || "Not specified",
+        };
+      });
+
+    // Include the existing demo doctor
+    const demoProfile = profiles.find((item) => String(item.userId) === "3");
+
+    const demoDoctor = {
+      id: "3",
+      name: "Doctor",
+      email: "doctor@semasacare.com",
+      specialty: demoProfile?.specialization || "General Medicine",
+    };
+
+    return [demoDoctor, ...registeredDoctors];
+  } catch (error) {
+    console.error("Unable to load doctors:", error);
+    return [];
+  }
+}
+
+let doctors = getDoctors();
 
 // 2. GET HTML ELEMENTS
 
-const appointmentForm =
-    document.getElementById("appointmentForm");
+const appointmentForm = document.getElementById("appointmentForm");
 
-const doctorSelect =
-    document.getElementById("doctorSelect");
+const doctorSelect = document.getElementById("doctorSelect");
 
-const appointmentDate =
-    document.getElementById("appointmentDate");
+const appointmentDate = document.getElementById("appointmentDate");
 
-const appointmentTime =
-    document.getElementById("appointmentTime");
+const appointmentTime = document.getElementById("appointmentTime");
 
-const bookingSuccess =
-    document.getElementById("bookingSuccess");
+const bookingSuccess = document.getElementById("bookingSuccess");
 
-const bookingDetails =
-    document.getElementById("bookingDetails");
+const bookingDetails = document.getElementById("bookingDetails");
 
+// POPULATE DOCTOR DROPDOWN
+
+function populateDoctorDropdown() {
+  doctors = getDoctors();
+
+  doctorSelect.replaceChildren();
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select a doctor";
+
+  doctorSelect.appendChild(defaultOption);
+
+  doctors.forEach((doctor) => {
+    const option = document.createElement("option");
+
+    option.value = doctor.id;
+    option.textContent = `${doctor.name} - ${doctor.specialty}`;
+
+    doctorSelect.appendChild(option);
+  });
+}
+
+populateDoctorDropdown();
 
 // 3. SET MINIMUM APPOINTMENT DATE
 
 const today = new Date();
 
 const localToday = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, "0"),
-    String(today.getDate()).padStart(2, "0")
+  today.getFullYear(),
+  String(today.getMonth() + 1).padStart(2, "0"),
+  String(today.getDate()).padStart(2, "0"),
 ].join("-");
 
 appointmentDate.min = localToday;
 
-
 // 4. AUTO SELECT DOCTOR
 
-const urlParams = new URLSearchParams(
-    window.location.search
-);
+const urlParams = new URLSearchParams(window.location.search);
 
 const selectedDoctor = urlParams.get("doctor");
 
 if (selectedDoctor) {
+  const doctorExists = doctors.some(
+    (doctor) => doctor.id === String(selectedDoctor),
+  );
 
-    const doctorExists = doctors.some(
-        doctor => doctor.id === Number(selectedDoctor)
-    );
-
-    if (doctorExists) {
-        doctorSelect.value = selectedDoctor;
-    }
-
+  if (doctorExists) {
+    doctorSelect.value = String(selectedDoctor);
+  }
 }
-
 
 // 5. GET SAVED APPOINTMENTS
 
 function getAppointments() {
+  try {
+    const savedAppointments = JSON.parse(
+      localStorage.getItem("semasacareAppointments"),
+    );
 
-    try {
-        const savedAppointments =
-            JSON.parse(
-                localStorage.getItem("semasacareAppointments")
-            );
+    return Array.isArray(savedAppointments) ? savedAppointments : [];
+  } catch (error) {
+    console.error("Unable to read appointments:", error);
 
-        return Array.isArray(savedAppointments)
-            ? savedAppointments
-            : [];
-
-    } catch (error) {
-
-        console.error("Unable to read appointments:", error);
-
-        return [];
-
-    }
-
+    return [];
+  }
 }
-
 
 // 6. GENERATE UNIQUE APPOINTMENT ID
 
 function generateAppointmentID() {
-
-    return "SC" +
-        Date.now().toString().slice(-8) +
-        Math.floor(Math.random() * 100);
-
+  return (
+    "SC" + Date.now().toString().slice(-8) + Math.floor(Math.random() * 100)
+  );
 }
-
 
 // 7. DISPLAY BOOKING DETAILS
 
 function showBookingDetails(appointment) {
+  bookingDetails.replaceChildren();
 
-    bookingDetails.replaceChildren();
+  const details = [
+    ["Appointment ID", appointment.id],
+    ["Patient Name", appointment.patientName],
+    ["Doctor", appointment.doctorName],
+    ["Specialty", appointment.specialty],
+    ["Date", appointment.date],
+    ["Time", appointment.time],
+    ["Status", appointment.status],
+  ];
 
-    const details = [
-        ["Appointment ID", appointment.id],
-        ["Patient Name", appointment.patientName],
-        ["Doctor", appointment.doctorName],
-        ["Specialty", appointment.specialty],
-        ["Date", appointment.date],
-        ["Time", appointment.time],
-        ["Status", appointment.status]
-    ];
+  details.forEach(([label, value]) => {
+    const paragraph = document.createElement("p");
 
-    details.forEach(([label, value]) => {
+    const strong = document.createElement("strong");
 
-        const paragraph = document.createElement("p");
+    strong.textContent = label + ": ";
 
-        const strong = document.createElement("strong");
+    paragraph.append(strong, document.createTextNode(value));
 
-        strong.textContent = label + ": ";
-
-        paragraph.append(
-            strong,
-            document.createTextNode(value)
-        );
-
-        bookingDetails.appendChild(paragraph);
-
-    });
-
+    bookingDetails.appendChild(paragraph);
+  });
 }
-
 
 // 8. HANDLE FORM SUBMISSION
 
-appointmentForm.addEventListener("submit", function(event) {
+appointmentForm.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  // GET PATIENT INFORMATION
 
-    // GET PATIENT INFORMATION
+  const patientName = document.getElementById("patientName").value.trim();
 
-    const patientName =
-        document.getElementById("patientName").value.trim();
+  const patientAge = Number(document.getElementById("patientAge").value);
 
-    const patientAge =
-        Number(document.getElementById("patientAge").value);
+  const patientEmail = document.getElementById("patientEmail").value.trim();
 
-    const patientEmail =
-        document.getElementById("patientEmail").value.trim();
+  const patientPhone = document.getElementById("patientPhone").value.trim();
 
-    const patientPhone =
-        document.getElementById("patientPhone").value.trim();
+  const patientGender = document.getElementById("patientGender").value;
 
-    const patientGender =
-        document.getElementById("patientGender").value;
+  // GET APPOINTMENT INFORMATION
 
-    // GET APPOINTMENT INFORMATION
+  const doctorId = String(doctorSelect.value);
 
-    const doctorId = Number(doctorSelect.value);
+  const selectedDoctor = doctors.find((doctor) => doctor.id === doctorId);
 
-    const selectedDoctor = doctors.find(
-        doctor => doctor.id === doctorId
+  const date = appointmentDate.value;
+
+  const time = appointmentTime.value;
+
+  const reason = document.getElementById("appointmentReason").value.trim();
+
+  // VALIDATION
+
+  if (
+    !patientName ||
+    !patientEmail ||
+    !patientPhone ||
+    !patientGender ||
+    !selectedDoctor ||
+    !date ||
+    !time
+  ) {
+    alert("Please complete all required fields.");
+
+    return;
+  }
+
+  if (!Number.isInteger(patientAge) || patientAge < 1 || patientAge > 120) {
+    alert("Please enter a valid age.");
+
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(patientPhone)) {
+    alert("Please enter a valid 10-digit phone number.");
+
+    return;
+  }
+
+  if (date < localToday) {
+    alert("Please select a future date.");
+
+    return;
+  }
+
+  // CREATE APPOINTMENT OBJECT
+
+  const appointment = {
+    id: generateAppointmentID(),
+
+    patientName: patientName,
+
+    age: patientAge,
+
+    email: patientEmail,
+
+    phone: patientPhone,
+
+    gender: patientGender,
+
+    doctorId: selectedDoctor.id,
+
+    doctorName: selectedDoctor.name,
+
+    doctorEmail: selectedDoctor.email,
+
+    specialty: selectedDoctor.specialty,
+
+    date: date,
+
+    time: time,
+
+    reason: reason,
+
+    status: "Pending",
+
+    bookedAt: new Date().toISOString(),
+  };
+
+  // SAVE APPOINTMENT
+
+  try {
+    const appointments = getAppointments();
+
+    appointments.push(appointment);
+
+    localStorage.setItem(
+      "semasacareAppointments",
+      JSON.stringify(appointments),
     );
+  } catch (error) {
+    alert("Unable to save appointment. Please check your browser storage.");
 
-    const date = appointmentDate.value;
+    console.error(error);
 
-    const time = appointmentTime.value;
+    return;
+  }
 
-    const reason =
-        document.getElementById("appointmentReason").value.trim();
+  // SHOW SUCCESS MESSAGE
 
+  showBookingDetails(appointment);
 
-    // VALIDATION
+  appointmentForm.hidden = true;
 
-    if (!patientName || !patientEmail ||
-        !patientPhone || !patientGender ||
-        !selectedDoctor || !date || !time) {
+  bookingSuccess.hidden = false;
 
-        alert("Please complete all required fields.");
-
-        return;
-
-    }
-
-    if (!Number.isInteger(patientAge) ||
-        patientAge < 1 || patientAge > 120) {
-
-        alert("Please enter a valid age.");
-
-        return;
-
-    }
-
-    if (!/^[0-9]{10}$/.test(patientPhone)) {
-
-        alert("Please enter a valid 10-digit phone number.");
-
-        return;
-
-    }
-
-    if (date < localToday) {
-
-        alert("Please select a future date.");
-
-        return;
-
-    }
-
-
-    // CREATE APPOINTMENT OBJECT
-
-    const appointment = {
-
-        id: generateAppointmentID(),
-
-        patientName: patientName,
-
-        age: patientAge,
-
-        email: patientEmail,
-
-        phone: patientPhone,
-
-        gender: patientGender,
-
-        doctorId: selectedDoctor.id,
-
-        doctorName: selectedDoctor.name,
-
-        specialty: selectedDoctor.specialty,
-
-        date: date,
-
-        time: time,
-
-        reason: reason,
-
-        status: "Pending",
-
-        bookedAt: new Date().toISOString()
-
-    };
-
-
-    // SAVE APPOINTMENT
-
-    try {
-
-        const appointments = getAppointments();
-
-        appointments.push(appointment);
-
-        localStorage.setItem(
-            "semasacareAppointments",
-            JSON.stringify(appointments)
-        );
-
-    } catch (error) {
-
-        alert(
-            "Unable to save appointment. Please check your browser storage."
-        );
-
-        console.error(error);
-
-        return;
-
-    }
-
-
-    // SHOW SUCCESS MESSAGE
-
-    showBookingDetails(appointment);
-
-    appointmentForm.hidden = true;
-
-    bookingSuccess.hidden = false;
-
-    bookingSuccess.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
+  bookingSuccess.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+  });
 });
-
 
 // 9. RESET FORM FOR ANOTHER BOOKING
 
-const anotherBookingButton =
-    bookingSuccess.querySelector("a.btn");
+const anotherBookingButton = bookingSuccess.querySelector("a.btn");
 
-anotherBookingButton.addEventListener("click", function(event) {
+anotherBookingButton.addEventListener("click", function (event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  appointmentForm.reset();
 
-    appointmentForm.reset();
+  doctorSelect.value = "";
 
-    doctorSelect.value = "";
+  appointmentForm.hidden = false;
 
-    appointmentForm.hidden = false;
+  bookingSuccess.hidden = true;
 
-    bookingSuccess.hidden = true;
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 });
-
 
 // 10. MOBILE NAVIGATION
 
-const menuToggle =
-    document.getElementById("menuToggle");
+const menuToggle = document.getElementById("menuToggle");
 
-const navLinks =
-    document.getElementById("navLinks");
+const navLinks = document.getElementById("navLinks");
 
 if (menuToggle && navLinks) {
+  menuToggle.addEventListener("click", function () {
+    navLinks.classList.toggle("active");
+  });
 
-    menuToggle.addEventListener("click", function() {
-
-        navLinks.classList.toggle("active");
-
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", function () {
+      navLinks.classList.remove("active");
     });
-
-    navLinks.querySelectorAll("a").forEach(link => {
-
-        link.addEventListener("click", function() {
-
-            navLinks.classList.remove("active");
-
-        });
-
-    });
-
+  });
 }
-
 
 // 11. FOOTER YEAR
 
-const currentYear =
-    document.getElementById("currentYear");
+const currentYear = document.getElementById("currentYear");
 
 if (currentYear) {
-
-    currentYear.textContent = new Date().getFullYear();
-
+  currentYear.textContent = new Date().getFullYear();
 }

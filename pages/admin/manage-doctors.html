@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Management | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="../../css/manage-doctors.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-heartbeat"></i>
+          <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <h3>Administrator</h3>
+            <p>System Admin</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <p class="menu-heading">MAIN MENU</p>
+
+          <a href="../dashboards/admin-dashboard.html" class="menu-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="../user-management.html" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+          </a>
+
+          <a href="../patient-list.html" class="menu-item">
+            <i class="fas fa-user-injured"></i>
+            <span>Patient Records</span>
+          </a>
+
+          <a href="manage-doctors.html" class="menu-item active">
+            <i class="fas fa-user-doctor"></i>
+            <span>Doctors</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-hospital"></i>
+            <span>Departments</span>
+          </a>
+
+          <p class="menu-heading">HOSPITAL SERVICES</p>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-pills"></i>
+            <span>Pharmacy</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-flask"></i>
+            <span>Laboratory</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>Billing & Payments</span>
+          </a>
+
+          <p class="menu-heading">SYSTEM</p>
+
+          <a href="../reports-analytics.html" class="menu-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports & Analytics</span>
+          </a>
+
+          <a href="../hospital-settings.html" class="menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Hospital Settings</span>
+          </a>
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div class="header-left">
+            <button id="menuToggle" class="menu-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div>
+              <h2>Doctor Management</h2>
+              <p>Manage hospital doctors and availability</p>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="header-user">
+              <div class="header-avatar">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <div>
+                <h4>Hospital Admin</h4>
+                <p>System Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="dashboard-content">
+          <div class="page-heading">
+            <div>
+              <h1>Doctors</h1>
+              <p>View and manage registered hospital doctors.</p>
+            </div>
+
+            <button class="add-doctor-btn" id="addDoctorBtn">
+              <i class="fas fa-plus"></i> Add Doctor
+            </button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon doctors-icon">
+                <i class="fas fa-user-doctor"></i>
+              </div>
+              <div>
+                <p>Total Doctors</p>
+                <h2 id="totalDoctors">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon present-icon">
+                <i class="fas fa-user-check"></i>
+              </div>
+              <div>
+                <p>Present</p>
+                <h2 id="presentDoctors">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon absent-icon">
+                <i class="fas fa-user-xmark"></i>
+              </div>
+              <div>
+                <p>Absent</p>
+                <h2 id="absentDoctors">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon leave-icon">
+                <i class="fas fa-calendar-minus"></i>
+              </div>
+              <div>
+                <p>On Leave</p>
+                <h2 id="leaveDoctors">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-heading">
+              <h2>Doctor Directory</h2>
+            </div>
+
+            <div class="doctor-toolbar">
+              <input
+                type="search"
+                id="doctorSearch"
+                placeholder="Search doctor by name or ID..."
+              />
+
+              <select id="specialtyFilter">
+                <option value="">All Specializations</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="General Medicine">General Medicine</option>
+              </select>
+            </div>
+
+            <div class="table-container">
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Doctor ID</th>
+                    <th>Doctor Name</th>
+                    <th>Specialization</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Attendance</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="doctorsTableBody">
+                  <tr>
+                    <td colspan="7" class="empty-message">
+                      No doctors registered yet.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/manage-doctors.js"></script>
+  </body>
+</html>

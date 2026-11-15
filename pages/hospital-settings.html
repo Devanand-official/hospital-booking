@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Hospital Settings | SemasaCare</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/hospital-settings.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-heartbeat"></i>
+          <span>SemasaCare</span>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <h3>Administrator</h3>
+            <p>System Admin</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <p class="menu-heading">MAIN MENU</p>
+
+          <a href="dashboards/admin-dashboard.html" class="menu-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="user-management.html" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+          </a>
+
+          <a href="patient-list.html" class="menu-item">
+            <i class="fas fa-user-injured"></i>
+            <span>Patient Records</span>
+          </a>
+
+          <a href="./admin/manage-doctors.html" class="menu-item">
+            <i class="fas fa-user-doctor"></i>
+            <span>Doctors</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-hospital"></i>
+            <span>Departments</span>
+          </a>
+
+          <p class="menu-heading">HOSPITAL SERVICES</p>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-pills"></i>
+            <span>Pharmacy</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-flask"></i>
+            <span>Laboratory</span>
+          </a>
+
+          <a href="#" class="menu-item">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>Billing & Payments</span>
+          </a>
+
+          <p class="menu-heading">SYSTEM</p>
+
+          <a href="reports-analytics.html" class="menu-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports & Analytics</span>
+          </a>
+
+          <a href="hospital-settings.html" class="menu-item active">
+            <i class="fas fa-cog"></i>
+            <span>Hospital Settings</span>
+          </a>
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- TOP NAVIGATION -->
+        <header class="top-header">
+          <div class="header-left">
+            <button
+              id="menuToggle"
+              class="menu-toggle"
+              aria-label="Toggle sidebar"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+
+            <div>
+              <h2>Hospital Settings</h2>
+              <p>Manage your hospital information and system preferences.</p>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <!-- <button class="notification-btn" aria-label="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-dot"></span>
+            </button> -->
+
+            <div class="header-user">
+              <div class="header-avatar">
+                <i class="fas fa-user-shield"></i>
+              </div>
+
+              <div>
+                <h4>Hospital Admin</h4>
+                <p>System Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- SETTINGS CONTENT -->
+        <section class="settings-content">
+          <div class="settings-page-heading">
+            <h1>Hospital Configuration</h1>
+            <p>Configure and manage your hospital's system settings.</p>
+          </div>
+
+          <form id="hospitalSettingsForm">
+            <!-- HOSPITAL PROFILE -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>Hospital Profile</h2>
+                <p>Update your hospital's basic information.</p>
+              </div>
+
+              <div class="settings-grid">
+                <div class="form-group full-width">
+                  <label for="hospitalName">Hospital Name</label>
+                  <input
+                    type="text"
+                    id="hospitalName"
+                    required
+                    placeholder="Enter hospital name"
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="hospitalAddress">Hospital Address</label>
+                  <textarea
+                    id="hospitalAddress"
+                    rows="3"
+                    required
+                    placeholder="Enter hospital address"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="hospitalPhone">Contact Number</label>
+                  <input
+                    type="tel"
+                    id="hospitalPhone"
+                    required
+                    placeholder="Enter contact number"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="hospitalEmail">Email Address</label>
+                  <input
+                    type="email"
+                    id="hospitalEmail"
+                    required
+                    placeholder="Enter email address"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- WORKING HOURS -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>Working Hours</h2>
+                <p>Set the hospital's regular operating hours.</p>
+              </div>
+
+              <div class="settings-grid">
+                <div class="form-group">
+                  <label for="openingTime">Opening Time</label>
+                  <input type="time" id="openingTime" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="closingTime">Closing Time</label>
+                  <input type="time" id="closingTime" required />
+                </div>
+              </div>
+            </div>
+
+            <!-- APPOINTMENT SETTINGS -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>Appointment Settings</h2>
+                <p>Configure general appointment booking preferences.</p>
+              </div>
+
+              <div class="settings-grid">
+                <div class="form-group">
+                  <label for="appointmentDuration">
+                    Appointment Duration
+                  </label>
+
+                  <select id="appointmentDuration" required>
+                    <option value="15">15 minutes</option>
+                    <option value="20">20 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                  </select>
+                </div>
+
+                <div class="form-group toggle-group">
+                  <div>
+                    <label for="bookingEnabled"> Appointment Booking </label>
+                    <p>Allow new appointments to be booked.</p>
+                  </div>
+
+                  <label class="switch">
+                    <input type="checkbox" id="bookingEnabled" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SYSTEM PREFERENCES -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>System Preferences</h2>
+                <p>Configure general preferences for the system.</p>
+              </div>
+
+              <div class="settings-grid">
+                <div class="form-group">
+                  <label for="dateFormat">Date Format</label>
+
+                  <select id="dateFormat">
+                    <option value="DD-MM-YYYY">DD-MM-YYYY</option>
+                    <option value="MM-DD-YYYY">MM-DD-YYYY</option>
+                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                  </select>
+                </div>
+
+                <div class="form-group toggle-group">
+                  <div>
+                    <label for="notificationsEnabled">
+                      System Notifications
+                    </label>
+                    <p>Enable system notification preferences.</p>
+                  </div>
+
+                  <label class="switch">
+                    <input type="checkbox" id="notificationsEnabled" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SAVE SETTINGS -->
+            <div class="settings-actions">
+              <p id="saveMessage" role="status" aria-live="polite"></p>
+
+              <button type="submit" class="save-settings-btn">
+                <i class="fas fa-save"></i>
+                Save Settings
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/hospital-settings.js"></script>
+  </body>
+</html>

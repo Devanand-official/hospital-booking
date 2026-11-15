@@ -1,0 +1,230 @@
+/* Doctor Management */
+
+.add-doctor-btn {
+  background: #078b8c;
+  color: #fff;
+  border: none;
+  padding: 11px 17px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-doctor-btn:hover {
+  background: #066f70;
+}
+
+.doctor-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.doctor-toolbar input,
+.doctor-toolbar select {
+  padding: 11px 13px;
+  border: 1px solid #d5e0e5;
+  border-radius: 7px;
+  background: #fff;
+  color: #52656d;
+  font-size: 13px;
+}
+
+.doctor-toolbar input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.doctor-toolbar select {
+  min-width: 190px;
+}
+
+.present-icon {
+  background: #e5f7ef;
+  color: #27a46d;
+}
+
+.absent-icon {
+  background: #fdebea;
+  color: #d9534f;
+}
+
+.leave-icon {
+  background: #fff2df;
+  color: #e69b30;
+}
+
+.doctor-status {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.doctor-status.present {
+  background: #e5f7ef;
+  color: #218c55;
+}
+
+.doctor-status.absent {
+  background: #fdebea;
+  color: #d34d49;
+}
+
+.doctor-status.leave {
+  background: #fff2df;
+  color: #bd7b1c;
+}
+
+.doctor-action {
+  border: none;
+  background: #e0f2f1;
+  color: #087f78;
+  padding: 7px 11px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .add-doctor-btn {
+    width: 100%;
+  }
+
+  .doctor-toolbar {
+    flex-direction: column;
+  }
+
+  .doctor-toolbar input,
+  .doctor-toolbar select {
+    width: 100%;
+  }
+}
+
+/* Doctor Form Modal */
+
+.doctor-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(16, 59, 73, 0.55);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.doctor-modal.show {
+  display: flex;
+}
+
+.doctor-modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.modal-heading h2 {
+  color: #173f4d;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.modal-heading p {
+  color: #82919a;
+  font-size: 12px;
+}
+
+.close-modal {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 27px;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 17px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #49616a;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #d5e0e5;
+  border-radius: 6px;
+  outline: none;
+  font-size: 13px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #078b8c;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.cancel-btn {
+  padding: 10px 17px;
+  border: 1px solid #d5e0e5;
+  background: #fff;
+  color: #52656d;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+@media (max-width: 550px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .doctor-modal-content {
+    padding: 18px;
+  }
+}

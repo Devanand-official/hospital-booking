@@ -1,0 +1,143 @@
+/* =====================================
+   SEMASACARE - REPORTS & ANALYTICS
+===================================== */
+
+body {
+  background: #f0f5f8;
+}
+
+.report-status-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.report-status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f5fafb;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.report-status-item div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-status-item strong {
+  color: #103b49;
+  font-size: 17px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.confirmed-dot {
+  background: #20a464;
+}
+.pending-dot {
+  background: #e5a126;
+}
+.completed-dot {
+  background: #2685ce;
+}
+.cancelled-dot {
+  background: #dc4545;
+}
+
+.report-subtitle {
+  color: #718096;
+  font-size: 13px;
+}
+
+.monthly-chart {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: end;
+  gap: 20px;
+  min-height: 230px;
+  padding: 20px 10px 5px;
+}
+
+.monthly-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  height: 210px;
+  gap: 9px;
+}
+
+.monthly-bar {
+  width: 38px;
+  min-height: 4px;
+  background: #078b8c;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.3s ease;
+}
+
+.monthly-bar-item strong {
+  font-size: 13px;
+  color: #103b49;
+}
+
+.monthly-bar-item span {
+  font-size: 12px;
+  color: #718096;
+}
+
+.report-user-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.report-user-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: #f5fafb;
+  border-radius: 8px;
+}
+
+.report-user-box i {
+  color: #078b8c;
+  font-size: 22px;
+}
+
+.report-user-box span {
+  color: #718096;
+  font-size: 13px;
+}
+
+.report-user-box strong {
+  color: #103b49;
+  font-size: 24px;
+}
+
+@media (max-width: 600px) {
+  .report-status-list,
+  .report-user-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .monthly-chart {
+    gap: 8px;
+  }
+
+  .monthly-bar {
+    width: 25px;
+  }
+
+  .monthly-bar-item span {
+    font-size: 10px;
+  }
+}
