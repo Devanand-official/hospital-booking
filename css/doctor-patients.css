@@ -1,0 +1,470 @@
+/* ==========================================
+   SEMASACARE - DOCTOR MY PATIENTS
+========================================== */
+
+/* ==========================================
+   1. PATIENT STATISTICS
+========================================== */
+
+.patient-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.patient-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e8eef1;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.patient-stat-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #e0f7f5;
+    color: #078b8c;
+    font-size: 21px;
+}
+
+.patient-stat-card p {
+    margin: 0 0 6px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.patient-stat-card h2 {
+    margin: 0;
+    color: #173f4d;
+    font-size: 26px;
+}
+
+
+/* ==========================================
+   2. NAVBAR
+========================================== */
+
+.main-content>.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 90px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.main-content .top-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+}
+
+.main-content .top-header .header-profile {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.main-content .top-header .profile-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: #dff5f3;
+    color: #078b8c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+.main-content .top-header .profile-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+}
+
+.main-content .top-header .profile-info strong {
+    color: #173f4d;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.main-content .top-header .profile-info span {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0;
+}
+
+
+/* ==========================================
+   3. PATIENT DIRECTORY
+========================================== */
+
+.patient-toolbar {
+    margin: 20px 0;
+}
+
+.patient-search {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+}
+
+.patient-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.patient-search input {
+    width: 100%;
+    padding: 12px 15px 12px 42px;
+    border: 1px solid #dce5e9;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.patient-search input:focus {
+    border-color: #078b8c;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dashboard-table {
+    width: 100%;
+    min-width: 750px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 15px 12px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e3ebef;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.dashboard-table th {
+    background: #f2f7f9;
+    color: #173f4d;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dashboard-table td {
+    color: #294b5b;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-table tbody tr {
+    height: 52px;
+}
+
+.dashboard-table tbody tr:hover {
+    background: #f8fbfc;
+}
+
+/* Patient directory column widths */
+
+.table-responsive>.dashboard-table th:nth-child(1),
+.table-responsive>.dashboard-table td:nth-child(1) {
+    width: 12%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(2),
+.table-responsive>.dashboard-table td:nth-child(2) {
+    width: 16%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(3),
+.table-responsive>.dashboard-table td:nth-child(3) {
+    width: 14%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(4),
+.table-responsive>.dashboard-table td:nth-child(4) {
+    width: 22%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(5),
+.table-responsive>.dashboard-table td:nth-child(5) {
+    width: 10%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(6),
+.table-responsive>.dashboard-table td:nth-child(6) {
+    width: 14%;
+}
+
+.table-responsive>.dashboard-table th:nth-child(7),
+.table-responsive>.dashboard-table td:nth-child(7) {
+    width: 12%;
+    text-align: center;
+}
+
+.patient-view-btn {
+    background: #e0f2f1;
+    color: #087f78;
+    border: none;
+    padding: 8px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.patient-view-btn:hover {
+    background: #bce9e4;
+}
+
+.empty-message {
+    text-align: center !important;
+    padding: 25px !important;
+    color: #64748b;
+}
+
+
+/* ==========================================
+   4. PATIENT DETAILS SECTION
+========================================== */
+
+.patient-details-card {
+    display: none;
+    width: 100%;
+    margin-top: 25px;
+    box-sizing: border-box;
+}
+
+/* Details heading and close button */
+
+#patientDetails .section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#patientDetails .section-heading>div {
+    text-align: left;
+    min-width: 0;
+}
+
+#patientDetails .section-heading h3 {
+    text-align: left;
+    margin: 0 0 6px;
+    color: #173f4d;
+}
+
+#patientDetails .section-heading p {
+    text-align: left;
+    margin: 0;
+    color: #64748b;
+}
+
+.close-details-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    background: #f1f5f9;
+    color: #475569;
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.close-details-btn:hover {
+    background: #e2e8f0;
+}
+
+
+/* ==========================================
+   5. PATIENT INFORMATION GRID
+========================================== */
+
+#patientDetailsContent {
+    width: 100%;
+}
+
+#patientDetailsContent .patient-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin: 0;
+    align-items: stretch;
+}
+
+.patient-detail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 9px;
+    min-width: 0;
+    min-height: 80px;
+    padding: 16px;
+    background: #f2f7f9;
+    border-radius: 9px;
+    box-sizing: border-box;
+}
+
+.patient-detail-item span {
+    display: block;
+    color: #648096;
+    font-size: 13px;
+    margin: 0;
+}
+
+.patient-detail-item strong {
+    display: block;
+    color: #173f4d;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    margin: 0;
+}
+
+
+/* ==========================================
+   6. APPOINTMENT HISTORY
+========================================== */
+
+.patient-history {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.patient-history h4 {
+    color: #173f4d;
+    text-align: left;
+    margin: 0 0 14px;
+}
+
+.patient-history table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.patient-history th,
+.patient-history td {
+    padding: 14px 12px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e3ebef;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.patient-history th {
+    background: #f2f7f9;
+    color: #173f4d;
+    font-weight: 600;
+}
+
+.patient-history td {
+    color: #294b5b;
+}
+
+.patient-history tbody tr:hover {
+    background: #f8fbfc;
+}
+
+
+/* ==========================================
+   7. RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 992px) {
+    #patientDetailsContent .patient-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .patient-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .main-content>.top-header {
+        gap: 10px;
+    }
+
+    .main-content .top-header .header-left {
+        gap: 10px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .dashboard-table {
+        min-width: 750px;
+    }
+
+    #patientDetailsContent .patient-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content .top-header .profile-avatar {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    .main-content .top-header .profile-info strong {
+        font-size: 12px;
+    }
+
+    .main-content .top-header .profile-info span {
+        font-size: 11px;
+    }
+
+    #patientDetailsContent .patient-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .patient-stat-card {
+        padding: 18px;
+    }
+}

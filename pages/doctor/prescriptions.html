@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prescriptions | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/doctor-prescriptions.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/doctor-prescriptions.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-doctor"></i>
+                </div>
+                <div>
+                    <h3 id="doctorName">Doctor</h3>
+                    <p>Doctor</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="../dashboards/doctor-dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="appointments.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>My Appointments</span>
+                </a>
+
+                <a href="patients.html" class="menu-item">
+                    <i class="fas fa-user-injured"></i>
+                    <span>My Patients</span>
+                </a>
+
+                <p class="menu-heading">PATIENT CARE</p>
+
+                <a href="medical-records.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Medical Records</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item active">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Prescriptions</h2>
+                        <p>Manage patient prescriptions</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-doctor"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Doctor</h4>
+                        <span>Doctor</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Prescriptions</h1>
+                        <p>Create, review and manage patient prescriptions.</p>
+                    </div>
+
+                    <button class="prescription-add-btn" id="newPrescriptionBtn" type="button">
+                        <i class="fas fa-plus"></i>
+                        New Prescription
+                    </button>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="prescription-stats">
+
+                    <div class="prescription-stat-card">
+                        <div class="prescription-stat-icon">
+                            <i class="fas fa-prescription"></i>
+                        </div>
+                        <div>
+                            <p>Total Prescriptions</p>
+                            <h2 id="totalPrescriptions">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="prescription-stat-card">
+                        <div class="prescription-stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p>Patients Prescribed</p>
+                            <h2 id="patientsPrescribed">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PRESCRIPTION FORM -->
+                <div class="section-card prescription-form-card" id="prescriptionFormSection">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3 id="formTitle">Create Prescription</h3>
+                            <p>Enter patient and medicine details.</p>
+                        </div>
+                    </div>
+
+                    <form id="prescriptionForm">
+
+                        <input type="hidden" id="prescriptionId">
+
+                        <div class="prescription-form-grid">
+
+                            <div class="form-group">
+                                <label for="patientSelect">Patient *</label>
+                                <select id="patientSelect" required>
+                                    <option value="">Select patient</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prescriptionDate">Prescription Date *</label>
+                                <input type="date" id="prescriptionDate" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="diagnosis">Diagnosis / Condition *</label>
+                                <textarea id="diagnosis" rows="2" placeholder="Enter diagnosis or condition"
+                                    required></textarea>
+                            </div>
+
+                        </div>
+
+                        <!-- MEDICINES -->
+                        <div class="medicine-section">
+
+                            <div class="medicine-section-heading">
+                                <div>
+                                    <h4>Medicines</h4>
+                                    <p>Add one or more medicines to this prescription.</p>
+                                </div>
+
+                                <button type="button" id="addMedicineBtn" class="add-medicine-btn">
+                                    <i class="fas fa-plus"></i> Add Medicine
+                                </button>
+                            </div>
+
+                            <div id="medicineList"></div>
+
+                        </div>
+
+                        <div class="prescription-form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="generalInstructions">
+                                    General Instructions
+                                </label>
+                                <textarea id="generalInstructions" rows="3"
+                                    placeholder="Enter general instructions for the patient"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="followUpDate">Follow-up Date</label>
+                                <input type="date" id="followUpDate">
+                            </div>
+
+                        </div>
+
+                        <p id="prescriptionMessage" class="form-message" aria-live="polite"></p>
+
+                        <div class="prescription-form-actions">
+                            <button type="button" id="cancelPrescriptionBtn" class="prescription-cancel-btn">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="prescription-save-btn">
+                                <i class="fas fa-save"></i>
+                                Save Prescription
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- PRESCRIPTION LIST -->
+                <div class="section-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Prescription History</h3>
+                            <p id="prescriptionCount">0 prescriptions</p>
+                        </div>
+                    </div>
+
+                    <div class="prescription-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchPrescriptions"
+                            placeholder="Search patient, prescription ID or diagnosis...">
+                    </div>
+
+                    <!-- DATE FILTER -->
+                    <div class="prescription-date-filters">
+                        <div class="date-filter-field">
+                            <label for="prescriptionDateFrom">From Date</label>
+                            <input type="date" id="prescriptionDateFrom">
+                        </div>
+
+                        <div class="date-filter-field">
+                            <label for="prescriptionDateTo">To Date</label>
+                            <input type="date" id="prescriptionDateTo">
+                        </div>
+
+                        <button type="button" id="filterPrescriptionsBtn"
+                            class="prescription-filter-btn">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+
+                        <button type="button" id="clearPrescriptionFiltersBtn"
+                            class="prescription-clear-filter-btn">
+                            <i class="fas fa-rotate-left"></i> Clear
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table prescription-table">
+                            <thead>
+                                <tr>
+                                    <th>Prescription ID</th>
+                                    <th>Patient</th>
+                                    <th>Date</th>
+                                    <th>Diagnosis</th>
+                                    <th>Medicines</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="prescriptionsTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No prescriptions found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- PRESCRIPTION DETAILS -->
+                <div class="section-card prescription-details-card" id="prescriptionDetails">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Prescription Details</h3>
+                            <p>Complete prescription information</p>
+                        </div>
+
+                        <div class="details-actions">
+                            <button type="button" id="printPrescriptionBtn" class="prescription-print-btn">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+
+                            <button type="button" id="closeDetailsBtn" class="prescription-close-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="prescriptionDetailsContent"></div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

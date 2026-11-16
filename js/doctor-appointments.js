@@ -1,463 +1,560 @@
+
 /* ==========================================
    SemasaCare - Doctor Appointment Management
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // =====================================
-  // 1. AUTHENTICATION
-  // =====================================
 
-  const currentUser = SemasaAuth.getCurrentUser();
+    // =====================================
+    // 1. AUTHENTICATION
+    // =====================================
 
-  if (!currentUser) {
-    window.location.href = "../login.html";
-    return;
-  }
+    const currentUser = SemasaAuth.getCurrentUser();
 
-  if (currentUser.role !== "doctor") {
-    const dashboardPaths = {
-      admin: "../admin-dashboard.html",
-      receptionist: "../dashboards/receptionist-dashboard.html",
-      patient: "../patient-dashboard.html",
-      pharmacist: "../pharmacist-dashboard.html",
-      laboratory: "../laboratory-dashboard.html",
-      accountant: "../accountant-dashboard.html",
-    };
-
-    window.location.href = dashboardPaths[currentUser.role] || "../login.html";
-
-    return;
-  }
-
-  // =====================================
-  // 2. HTML ELEMENTS
-  // =====================================
-
-  const doctorName = document.getElementById("doctorName");
-  const headerName = document.getElementById("headerName");
-  const currentDate = document.getElementById("currentDate");
-
-  const tableBody = document.getElementById("appointmentsTableBody");
-
-  const searchPatient = document.getElementById("searchPatient");
-  const dateFilter = document.getElementById("dateFilter");
-  const statusFilter = document.getElementById("statusFilter");
-  const resetFilters = document.getElementById("resetFilters");
-
-  const totalAppointments = document.getElementById("totalAppointments");
-  const pendingAppointments = document.getElementById("pendingAppointments");
-  const completedAppointments = document.getElementById(
-    "completedAppointments",
-  );
-  const cancelledAppointments = document.getElementById(
-    "cancelledAppointments",
-  );
-  const showingCount = document.getElementById("showingCount");
-
-  // =====================================
-  // 3. DOCTOR INFORMATION
-  // =====================================
-
-  const name = currentUser.name || "Doctor";
-
-  doctorName.textContent = name;
-  headerName.textContent = name;
-
-  currentDate.textContent = new Date().toLocaleDateString("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  // =====================================
-  // 4. LOAD APPOINTMENTS
-  // =====================================
-
-  function getAppointments() {
-    try {
-      const data = JSON.parse(
-        localStorage.getItem("semasacareAppointments") || "[]",
-      );
-
-      return Array.isArray(data) ? data : [];
-    } catch (error) {
-      console.error("Unable to load appointments:", error);
-      return [];
-    }
-  }
-
-  function saveAppointments(appointments) {
-    try {
-      localStorage.setItem(
-        "semasacareAppointments",
-        JSON.stringify(appointments),
-      );
-
-      return true;
-    } catch (error) {
-      console.error("Unable to save appointments:", error);
-      alert("Unable to update appointment.");
-      return false;
-    }
-  }
-
-  // =====================================
-  // 5. MATCH LOGGED-IN DOCTOR
-  // =====================================
-
-  function getDoctorAppointments() {
-    const appointments = getAppointments();
-
-    const doctorId = String(currentUser.id);
-    const doctorEmail = String(currentUser.email || "")
-      .trim()
-      .toLowerCase();
-
-    return appointments.filter((appointment) => {
-      const appointmentDoctorId = String(appointment.doctorId ?? "");
-
-      const appointmentDoctorEmail = String(appointment.doctorEmail || "")
-        .trim()
-        .toLowerCase();
-
-      return (
-        appointmentDoctorId === doctorId ||
-        (doctorEmail && appointmentDoctorEmail === doctorEmail)
-      );
-    });
-  }
-
-  // =====================================
-  // 6. DATE FORMATTING
-  // =====================================
-
-  function normalizeDate(value) {
-    const date = String(value || "").trim();
-
-    if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
-      const [year, month, day] = date.split("-").map(Number);
-
-      return [
-        year,
-        String(month).padStart(2, "0"),
-        String(day).padStart(2, "0"),
-      ].join("-");
+    if (!currentUser) {
+        window.location.href = "../login.html";
+        return;
     }
 
-    if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}$/.test(date)) {
-      const [day, month, year] = date.split(/[-/]/).map(Number);
+    if (currentUser.role !== "doctor") {
+        const dashboardPaths = {
+            admin: "../admin-dashboard.html",
+            receptionist: "../dashboards/receptionist-dashboard.html",
+            patient: "../patient-dashboard.html",
+            pharmacist: "../pharmacist-dashboard.html",
+            laboratory: "../laboratory-dashboard.html",
+            accountant: "../accountant-dashboard.html"
+        };
 
-      return [
-        year,
-        String(month).padStart(2, "0"),
-        String(day).padStart(2, "0"),
-      ].join("-");
+        window.location.href =
+            dashboardPaths[currentUser.role] || "../login.html";
+
+        return;
     }
 
-    return "";
-  }
+    // =====================================
+    // 2. HTML ELEMENTS
+    // =====================================
 
-  function formatDate(value) {
-    const normalized = normalizeDate(value);
+    const doctorName = document.getElementById("doctorName");
+    const headerName = document.getElementById("headerName");
+    const currentDate = document.getElementById("currentDate");
 
-    if (!normalized) return value || "N/A";
+    const tableBody = document.getElementById("appointmentsTableBody");
 
-    const [year, month, day] = normalized.split("-").map(Number);
+    const searchPatient = document.getElementById("searchPatient");
+    const dateFilter = document.getElementById("dateFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const resetFilters = document.getElementById("resetFilters");
 
-    return new Date(year, month - 1, day).toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  }
+    const totalAppointments = document.getElementById("totalAppointments");
+    const pendingAppointments = document.getElementById("pendingAppointments");
+    const completedAppointments = document.getElementById("completedAppointments");
+    const cancelledAppointments = document.getElementById("cancelledAppointments");
+    const showingCount = document.getElementById("showingCount");
 
-  // =====================================
-  // 7. STATUS BADGE
-  // =====================================
+    // =====================================
+    // 3. DOCTOR INFORMATION
+    // =====================================
 
-  function createStatusBadge(status) {
-    const badge = document.createElement("span");
+    const name = currentUser.name || "Doctor";
 
-    const safeStatus = String(status || "Pending");
+    if (doctorName) doctorName.textContent = name;
+    if (headerName) headerName.textContent = name;
 
-    badge.className = "doctor-appointment-status";
-
-    const normalized = safeStatus.toLowerCase();
-
-    if (normalized === "completed") {
-      badge.classList.add("completed");
-      // } else if (normalized === "confirmed") {
-      //   badge.classList.add("confirmed");
-    } else if (normalized === "cancelled") {
-      badge.classList.add("cancelled");
-    } else {
-      badge.classList.add("pending");
+    if (currentDate) {
+        currentDate.textContent = new Date().toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
     }
 
-    badge.textContent = safeStatus;
+    // =====================================
+    // 4. LOAD APPOINTMENTS
+    // =====================================
 
-    return badge;
-  }
+    function getAppointments() {
+        try {
+            const data = JSON.parse(
+                localStorage.getItem("semasacareAppointments") || "[]"
+            );
 
-  // =====================================
-  // 8. UPDATE STATISTICS
-  // =====================================
+            return Array.isArray(data) ? data : [];
 
-  function updateStatistics(appointments) {
-    totalAppointments.textContent = appointments.length;
-
-    pendingAppointments.textContent = appointments.filter(
-      (item) => String(item.status || "Pending").toLowerCase() === "pending",
-    ).length;
-
-    completedAppointments.textContent = appointments.filter(
-      (item) => String(item.status || "").toLowerCase() === "completed",
-    ).length;
-
-    cancelledAppointments.textContent = appointments.filter(
-      (item) => String(item.status || "").toLowerCase() === "cancelled",
-    ).length;
-  }
-
-  // =====================================
-  // 9. RENDER APPOINTMENT TABLE
-  // =====================================
-
-  function renderAppointments() {
-    const appointments = getDoctorAppointments();
-
-    const searchText = searchPatient.value.trim().toLowerCase();
-    const selectedDate = dateFilter.value;
-    const selectedStatus = statusFilter.value;
-
-    const filteredAppointments = appointments.filter((appointment) => {
-      const patientName = String(appointment.patientName || "").toLowerCase();
-
-      const appointmentDate = normalizeDate(appointment.date);
-
-      const appointmentStatus = String(appointment.status || "Pending");
-
-      const matchesSearch = patientName.includes(searchText);
-
-      const matchesDate = !selectedDate || appointmentDate === selectedDate;
-
-      const matchesStatus =
-        selectedStatus === "all" ||
-        appointmentStatus.toLowerCase() === selectedStatus.toLowerCase();
-
-      return matchesSearch && matchesDate && matchesStatus;
-    });
-
-    // Sort by appointment date
-    filteredAppointments.sort((a, b) => {
-      const dateA = normalizeDate(a.date);
-      const dateB = normalizeDate(b.date);
-
-      return dateA.localeCompare(dateB);
-    });
-
-    tableBody.replaceChildren();
-
-    showingCount.textContent = filteredAppointments.length;
-
-    if (filteredAppointments.length === 0) {
-      const row = document.createElement("tr");
-      const cell = document.createElement("td");
-
-      cell.colSpan = 7;
-      cell.className = "empty-message";
-      cell.textContent =
-        appointments.length === 0
-          ? "No appointments assigned to you yet."
-          : "No appointments match your filters.";
-
-      row.appendChild(cell);
-      tableBody.appendChild(row);
-
-      return;
+        } catch (error) {
+            console.error("Unable to load appointments:", error);
+            return [];
+        }
     }
 
-    filteredAppointments.forEach((appointment) => {
-      const row = document.createElement("tr");
+    function saveAppointments(appointments) {
+        try {
+            localStorage.setItem(
+                "semasacareAppointments",
+                JSON.stringify(appointments)
+            );
 
-      const values = [
-        appointment.id || "N/A",
-        appointment.patientName || "N/A",
-        appointment.phone || "N/A",
-        formatDate(appointment.date),
-        appointment.time || "N/A",
-      ];
+            return true;
 
-      values.forEach((value) => {
-        const cell = document.createElement("td");
+        } catch (error) {
+            console.error("Unable to save appointments:", error);
+            alert("Unable to update appointment.");
+            return false;
+        }
+    }
 
-        cell.textContent = value;
+    // =====================================
+    // 5. MATCH LOGGED-IN DOCTOR
+    // =====================================
 
-        row.appendChild(cell);
-      });
+    function getDoctorAppointments() {
+        const appointments = getAppointments();
 
-      // STATUS
-      const statusCell = document.createElement("td");
+        const doctorId = String(currentUser.id ?? "");
 
-      statusCell.appendChild(createStatusBadge(appointment.status));
+        const doctorEmail = String(currentUser.email || "")
+            .trim()
+            .toLowerCase();
 
-      row.appendChild(statusCell);
+        return appointments.filter((appointment) => {
 
-      // ACTION - STATUS DROPDOWN
+            const appointmentDoctorId =
+                String(appointment.doctorId ?? "");
 
-      const actionCell = document.createElement("td");
+            const appointmentDoctorEmail =
+                String(appointment.doctorEmail || "")
+                    .trim()
+                    .toLowerCase();
 
-      const statusSelect = document.createElement("select");
+            return (
+                (doctorId && appointmentDoctorId === doctorId) ||
+                (doctorEmail && appointmentDoctorEmail === doctorEmail)
+            );
+        });
+    }
 
-      statusSelect.className = "appointment-status-select";
+    // =====================================
+    // 6. DATE FORMATTING
+    // =====================================
 
-      statusSelect.dataset.appointmentId = appointment.id;
+    function normalizeDate(value) {
+        const date = String(value || "").trim();
 
-      const statuses = ["Pending", "Completed", "Cancelled"];
+        // YYYY-MM-DD
+        if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
+            const [year, month, day] = date.split("-").map(Number);
 
-      statuses.forEach((status) => {
-        const option = document.createElement("option");
-
-        option.value = status;
-        option.textContent = status;
-
-        if (
-          status.toLowerCase() ===
-          String(appointment.status || "Pending").toLowerCase()
-        ) {
-          option.selected = true;
+            return [
+                year,
+                String(month).padStart(2, "0"),
+                String(day).padStart(2, "0")
+            ].join("-");
         }
 
-        option.value = status;
+        // DD-MM-YYYY or DD/MM/YYYY
+        if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}$/.test(date)) {
+            const [day, month, year] = date.split(/[-/]/).map(Number);
 
-        statusSelect.appendChild(option);
-      });
+            return [
+                year,
+                String(month).padStart(2, "0"),
+                String(day).padStart(2, "0")
+            ].join("-");
+        }
 
-      actionCell.appendChild(statusSelect);
+        return "";
+    }
 
-      row.appendChild(actionCell);
+    function formatDate(value) {
+        const normalized = normalizeDate(value);
 
-      // ADD ROW TO TABLE
-      tableBody.appendChild(row);
+        if (!normalized) return value || "N/A";
+
+        const [year, month, day] = normalized.split("-").map(Number);
+
+        return new Date(year, month - 1, day).toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        });
+    }
+
+    // =====================================
+    // 7. APPOINTMENT DATE AND TIME SORTING
+    // =====================================
+
+    function getAppointmentTimestamp(appointment) {
+
+        const date = normalizeDate(appointment.date);
+
+        if (!date) return Number.MAX_SAFE_INTEGER;
+
+        const time = String(appointment.time || "").trim();
+
+        let hours = 0;
+        let minutes = 0;
+
+        const match = time.match(
+            /^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?$/i
+        );
+
+        if (match) {
+            hours = Number(match[1]);
+            minutes = Number(match[2]);
+
+            const period = match[3]?.toUpperCase();
+
+            if (period === "PM" && hours < 12) {
+                hours += 12;
+            }
+
+            if (period === "AM" && hours === 12) {
+                hours = 0;
+            }
+        }
+
+        const [year, month, day] = date.split("-").map(Number);
+
+        return new Date(
+            year,
+            month - 1,
+            day,
+            hours,
+            minutes
+        ).getTime();
+    }
+
+    // =====================================
+    // 8. STATUS BADGE
+    // =====================================
+
+    function createStatusBadge(status) {
+        const badge = document.createElement("span");
+
+        const safeStatus = String(status || "Pending");
+
+        badge.className = "doctor-appointment-status";
+
+        const normalized = safeStatus.toLowerCase();
+
+        if (normalized === "completed") {
+            badge.classList.add("completed");
+
+        } else if (normalized === "cancelled") {
+            badge.classList.add("cancelled");
+
+        } else {
+            badge.classList.add("pending");
+        }
+
+        badge.textContent = safeStatus;
+
+        return badge;
+    }
+
+    // =====================================
+    // 9. UPDATE STATISTICS
+    // =====================================
+
+    function updateStatistics(appointments) {
+
+        if (totalAppointments) {
+            totalAppointments.textContent = appointments.length;
+        }
+
+        if (pendingAppointments) {
+            pendingAppointments.textContent = appointments.filter(
+                (item) =>
+                    String(item.status || "Pending").toLowerCase() === "pending"
+            ).length;
+        }
+
+        if (completedAppointments) {
+            completedAppointments.textContent = appointments.filter(
+                (item) =>
+                    String(item.status || "").toLowerCase() === "completed"
+            ).length;
+        }
+
+        if (cancelledAppointments) {
+            cancelledAppointments.textContent = appointments.filter(
+                (item) =>
+                    String(item.status || "").toLowerCase() === "cancelled"
+            ).length;
+        }
+    }
+
+    // =====================================
+    // 10. RENDER APPOINTMENT TABLE
+    // =====================================
+
+    function renderAppointments() {
+
+        if (!tableBody || !searchPatient || !dateFilter ||
+            !statusFilter || !showingCount) {
+            console.error("Appointment table elements are missing.");
+            return;
+        }
+
+        const appointments = getDoctorAppointments();
+
+        const searchText = searchPatient.value.trim().toLowerCase();
+        const selectedDate = dateFilter.value;
+        const selectedStatus = statusFilter.value;
+
+        const filteredAppointments = appointments.filter((appointment) => {
+
+            const patientName = String(
+                appointment.patientName || ""
+            ).toLowerCase();
+
+            const appointmentDate = normalizeDate(appointment.date);
+
+            const appointmentStatus = String(
+                appointment.status || "Pending"
+            );
+
+            const matchesSearch = patientName.includes(searchText);
+
+            const matchesDate =
+                !selectedDate || appointmentDate === selectedDate;
+
+            const matchesStatus =
+                selectedStatus === "all" ||
+                appointmentStatus.toLowerCase() ===
+                selectedStatus.toLowerCase();
+
+            return matchesSearch && matchesDate && matchesStatus;
+        });
+
+        // SORT BY DATE AND TIME - EARLIEST FIRST
+        filteredAppointments.sort((a, b) => {
+            return (
+                getAppointmentTimestamp(a) -
+                getAppointmentTimestamp(b)
+            );
+        });
+
+        tableBody.replaceChildren();
+
+        showingCount.textContent = filteredAppointments.length;
+
+        if (filteredAppointments.length === 0) {
+
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 7;
+            cell.className = "empty-message";
+
+            cell.textContent =
+                appointments.length === 0
+                    ? "No appointments assigned to you yet."
+                    : "No appointments match your filters.";
+
+            row.appendChild(cell);
+            tableBody.appendChild(row);
+
+            return;
+        }
+
+        filteredAppointments.forEach((appointment) => {
+
+            const row = document.createElement("tr");
+
+            const values = [
+                appointment.id || "N/A",
+                appointment.patientName || "N/A",
+                appointment.phone || "N/A",
+                formatDate(appointment.date),
+                appointment.time || "N/A"
+            ];
+
+            values.forEach((value) => {
+
+                const cell = document.createElement("td");
+
+                cell.textContent = value;
+
+                row.appendChild(cell);
+            });
+
+            // STATUS
+            const statusCell = document.createElement("td");
+
+            statusCell.appendChild(
+                createStatusBadge(appointment.status)
+            );
+
+            row.appendChild(statusCell);
+
+            // ACTION - STATUS DROPDOWN
+            const actionCell = document.createElement("td");
+
+            const statusSelect = document.createElement("select");
+
+            statusSelect.className = "appointment-status-select";
+
+            statusSelect.dataset.appointmentId = appointment.id;
+
+            const statuses = ["Pending", "Completed", "Cancelled"];
+
+            statuses.forEach((status) => {
+
+                const option = document.createElement("option");
+
+                option.value = status;
+                option.textContent = status;
+
+                if (
+                    status.toLowerCase() ===
+                    String(appointment.status || "Pending").toLowerCase()
+                ) {
+                    option.selected = true;
+                }
+
+                statusSelect.appendChild(option);
+            });
+
+            actionCell.appendChild(statusSelect);
+
+            row.appendChild(actionCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    // =====================================
+    // 11. UPDATE APPOINTMENT STATUS
+    // =====================================
+
+    function updateAppointmentStatus(appointmentId, newStatus) {
+
+        const appointments = getAppointments();
+
+        const appointment = appointments.find(
+            (item) => String(item.id) === String(appointmentId)
+        );
+
+        if (!appointment) {
+            alert("Appointment not found.");
+            return;
+        }
+
+        const belongsToDoctor =
+            String(appointment.doctorId ?? "") ===
+                String(currentUser.id ?? "") ||
+            String(appointment.doctorEmail || "").toLowerCase() ===
+                String(currentUser.email || "").toLowerCase();
+
+        if (!belongsToDoctor) {
+            alert("You cannot update another doctor's appointment.");
+            return;
+        }
+
+        const validStatuses = ["Pending", "Completed", "Cancelled"];
+
+        const matchedStatus = validStatuses.find(
+            (status) => status.toLowerCase() === newStatus.toLowerCase()
+        );
+
+        if (!matchedStatus) {
+            alert("Invalid appointment status.");
+            return;
+        }
+
+        appointment.status = matchedStatus;
+
+        if (saveAppointments(appointments)) {
+            refreshDashboard();
+        }
+    }
+
+    // =====================================
+    // 12. TABLE ACTION EVENTS
+    // =====================================
+
+    if (tableBody) {
+        tableBody.addEventListener("change", (event) => {
+
+            const select = event.target.closest(
+                ".appointment-status-select"
+            );
+
+            if (!select) return;
+
+            updateAppointmentStatus(
+                select.dataset.appointmentId,
+                select.value
+            );
+        });
+    }
+
+    // =====================================
+    // 13. SEARCH AND FILTER EVENTS
+    // =====================================
+
+    searchPatient?.addEventListener("input", renderAppointments);
+
+    dateFilter?.addEventListener("change", renderAppointments);
+
+    statusFilter?.addEventListener("change", renderAppointments);
+
+    resetFilters?.addEventListener("click", () => {
+
+        if (searchPatient) searchPatient.value = "";
+        if (dateFilter) dateFilter.value = "";
+        if (statusFilter) statusFilter.value = "all";
+
+        renderAppointments();
     });
-  }
 
-  // =====================================
-  // 10. UPDATE APPOINTMENT STATUS
-  // =====================================
+    // =====================================
+    // 14. SIDEBAR
+    // =====================================
 
-  function updateAppointmentStatus(appointmentId, newStatus) {
-    const appointments = getAppointments();
+    document.getElementById("menuToggle")?.addEventListener("click", () => {
+        document.getElementById("sidebar")?.classList.toggle("active");
+    });
 
-    const appointment = appointments.find(
-      (item) => String(item.id) === String(appointmentId),
-    );
+    // =====================================
+    // 15. LOGOUT
+    // =====================================
 
-    if (!appointment) {
-      alert("Appointment not found.");
-      return;
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+
+        localStorage.removeItem("semasacareSession");
+
+        window.location.replace("../login.html");
+    });
+
+    // =====================================
+    // 16. REFRESH DASHBOARD
+    // =====================================
+
+    function refreshDashboard() {
+
+        const appointments = getDoctorAppointments();
+
+        updateStatistics(appointments);
+
+        renderAppointments();
     }
 
-    const belongsToDoctor =
-      String(appointment.doctorId ?? "") === String(currentUser.id) ||
-      String(appointment.doctorEmail || "").toLowerCase() ===
-        String(currentUser.email || "").toLowerCase();
+    // Refresh when appointments change in another browser tab
+    window.addEventListener("storage", (event) => {
 
-    if (!belongsToDoctor) {
-      alert("You cannot update another doctor's appointment.");
-      return;
-    }
+        if (event.key === "semasacareAppointments") {
+            refreshDashboard();
+        }
+    });
 
-    const validStatuses = ["Pending", "Completed", "Cancelled"];
+    // =====================================
+    // 17. INITIALIZE
+    // =====================================
 
-    const matchedStatus = validStatuses.find(
-      (status) => status.toLowerCase() === newStatus.toLowerCase(),
-    );
+    refreshDashboard();
 
-    if (!matchedStatus) {
-      alert("Invalid appointment status.");
-      return;
-    }
-
-    appointment.status = matchedStatus;
-
-    if (saveAppointments(appointments)) {
-      refreshDashboard();
-    }
-  }
-
-  // =====================================
-  // 11. TABLE ACTION EVENTS
-  // =====================================
-
-  // TABLE STATUS DROPDOWN EVENTS
-
-  tableBody.addEventListener("change", (event) => {
-    const select = event.target.closest(".appointment-status-select");
-
-    if (!select) return;
-
-    updateAppointmentStatus(select.dataset.appointmentId, select.value);
-  });
-  // =====================================
-  // 12. SEARCH AND FILTER EVENTS
-  // =====================================
-
-  searchPatient.addEventListener("input", renderAppointments);
-
-  dateFilter.addEventListener("change", renderAppointments);
-
-  statusFilter.addEventListener("change", renderAppointments);
-
-  resetFilters.addEventListener("click", () => {
-    searchPatient.value = "";
-    dateFilter.value = "";
-    statusFilter.value = "all";
-
-    renderAppointments();
-  });
-
-  // =====================================
-  // 13. SIDEBAR
-  // =====================================
-
-  document.getElementById("menuToggle")?.addEventListener("click", () => {
-    document.getElementById("sidebar")?.classList.toggle("active");
-  });
-
-  // =====================================
-  // 14. LOGOUT
-  // =====================================
-
-  document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    localStorage.removeItem("semasacareSession");
-
-    window.location.replace("../login.html");
-  });
-
-  // =====================================
-  // 15. REFRESH DASHBOARD
-  // =====================================
-
-  function refreshDashboard() {
-    const appointments = getDoctorAppointments();
-
-    updateStatistics(appointments);
-
-    renderAppointments();
-  }
-
-  // Refresh if appointments change in another browser tab
-  window.addEventListener("storage", (event) => {
-    if (event.key === "semasacareAppointments") {
-      refreshDashboard();
-    }
-  });
-
-  // =====================================
-  // 16. INITIALIZE
-  // =====================================
-
-  refreshDashboard();
 });

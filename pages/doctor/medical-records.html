@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Medical Records | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/doctor-medical-records.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/doctor-medical-records.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-doctor"></i>
+                </div>
+                <div>
+                    <h3 id="doctorName">Doctor</h3>
+                    <p>Doctor</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="../dashboards/doctor-dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="appointments.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>My Appointments</span>
+                </a>
+
+                <a href="patients.html" class="menu-item">
+                    <i class="fas fa-user-injured"></i>
+                    <span>My Patients</span>
+                </a>
+
+                <p class="menu-heading">PATIENT CARE</p>
+
+                <a href="medical-records.html" class="menu-item active">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Medical Records</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Medical Records</h2>
+                        <p>Patient consultation records</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-doctor"></i>
+                    </div>
+                    <div>
+                        <h4 id="headerName">Doctor</h4>
+                        <span>Doctor</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Medical Records</h1>
+                        <p>Create and review patient consultation records.</p>
+                    </div>
+
+                    <button class="medical-add-btn" id="newRecordBtn" type="button">
+                        <i class="fas fa-plus"></i> New Record
+                    </button>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="medical-stats">
+
+                    <div class="medical-stat-card">
+                        <div class="medical-stat-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <p>Total Records</p>
+                            <h2 id="totalRecords">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="medical-stat-card">
+                        <div class="medical-stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p>Patients Recorded</p>
+                            <h2 id="recordedPatients">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CREATE RECORD -->
+                <div class="section-card medical-form-card" id="recordFormSection">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3 id="formTitle">Create Medical Record</h3>
+                            <p>Enter the consultation information below.</p>
+                        </div>
+                    </div>
+
+                    <form id="medicalRecordForm">
+
+                        <input type="hidden" id="recordId">
+
+                        <div class="medical-form-grid">
+
+                            <div class="form-group">
+                                <label for="patientSelect">Patient *</label>
+                                <select id="patientSelect" required>
+                                    <option value="">Select patient</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="visitDate">Consultation Date *</label>
+                                <input type="date" id="visitDate" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="symptoms">Symptoms / Complaints *</label>
+                                <textarea id="symptoms" rows="3" placeholder="Enter reported symptoms"
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="diagnosis">Diagnosis *</label>
+                                <textarea id="diagnosis" rows="3" placeholder="Enter diagnosis" required></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="treatment">Treatment / Advice</label>
+                                <textarea id="treatment" rows="3" placeholder="Enter treatment or advice"></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="notes">Doctor's Notes</label>
+                                <textarea id="notes" rows="3" placeholder="Additional consultation notes"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="followUpDate">Follow-up Date</label>
+                                <input type="date" id="followUpDate">
+                            </div>
+
+                        </div>
+
+                        <p id="formMessage" class="form-message"></p>
+
+                        <div class="medical-form-actions">
+
+                            <button type="button" id="cancelRecordBtn" class="medical-cancel-btn">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="medical-save-btn">
+                                <i class="fas fa-save"></i> Save Record
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- RECORD LIST -->
+                <div class="section-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Patient Medical History</h3>
+                            <p id="recordCount">0 records</p>
+                        </div>
+                    </div>
+
+                    <div class="medical-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchRecords" placeholder="Search patient name or record ID...">
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Record ID</th>
+                                    <th>Patient</th>
+                                    <th>Consultation Date</th>
+                                    <th>Diagnosis</th>
+                                    <th>Follow-up</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="medicalRecordsTable">
+
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No medical records found.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- RECORD DETAILS -->
+                <div class="section-card record-details-card" id="recordDetails">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Medical Record Details</h3>
+                            <p>Consultation information</p>
+                        </div>
+
+                        <button type="button" id="closeDetailsBtn" class="medical-close-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div id="recordDetailsContent"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

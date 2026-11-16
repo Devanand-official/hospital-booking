@@ -164,7 +164,158 @@ function getAppointments() {
   }
 }
 
-// 6. GENERATE UNIQUE APPOINTMENT ID
+
+// ==========================================
+// 5A. GET REGISTERED PATIENTS
+// ==========================================
+
+function getPatients() {
+  try {
+    const patients = JSON.parse(
+      localStorage.getItem("semasacarePatients") || "[]"
+    );
+
+    return Array.isArray(patients) ? patients : [];
+  } catch (error) {
+    console.error("Unable to read patients:", error);
+    return [];
+  }
+}
+
+// ==========================================
+// 5B. FIND OR CREATE PATIENT
+// ==========================================
+
+function findOrCreatePatient({
+  name,
+  email,
+  phone,
+  age,
+  gender
+}) {
+  const patients = getPatients();
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedPhone = phone.trim();
+
+  // Find an existing patient using email or phone
+  let patient = patients.find(item =>
+    (
+      item.email || ""
+    ).trim().toLowerCase() === normalizedEmail
+  );
+
+  if (!patient) {
+    patient = patients.find(item =>
+      String(item.phone || "").trim() === normalizedPhone
+    );
+  }
+
+  // Reuse existing patient ID
+  if (patient) {
+    return patient;
+  }
+
+  // Create a new patient record
+  const newPatient = {
+    id: `PAT-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    name: name,
+    email: normalizedEmail,
+    phone: normalizedPhone,
+    age: age,
+    gender: gender,
+    dob: "",
+    bloodGroup: "",
+    address: "",
+    emergencyContact: "",
+    role: "patient",
+    registeredBy: "Online Booking",
+    registrationDate: new Date().toISOString()
+  };
+
+  patients.push(newPatient);
+
+  localStorage.setItem(
+    "semasacarePatients",
+    JSON.stringify(patients)
+  );
+
+  return newPatient;
+}
+
+
+// 6. PATIENT RECORD HELPERS
+
+function getPatients() {
+  try {
+    const patients = JSON.parse(localStorage.getItem("semasacarePatients") || "[]");
+    return Array.isArray(patients) ? patients : [];
+  } catch (error) {
+    console.error("Unable to read patients:", error);
+    return [];
+  }
+}
+
+function generatePatientID() {
+  let id;
+  const patients = getPatients();
+  do {
+    id = "PAT-" + Date.now() + "-" + Math.floor(Math.random() * 10000);
+  } while (patients.some((patient) => String(patient.id) === id));
+  return id;
+}
+
+// Match by email first. Phone is used only with the same name to reduce
+// accidental merging of family members who share a phone number.
+function findOrCreatePatient(details) {
+  const patients = getPatients();
+  const email = String(details.email || "").trim().toLowerCase();
+  const phone = String(details.phone || "").trim();
+  const name = String(details.name || "").trim();
+
+  let patient = patients.find((item) =>
+    String(item.email || "").trim().toLowerCase() === email
+  );
+
+  if (!patient) {
+    patient = patients.find((item) =>
+      String(item.phone || "").trim() === phone &&
+      String(item.name || "").trim().toLowerCase() === name.toLowerCase()
+    );
+  }
+
+  if (patient) {
+    // Fill missing contact details without replacing an existing patient ID.
+    patient.email = patient.email || email;
+    patient.phone = patient.phone || phone;
+    patient.name = patient.name || name;
+    patient.gender = patient.gender || details.gender;
+    localStorage.setItem("semasacarePatients", JSON.stringify(patients));
+    return patient;
+  }
+
+  const newPatient = {
+    id: generatePatientID(),
+    name,
+    email,
+    phone,
+    age: details.age,
+    dob: "",
+    gender: details.gender,
+    bloodGroup: "",
+    address: "",
+    emergencyContact: "",
+    role: "patient",
+    registeredBy: "Online Booking",
+    registrationDate: new Date().toISOString()
+  };
+
+  patients.push(newPatient);
+  localStorage.setItem("semasacarePatients", JSON.stringify(patients));
+  return newPatient;
+}
+
+// 7. GENERATE UNIQUE APPOINTMENT ID
 
 function generateAppointmentID() {
   return (
@@ -263,38 +414,76 @@ appointmentForm.addEventListener("submit", function (event) {
     return;
   }
 
+  // FIND OR CREATE THE PATIENT RECORD
+  // let patient;
+  // try {
+  //   patient = findOrCreatePatient({
+  //     name: patientName,
+  //     email: patientEmail,
+  //     phone: patientPhone,
+  //     age: patientAge,
+  //     gender: patientGender
+  //   });
+  // } catch (error) {
+  //   console.error("Unable to save patient record:", error);
+  //   alert("Unable to save patient information. Please try again.");
+  //   return;
+  // }
+
+  // CREATE APPOINTMENT OBJECT WITH THE PATIENT'S PERMANENT ID
+
+  // ==========================================
+  // CREATE OR FIND PATIENT
+  // ==========================================
+
+  let patient;
+
+  try {
+    patient = findOrCreatePatient({
+      name: patientName,
+      email: patientEmail,
+      phone: patientPhone,
+      age: patientAge,
+      gender: patientGender
+    });
+  } catch (error) {
+    alert("Unable to save patient information. Please try again.");
+    console.error(error);
+    return;
+  }
+
+  // ==========================================
   // CREATE APPOINTMENT OBJECT
+  // ==========================================
 
   const appointment = {
     id: generateAppointmentID(),
 
-    patientName: patientName,
+    // Patient identification
+    patientId: patient.id,
+    patientName: patient.name,
+    patientEmail: patient.email,
+    patientPhone: patient.phone,
+    patientGender: patient.gender,
 
+    // Legacy fields for existing modules
     age: patientAge,
+    email: patient.email,
+    phone: patient.phone,
+    gender: patient.gender,
 
-    email: patientEmail,
-
-    phone: patientPhone,
-
-    gender: patientGender,
-
+    // Doctor information
     doctorId: selectedDoctor.id,
-
     doctorName: selectedDoctor.name,
-
     doctorEmail: selectedDoctor.email,
-
     specialty: selectedDoctor.specialty,
 
+    // Appointment information
     date: date,
-
     time: time,
-
     reason: reason,
-
     status: "Pending",
-
-    bookedAt: new Date().toISOString(),
+    bookedAt: new Date().toISOString()
   };
 
   // SAVE APPOINTMENT

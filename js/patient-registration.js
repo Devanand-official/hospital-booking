@@ -1,10 +1,6 @@
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =========================================
-    // 1. Check Login and Role Access
-    // =========================================
-
+    // 1. CHECK LOGIN AND ROLE ACCESS
     const currentUser = SemasaAuth.getCurrentUser();
 
     if (!currentUser) {
@@ -15,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const allowedRoles = ["admin", "receptionist"];
 
     if (!allowedRoles.includes(currentUser.role)) {
-
         const roleDashboards = {
             admin: "dashboards/admin-dashboard.html",
             receptionist: "dashboards/receptionist-dashboard.html",
@@ -26,34 +21,18 @@ document.addEventListener("DOMContentLoaded", function () {
             accountant: "dashboards/accountant-dashboard.html"
         };
 
-        window.location.href =
-            roleDashboards[currentUser.role] || "login.html";
-
+        window.location.href = roleDashboards[currentUser.role] || "login.html";
         return;
     }
 
-
-    // =========================================
-    // 2. Display Staff Information
-    // =========================================
-
+    // 2. DISPLAY STAFF INFORMATION
     const staffName = currentUser.name || currentUser.email;
-
     const staffNameElement = document.getElementById("staffName");
     const headerNameElement = document.getElementById("headerName");
     const staffRoleElement = document.getElementById("staffRole");
     const headerRoleElement = document.getElementById("headerRole");
 
-    if (staffNameElement) {
-        staffNameElement.textContent = staffName;
-    }
-
-    if (headerNameElement) {
-        headerNameElement.textContent = staffName;
-    }
-
-   if (staffRoleElement) {
-    const roleName = {
+    const roleNames = {
         admin: "System Admin",
         receptionist: "Receptionist",
         doctor: "Doctor",
@@ -62,203 +41,102 @@ document.addEventListener("DOMContentLoaded", function () {
         accountant: "Accountant"
     };
 
-    staffRoleElement.textContent =
-        roleName[currentUser.role] || currentUser.role;
-}
+    if (staffNameElement) staffNameElement.textContent = staffName;
+    if (headerNameElement) headerNameElement.textContent = staffName;
+    if (staffRoleElement) staffRoleElement.textContent = roleNames[currentUser.role] || currentUser.role;
+    if (headerRoleElement) headerRoleElement.textContent = roleNames[currentUser.role] || currentUser.role;
 
-   if (headerRoleElement) {
-    const roleName = {
-        admin: "System Admin",
-        receptionist: "Receptionist",
-        doctor: "Doctor",
-        pharmacist: "Pharmacist",
-        laboratory: "Laboratory Technician",
-        accountant: "Accountant"
-    };
-
-    headerRoleElement.textContent =
-        roleName[currentUser.role] || currentUser.role;
-}
-
-
-    // =========================================
-    // 3. Set Maximum Date of Birth
-    // =========================================
-
+    // 3. SET MAXIMUM DATE OF BIRTH
     const dobInput = document.getElementById("dob");
-
     if (dobInput) {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, "0");
-        const day = String(today.getDate()).padStart(2, "0");
-
-        dobInput.max = `${year}-${month}-${day}`;
+        dobInput.max = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
     }
 
+    // 4. FORM ELEMENTS
+    const registrationForm = document.getElementById("patientRegistrationForm");
+    const registrationMessage = document.getElementById("registrationMessage");
 
-    // =========================================
-    // 4. Get Registration Form Elements
-    // =========================================
+    if (!registrationForm || !registrationMessage) {
+        console.error("Patient registration form or message element was not found.");
+        return;
+    }
 
-    const registrationForm =
-        document.getElementById("patientRegistrationForm");
-
-    const registrationMessage =
-        document.getElementById("registrationMessage");
-
-
-    // =========================================
-    // 5. Display Messages
-    // =========================================
-
+    // 5. MESSAGE HELPER
     function showMessage(message, type) {
-
         registrationMessage.textContent = message;
         registrationMessage.className = "form-message " + type;
     }
 
-
-    // =========================================
-    // 6. Get Existing Patient Records
-    // =========================================
-
+    // 6. PATIENT STORAGE
     function getPatients() {
-
         try {
-            const patients =
-                JSON.parse(localStorage.getItem("semasacarePatients")) || [];
-
+            const patients = JSON.parse(localStorage.getItem("semasacarePatients") || "[]");
             return Array.isArray(patients) ? patients : [];
-
         } catch (error) {
+            console.error("Unable to read patient records:", error);
             return [];
         }
     }
 
+    function generatePatientID(patients) {
+        let id;
+        do {
+            id = "PAT-" + Date.now() + "-" + Math.floor(Math.random() * 10000);
+        } while (patients.some((patient) => String(patient.id) === id));
+        return id;
+    }
 
-    // =========================================
-    // 7. Register Patient
-    // =========================================
-
+    // 7. REGISTER PATIENT
     registrationForm.addEventListener("submit", function (event) {
-
         event.preventDefault();
 
-        const name =
-            document.getElementById("fullName").value.trim();
+        const name = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim().toLowerCase();
+        const phone = document.getElementById("phone").value.trim();
+        const dob = document.getElementById("dob").value;
+        const gender = document.getElementById("gender").value;
+        const bloodGroup = document.getElementById("bloodGroup").value;
+        const address = document.getElementById("address").value.trim();
+        const emergencyContact = document.getElementById("emergencyContact").value.trim();
 
-        const email =
-            document.getElementById("email").value.trim().toLowerCase();
-
-        const phone =
-            document.getElementById("phone").value.trim();
-
-        const dob =
-            document.getElementById("dob").value;
-
-        const gender =
-            document.getElementById("gender").value;
-
-        const bloodGroup =
-            document.getElementById("bloodGroup").value;
-
-        const address =
-            document.getElementById("address").value.trim();
-
-        const emergencyContact =
-            document.getElementById("emergencyContact").value.trim();
-
-
-        // Validate required fields
-
-        if (!name || !email || !phone || !dob ||
-            !gender || !address) {
-
+        if (!name || !email || !phone || !dob || !gender || !address) {
             showMessage("Please complete all required fields.", "error");
             return;
         }
 
-
-        // Validate email
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             showMessage("Please enter a valid email address.", "error");
             return;
         }
 
-
-        // Validate phone number
-
         if (!/^\d{10}$/.test(phone)) {
-
-            showMessage(
-                "Phone number must contain exactly 10 digits.",
-                "error"
-            );
-
+            showMessage("Phone number must contain exactly 10 digits.", "error");
             return;
         }
-
-
-        // Validate emergency contact if provided
 
         if (emergencyContact && !/^\d{10}$/.test(emergencyContact)) {
-
-            showMessage(
-                "Emergency contact must contain exactly 10 digits.",
-                "error"
-            );
-
+            showMessage("Emergency contact must contain exactly 10 digits.", "error");
             return;
         }
-
-
-        // Validate date of birth
 
         const birthDate = new Date(dob + "T00:00:00");
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
         if (Number.isNaN(birthDate.getTime()) || birthDate >= today) {
-
-            showMessage(
-                "Date of birth must be earlier than today.",
-                "error"
-            );
-
+            showMessage("Date of birth must be earlier than today.", "error");
             return;
         }
-
-
-        // Check duplicate email
 
         const patients = getPatients();
-
-        const emailExists = patients.some(function (patient) {
-            return patient.email.toLowerCase() === email;
-        });
-
-        if (emailExists) {
-
-            showMessage(
-                "A patient with this email address is already registered.",
-                "error"
-            );
-
+        const duplicateEmail = patients.some((patient) => String(patient.email || "").trim().toLowerCase() === email);
+        if (duplicateEmail) {
+            showMessage("A patient with this email address is already registered.", "error");
             return;
         }
 
-
-        // Create patient record
-
         const newPatient = {
-
-            id: "PAT-" + Date.now(),
-
+            id: generatePatientID(patients),
             name: name,
             email: email,
             phone: phone,
@@ -267,89 +145,44 @@ document.addEventListener("DOMContentLoaded", function () {
             bloodGroup: bloodGroup,
             address: address,
             emergencyContact: emergencyContact,
-
             role: "patient",
-
-            registeredBy: currentUser.email,
-
+            registeredBy: currentUser.email || currentUser.name || "Staff",
             registrationDate: new Date().toISOString()
         };
 
-
-        // Save patient record
-
         try {
-
             patients.push(newPatient);
-
-            localStorage.setItem(
-                "semasacarePatients",
-                JSON.stringify(patients)
-            );
-
-            showMessage(
-                "Patient registered successfully!",
-                "success"
-            );
-
+            localStorage.setItem("semasacarePatients", JSON.stringify(patients));
+            showMessage("Patient registered successfully! Patient ID: " + newPatient.id, "success");
             registrationForm.reset();
-
         } catch (error) {
-
-            showMessage(
-                "Unable to save the patient record. Please try again.",
-                "error"
-            );
-
+            console.error("Unable to save patient:", error);
+            showMessage("Unable to save the patient record. Please try again.", "error");
         }
-
     });
 
-
-    // =========================================
-    // 8. Clear Message When Form Is Reset
-    // =========================================
-
+    // 8. CLEAR MESSAGE WHEN FORM IS RESET
     registrationForm.addEventListener("reset", function () {
-
         registrationMessage.textContent = "";
         registrationMessage.className = "form-message";
-
     });
 
-
-    // =========================================
-    // 9. Mobile Sidebar Toggle
-    // =========================================
-
+    // 9. MOBILE SIDEBAR TOGGLE
     const menuToggle = document.getElementById("menuToggle");
     const sidebar = document.querySelector(".sidebar");
-
     if (menuToggle && sidebar) {
-
         menuToggle.addEventListener("click", function () {
             sidebar.classList.toggle("active");
         });
-
     }
 
-
-    // =========================================
-    // 10. Logout
-    // =========================================
-
+    // 10. LOGOUT
     const logoutBtn = document.getElementById("logoutBtn");
-
     if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", function () {
-
+        logoutBtn.addEventListener("click", function (event) {
+            event.preventDefault();
             localStorage.removeItem("semasacareSession");
-
             window.location.href = "login.html";
-
         });
-
     }
-
 });

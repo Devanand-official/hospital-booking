@@ -300,6 +300,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+/* CONVERT APPOINTMENT TIME TO MINUTES */
+
+function convertToMinutes(timeString) {
+
+    if (!timeString) return 0;
+
+    const time = String(timeString).trim();
+
+    const match = time.match(
+        /^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?$/i
+    );
+
+    if (!match) return 0;
+
+    let hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    const period = match[3]?.toUpperCase();
+
+    if (period === "PM" && hours < 12) {
+        hours += 12;
+    }
+
+    if (period === "AM" && hours === 12) {
+        hours = 0;
+    }
+
+    return hours * 60 + minutes;
+}
+
     
 // 12. DISPLAY APPOINTMENTS
 

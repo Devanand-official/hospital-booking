@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Patients | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/doctor-patients.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/doctor-patients.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-doctor"></i>
+                </div>
+
+                <div>
+                    <h3 id="doctorName">Doctor</h3>
+                    <p>Doctor</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="../dashboards/doctor-dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="appointments.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>My Appointments</span>
+                </a>
+
+                <a href="patients.html" class="menu-item active">
+                    <i class="fas fa-user-injured"></i>
+                    <span>My Patients</span>
+                </a>
+
+                <p class="menu-heading">PATIENT CARE</p>
+
+                <a href="medical-records.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Medical Records</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>My Patients</h2>
+                        <p>Manage your assigned patients</p>
+                    </div>
+                </div>
+
+
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-doctor"></i>
+                    </div>
+
+                    <div class="profile-info">
+                        <strong id="headerName">Doctor</strong>
+                        <span>Doctor</span>
+                    </div>
+                </div>
+
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>My Patients</h1>
+                        <p>View patients assigned to your appointments.</p>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="patient-stats">
+
+                    <div class="patient-stat-card">
+                        <div class="patient-stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p>Total Patients</p>
+                            <h2 id="totalPatients">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="patient-stat-card">
+                        <div class="patient-stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <p>Total Appointments</p>
+                            <h2 id="totalAppointments">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PATIENT LIST -->
+                <div class="section-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Patient Directory</h3>
+                            <p id="recordsCount">Loading patients...</p>
+                        </div>
+                    </div>
+
+                    <div class="patient-toolbar">
+
+                        <div class="patient-search">
+                            <i class="fas fa-search"></i>
+
+                            <input type="text" id="searchPatient" placeholder="Search by name, ID, email or phone...">
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Appointments</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="patientsTableBody">
+
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading patients...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- PATIENT DETAILS -->
+                <div class="section-card patient-details-card" id="patientDetails">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Patient Details</h3>
+                            <p>Patient information and appointment history</p>
+                        </div>
+
+                        <button id="closeDetails" class="close-details-btn" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div id="patientDetailsContent"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
