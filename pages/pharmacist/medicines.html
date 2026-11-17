@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Medicine Management | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-medicines.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/pharmacist/medicines.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-nurse"></i>
+                </div>
+                <div>
+                    <h3 id="pharmacistName">Pharmacist</h3>
+                    <p>Pharmacist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">PHARMACY</p>
+
+                <a href="medicines.html" class="menu-item active">
+                    <i class="fas fa-pills"></i>
+                    <span>Medicines</span>
+                </a>
+
+                <a href="inventory.html" class="menu-item">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-chart-column"></i>
+                    <span>Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Medicine Management</h2>
+                        <p>Manage pharmacy medicine records</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Pharmacist</h4>
+                        <span>Pharmacist</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Medicines</h1>
+                        <p>Add, update and manage registered medicines.</p>
+                    </div>
+
+                    <button class="medicine-add-btn" id="addMedicineBtn" type="button">
+                        <i class="fas fa-plus"></i>
+                        Add Medicine
+                    </button>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="medicine-stats-grid">
+
+                    <div class="medicine-stat-card">
+                        <div class="medicine-stat-icon teal">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div>
+                            <p>Total Medicines</p>
+                            <h2 id="totalMedicines">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="medicine-stat-card">
+                        <div class="medicine-stat-icon blue">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+                        <div>
+                            <p>Total Stock Units</p>
+                            <h2 id="totalStock">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="medicine-stat-card">
+                        <div class="medicine-stat-icon orange">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <p>Low Stock</p>
+                            <h2 id="lowStockCount">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MEDICINE FORM -->
+                <div class="section-card medicine-form-card" id="medicineFormSection">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3 id="medicineFormTitle">Add New Medicine</h3>
+                            <p>Enter the medicine information below.</p>
+                        </div>
+                    </div>
+
+                    <form id="medicineForm">
+
+                        <input type="hidden" id="medicineId">
+
+                        <div class="medicine-form-grid">
+
+                            <div class="form-group">
+                                <label for="medicineCode">Medicine Code *</label>
+                                <input type="text" id="medicineCode" placeholder="Example: MED001" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicineName">Medicine Name *</label>
+                                <input type="text" id="medicineName" placeholder="Enter medicine name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genericName">Generic Name</label>
+                                <input type="text" id="genericName" placeholder="Enter generic name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="strength">Strength *</label>
+                                <input type="text" id="strength" placeholder="Example: 500 mg" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dosageForm">Dosage Form *</label>
+                                <select id="dosageForm" required>
+                                    <option value="">Select dosage form</option>
+                                    <option value="Tablet">Tablet</option>
+                                    <option value="Capsule">Capsule</option>
+                                    <option value="Syrup">Syrup</option>
+                                    <option value="Injection">Injection</option>
+                                    <option value="Drops">Drops</option>
+                                    <option value="Cream">Cream</option>
+                                    <option value="Ointment">Ointment</option>
+                                    <option value="Inhaler">Inhaler</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="manufacturer">Manufacturer</label>
+                                <input type="text" id="manufacturer" placeholder="Manufacturer name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="batchNumber">Batch Number *</label>
+                                <input type="text" id="batchNumber" placeholder="Enter batch number" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date *</label>
+                                <input type="date" id="expiryDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stockQuantity">Available Stock *</label>
+                                <input type="number" id="stockQuantity" min="0" step="1" placeholder="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reorderLevel">Minimum Stock Level *</label>
+                                <input type="number" id="reorderLevel" min="0" step="1" value="10" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unitPrice">Unit Price (₹) *</label>
+                                <input type="number" id="unitPrice" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicineDescription">Description</label>
+                                <input type="text" id="medicineDescription" placeholder="Optional description">
+                            </div>
+
+                        </div>
+
+                        <p id="medicineMessage" class="medicine-message" aria-live="polite"></p>
+
+                        <div class="medicine-form-actions">
+
+                            <button type="button" id="cancelMedicineBtn" class="medicine-cancel-btn">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="medicine-save-btn">
+                                <i class="fas fa-save"></i>
+                                Save Medicine
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- MEDICINE LIST -->
+                <div class="section-card medicine-list-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Medicine Directory</h3>
+                            <p id="medicineCount">0 medicines</p>
+                        </div>
+                    </div>
+
+                    <div class="medicine-toolbar">
+
+                        <div class="medicine-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchMedicines" placeholder="Search name, code or manufacturer...">
+                        </div>
+
+                        <select id="stockFilter" class="stock-filter">
+                            <option value="all">All Medicines</option>
+                            <option value="available">Available Stock</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table medicine-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Medicine Code</th>
+                                    <th>Medicine</th>
+                                    <th>Strength</th>
+                                    <th>Form</th>
+                                    <th>Stock</th>
+                                    <th>Expiry Date</th>
+                                    <th>Unit Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="medicineTableBody">
+                                <tr>
+                                    <td colspan="9" class="empty-message">
+                                        No medicines registered yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

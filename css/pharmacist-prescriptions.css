@@ -1,0 +1,353 @@
+/* ==========================================
+   SEMASACARE - PHARMACIST PRESCRIPTIONS
+========================================== */
+
+.pharmacy-rx-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.rx-stat-card {
+    background: #fff;
+    border: 1px solid #e5edf0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 3px 12px rgba(16, 59, 73, 0.04);
+}
+
+.rx-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.rx-stat-icon.blue {
+    background: #e7f0ff;
+    color: #2563eb;
+}
+
+.rx-stat-icon.orange {
+    background: #fff2df;
+    color: #d97706;
+}
+
+.rx-stat-icon.purple {
+    background: #f1eaff;
+    color: #7c3aed;
+}
+
+.rx-stat-icon.green {
+    background: #e3f8ed;
+    color: #15803d;
+}
+
+.rx-stat-card p {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0 0 5px;
+}
+
+.rx-stat-card h2 {
+    color: #173f4d;
+    font-size: 25px;
+    margin: 0;
+}
+
+.rx-toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.rx-search {
+    position: relative;
+    flex: 1;
+    max-width: 450px;
+}
+
+.rx-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8496a0;
+}
+
+.rx-search input,
+.rx-filter {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #dce6e9;
+    border-radius: 8px;
+    background: #fff;
+    color: #173f4d;
+    outline: none;
+}
+
+.rx-search input {
+    padding: 0 14px 0 40px;
+}
+
+.rx-filter {
+    max-width: 210px;
+    padding: 0 12px;
+}
+
+.rx-search input:focus,
+.rx-filter:focus,
+.rx-dispense-row select:focus,
+.rx-dispense-row input:focus {
+    border-color: #078b8c;
+    box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.1);
+}
+
+.rx-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.rx-status.pending {
+    background: #fff2df;
+    color: #b45309;
+}
+
+.rx-status.partial {
+    background: #f1eaff;
+    color: #6d28d9;
+}
+
+.rx-status.dispensed {
+    background: #e3f8ed;
+    color: #15803d;
+}
+
+.rx-view-btn {
+    background: #e8f7f6;
+    color: #078b8c;
+    border: 0;
+    border-radius: 6px;
+    padding: 8px 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rx-view-btn:hover {
+    background: #078b8c;
+    color: #fff;
+}
+
+.rx-details-card {
+    display: none;
+    margin-top: 25px;
+}
+
+.rx-close-btn {
+    border: 0;
+    background: #f1f5f7;
+    color: #475569;
+    border-radius: 7px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.rx-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0 25px;
+}
+
+.rx-info-item {
+    background: #f6f9fa;
+    border: 1px solid #e8eff1;
+    border-radius: 8px;
+    padding: 13px;
+    min-width: 0;
+}
+
+.rx-info-item span {
+    display: block;
+    color: #71818a;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.rx-info-item strong {
+    display: block;
+    color: #173f4d;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.rx-medicine-heading {
+    margin-bottom: 15px;
+}
+
+.rx-medicine-heading h3 {
+    color: #173f4d;
+    font-size: 17px;
+    margin: 0 0 5px;
+}
+
+.rx-medicine-heading p {
+    color: #71818a;
+    font-size: 13px;
+    margin: 0;
+}
+
+.rx-dispense-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.5fr 0.7fr 0.7fr;
+    gap: 14px;
+    align-items: end;
+    padding: 17px;
+    border: 1px solid #e4ecef;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.rx-prescribed-info strong {
+    display: block;
+    color: #173f4d;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.rx-prescribed-info span {
+    display: block;
+    color: #71818a;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.rx-dispense-row label {
+    display: block;
+    color: #52636c;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.rx-dispense-row select,
+.rx-dispense-row input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #dce6e9;
+    border-radius: 7px;
+    padding: 0 9px;
+    outline: none;
+    background: #fff;
+    color: #173f4d;
+    min-width: 0;
+}
+
+.rx-stock-note {
+    font-size: 11px;
+    margin-top: 5px;
+    color: #64748b;
+}
+
+.rx-stock-note.insufficient {
+    color: #dc2626;
+}
+
+.rx-line-status {
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.rx-line-status.done {
+    color: #15803d;
+}
+
+.rx-line-status.remaining {
+    color: #b45309;
+}
+
+.rx-message {
+    font-size: 13px;
+    margin-top: 14px;
+    min-height: 20px;
+}
+
+.rx-action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.rx-dispense-btn {
+    border: 0;
+    border-radius: 8px;
+    background: #078b8c;
+    color: #fff;
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rx-dispense-btn:hover {
+    background: #066f70;
+}
+
+.rx-dispense-btn:disabled {
+    background: #94a3a8;
+    cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+    .pharmacy-rx-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rx-dispense-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .pharmacy-rx-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .rx-toolbar {
+        flex-direction: column;
+    }
+
+    .rx-search,
+    .rx-filter {
+        max-width: none;
+    }
+
+    .rx-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rx-dispense-row {
+        grid-template-columns: 1fr;
+    }
+
+    .rx-action-row {
+        justify-content: stretch;
+    }
+
+    .rx-dispense-btn {
+        width: 100%;
+    }
+}

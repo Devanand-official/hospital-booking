@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/dashboard.css">
     <link rel="stylesheet" href="../../css/doctor-medical-records.css">
+    <link rel="stylesheet" href="../../css/doctor-medical-records-enhancements.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -227,9 +228,17 @@
                         </div>
                     </div>
 
-                    <div class="medical-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchRecords" placeholder="Search patient name or record ID...">
+                    <div class="medical-toolbar">
+                        <div class="medical-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchRecords" placeholder="Search patient name, record ID or diagnosis...">
+                        </div>
+                        <div class="medical-date-filters">
+                            <label>From <input type="date" id="recordDateFrom"></label>
+                            <label>To <input type="date" id="recordDateTo"></label>
+                            <button type="button" id="applyRecordDateFilter" class="medical-filter-btn"><i class="fas fa-filter"></i> Filter</button>
+                            <button type="button" id="clearRecordDateFilter" class="medical-clear-btn">Clear</button>
+                        </div>
                     </div>
 
                     <div class="table-responsive">
@@ -272,13 +281,30 @@
                             <p>Consultation information</p>
                         </div>
 
-                        <button type="button" id="closeDetailsBtn" class="medical-close-btn">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <div class="medical-detail-actions">
+                            <button type="button" id="printRecordBtn" class="medical-print-btn"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" id="closeDetailsBtn" class="medical-close-btn" aria-label="Close details">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="recordDetailsContent"></div>
 
+                </div>
+
+                <!-- PATIENT CONSULTATION HISTORY -->
+                <div class="section-card patient-history-card" id="patientHistorySection">
+                    <div class="section-heading">
+                        <div>
+                            <h3 id="patientHistoryTitle">Patient Consultation History</h3>
+                            <p id="patientHistorySubtitle">All consultations for the selected patient</p>
+                        </div>
+                        <button type="button" id="closePatientHistoryBtn" class="medical-close-btn" aria-label="Close patient history">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div id="patientHistoryContent"></div>
                 </div>
 
             </section>

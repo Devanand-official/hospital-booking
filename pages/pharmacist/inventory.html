@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-inventory.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/pharmacist/inventory.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon"><i class="fas fa-user-nurse"></i></div>
+                <div>
+                    <h3 id="pharmacistName">Pharmacist</h3>
+                    <p>Pharmacist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">PHARMACY</p>
+
+                <a href="medicines.html" class="menu-item">
+                    <i class="fas fa-pills"></i><span>Medicines</span>
+                </a>
+
+                <a href="inventory.html" class="menu-item active">
+                    <i class="fas fa-boxes-stacked"></i><span>Inventory</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i><span>Prescriptions</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-chart-column"></i><span>Reports</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+            </button>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Inventory Management</h2>
+                        <p>Monitor and manage pharmacy stock</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Pharmacist</h4>
+                        <span>Pharmacist</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Inventory</h1>
+                        <p>Track stock levels, incoming stock and adjustments.</p>
+                    </div>
+                    <button class="inventory-add-btn" id="openStockFormBtn" type="button">
+                        <i class="fas fa-plus"></i> Update Stock
+                    </button>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="inventory-stats-grid">
+                    <div class="inventory-stat-card">
+                        <div class="inventory-stat-icon teal">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+                        <div>
+                            <p>Total Stock Units</p>
+                            <h2 id="totalStockUnits">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="inventory-stat-icon blue">
+                            <i class="fas fa-capsules"></i>
+                        </div>
+                        <div>
+                            <p>Medicine Types</p>
+                            <h2 id="medicineTypes">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="inventory-stat-icon orange">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <p>Low Stock Items</p>
+                            <h2 id="lowStockItems">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="inventory-stat-icon red">
+                            <i class="fas fa-circle-xmark"></i>
+                        </div>
+                        <div>
+                            <p>Out of Stock</p>
+                            <h2 id="outOfStockItems">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STOCK UPDATE FORM -->
+                <div class="section-card stock-form-card" id="stockFormSection">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Update Medicine Stock</h3>
+                            <p>Record incoming stock or a stock adjustment.</p>
+                        </div>
+                    </div>
+
+                    <form id="stockForm">
+                        <div class="stock-form-grid">
+
+                            <div class="form-group">
+                                <label for="stockMedicine">Medicine *</label>
+                                <select id="stockMedicine" required>
+                                    <option value="">Select medicine</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stockAction">Transaction Type *</label>
+                                <select id="stockAction" required>
+                                    <option value="in">Add Stock</option>
+                                    <option value="out">Reduce Stock</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stockQuantity">Quantity *</label>
+                                <input type="number" id="stockQuantity" min="1" step="1" placeholder="Enter quantity"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stockReason">Reason *</label>
+                                <select id="stockReason" required>
+                                    <option value="">Select reason</option>
+                                    <option value="Purchase">New Purchase</option>
+                                    <option value="Stock Correction">Stock Correction</option>
+                                    <option value="Damaged">Damaged Stock</option>
+                                    <option value="Expired">Expired Stock</option>
+                                    <option value="Returned">Supplier Return</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="stockReference">Reference / Notes</label>
+                                <input type="text" id="stockReference" placeholder="Invoice number or additional notes">
+                            </div>
+
+                        </div>
+
+                        <p id="stockMessage" class="stock-message" aria-live="polite"></p>
+
+                        <div class="stock-form-actions">
+                            <button type="button" id="cancelStockBtn" class="stock-cancel-btn">Cancel</button>
+                            <button type="submit" class="stock-save-btn">
+                                <i class="fas fa-save"></i> Save Stock Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- INVENTORY TABLE -->
+                <div class="section-card">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Current Stock</h3>
+                            <p id="inventoryCount">0 medicines</p>
+                        </div>
+                    </div>
+
+                    <div class="inventory-toolbar">
+                        <div class="inventory-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInventory" placeholder="Search medicine, code or batch...">
+                        </div>
+
+                        <select id="inventoryFilter" class="inventory-filter">
+                            <option value="all">All Stock</option>
+                            <option value="available">Available</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                            <option value="expired">Expired</option>
+                            <option value="expiring">Expiring in 30 days</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Batch Number</th>
+                                    <th>Current Stock</th>
+                                    <th>Minimum Stock</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No medicines available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- STOCK MOVEMENT HISTORY -->
+                <div class="section-card stock-history-card">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Stock Movement History</h3>
+                            <p>Recent incoming stock and stock adjustments.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Medicine</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Reason</th>
+                                    <th>Date & Time</th>
+                                    <th>Updated By</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockHistoryBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        No stock movements recorded.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+</body>
+
+</html>

@@ -22,9 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const doctorId = String(currentUser.id ?? "");
-    const doctorEmail = String(currentUser.email || "")
-        .trim().toLowerCase();
-
+    const doctorEmail = String(currentUser.email || "").trim().toLowerCase();
     const doctorNameValue = currentUser.name || "Doctor";
 
     // =====================================
@@ -50,13 +48,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelPrescriptionBtn = document.getElementById("cancelPrescriptionBtn");
 
     const searchInput = document.getElementById("searchPrescriptions");
-    const dateFromInput = document.getElementById("prescriptionDateFrom");
-    const dateToInput = document.getElementById("prescriptionDateTo");
+    const tableBody = document.getElementById("prescriptionsTableBody");
+
+    // Prescription date filters
+    const prescriptionDateFrom =
+        document.getElementById("prescriptionDateFrom");
+
+    const prescriptionDateTo =
+        document.getElementById("prescriptionDateTo");
+
     const filterPrescriptionsBtn =
         document.getElementById("filterPrescriptionsBtn");
+
     const clearPrescriptionFiltersBtn =
         document.getElementById("clearPrescriptionFiltersBtn");
-    const tableBody = document.getElementById("prescriptionsTableBody");
 
     const totalPrescriptions = document.getElementById("totalPrescriptions");
     const patientsPrescribed = document.getElementById("patientsPrescribed");
@@ -113,6 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return getStorageData("semasacarePrescriptions");
     }
 
+    // Pharmacy inventory
+    function getInventoryMedicines() {
+        return getStorageData("semasacareMedicines");
+    }
+
     // =====================================
     // 5. GET DOCTOR APPOINTMENTS
     // =====================================
@@ -139,22 +149,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6. GET ASSIGNED PATIENTS
     // =====================================
 
-
     function getAssignedPatients() {
+
         const doctor = SemasaAuth.getCurrentUser();
-
-        const appointments = JSON.parse(
-            localStorage.getItem("semasacareAppointments") || "[]"
-        );
-
-        const registeredPatients = JSON.parse(
-            localStorage.getItem("semasacarePatients") || "[]"
-        );
+        const appointments = getAppointments();
+        const registeredPatients = getPatients();
 
         if (!doctor) return [];
 
-        // Get appointments assigned to the logged-in doctor
         const doctorAppointments = appointments.filter(appointment => {
+
             const doctorIdMatches =
                 String(appointment.doctorId || "") === String(doctor.id);
 
@@ -168,6 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const patientsMap = new Map();
 
         doctorAppointments.forEach(appointment => {
+
             const email = (
                 appointment.patientEmail || appointment.email || ""
             ).trim().toLowerCase();
@@ -178,8 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const patientId = appointment.patientId;
 
-            // Find an existing registered patient
             const registeredPatient = registeredPatients.find(patient => {
+
                 if (
                     patientId &&
                     String(patient.id) === String(patientId)
@@ -201,22 +206,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             });
 
-            // Use registered patient details when available.
-            // Otherwise, use the details stored in the appointment.
             const patient = registeredPatient || {
                 id: patientId || `APPT-${appointment.id || email || phone}`,
                 name: appointment.patientName || "Unknown Patient",
-                email: email,
-                phone: phone,
+                email,
+                phone,
                 age: appointment.age || "",
                 gender: appointment.patientGender || appointment.gender || ""
             };
 
             const uniqueKey =
-                patient.id ||
-                email ||
-                phone ||
-                appointment.id;
+                patient.id || email || phone || appointment.id;
 
             if (!uniqueKey) return;
 
@@ -258,18 +258,19 @@ document.addEventListener("DOMContentLoaded", () => {
             const option = document.createElement("option");
 
             option.value = String(patient.id);
-
-            option.textContent =
-                `${patient.name} (${patient.id})`;
+            option.textContent = `${patient.name} (${patient.id})`;
 
             patientSelect.appendChild(option);
         });
 
         if (assignedPatients.length === 0) {
+
             const option = document.createElement("option");
+
             option.value = "";
             option.textContent = "No assigned patients available";
             option.disabled = true;
+
             patientSelect.appendChild(option);
         }
     }
@@ -322,7 +323,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 10. ADD MEDICINE ROW
+    // 10. MEDICINE INVENTORY HELPERS
+    // =====================================
+
+    // function getMedicineDisplayName(medicine) {
+
+    //     const name = medicine.name || "Unnamed Medicine";
+    //     const strength = medicine.strength || "";
+
+    //     return strength
+    //         ? `${name} - ${strength}`
+    //         : name;
+    // }
+
+    function getMedicineDisplayName(medicine) {
+        const name = medicine.name || "Unnamed Medicine";
+        const strength = medicine.strength || "";
+
+        return strength ? `${name} ${strength}` : name;
+    }
+
+    // function getMedicineDisplayName(medicine) {
+    //     return medicine.name || "Unnamed Medicine";
+    // }
+
+    function findInventoryMedicine(id) {
+
+        return getInventoryMedicines().find(
+            item => String(item.id) === String(id)
+        );
+    }
+
+    // =====================================
+    // 11. ADD MEDICINE ROW
     // =====================================
 
     function addMedicineRow(medicine = {}) {
@@ -330,18 +363,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const row = document.createElement("div");
         row.className = "medicine-row";
 
+        const inventoryMedicines = getInventoryMedicines();
+
         const fields = [
             {
                 name: "medicineName",
                 label: "Medicine Name",
-                type: "text",
-                placeholder: "Medicine name"
+                type: "medicine-select"
             },
             {
                 name: "dosage",
                 label: "Dosage",
                 type: "text",
-                placeholder: "e.g. 500 mg"
+                placeholder: "e.g. 200 mg"
             },
             {
                 name: "frequency",
@@ -370,6 +404,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         ];
 
+        let medicineSelect = null;
+        let dosageInput = null;
+
         fields.forEach((field) => {
 
             const wrapper = document.createElement("div");
@@ -378,42 +415,208 @@ document.addEventListener("DOMContentLoaded", () => {
             const label = document.createElement("label");
             label.textContent = field.label;
 
-            const input = document.createElement(
-                field.type === "select" ? "select" : "input"
-            );
+            let input;
 
-            input.dataset.field = field.name;
+            // Medicine dropdown
+            if (field.type === "medicine-select") {
 
-            if (field.type === "select") {
+                input = document.createElement("select");
+
+                input.dataset.field = "medicineName";
+                input.dataset.medicineSelect = "true";
 
                 const defaultOption = document.createElement("option");
+
                 defaultOption.value = "";
-                defaultOption.textContent = "Select frequency";
+                defaultOption.textContent = "Select medicine";
+
                 input.appendChild(defaultOption);
 
-                field.options.forEach((optionText) => {
+                inventoryMedicines.forEach(item => {
+
                     const option = document.createElement("option");
+
+                    option.value = String(item.id);
+                    option.dataset.medicineId = String(item.id);
+                    option.dataset.medicineName = item.name || "";
+                    option.dataset.strength = item.strength || "";
+                    option.dataset.stock = Number(item.stockQuantity) || 0;
+
+                    // option.textContent =
+                    //     `${getMedicineDisplayName(item)} (Stock: ${Number(item.stockQuantity) || 0})`;
+
+                    option.textContent = getMedicineDisplayName(item);
+
+                    // Prevent selecting medicines with no stock
+                    if (Number(item.stockQuantity) <= 0) {
+                        option.disabled = true;
+                        // option.textContent += " - Out of Stock";
+                    }
+
+                    input.appendChild(option);
+                });
+
+                medicineSelect = input;
+
+            } else if (field.type === "select") {
+
+                input = document.createElement("select");
+                input.dataset.field = field.name;
+
+                const defaultOption = document.createElement("option");
+
+                defaultOption.value = "";
+                defaultOption.textContent = "Select frequency";
+
+                input.appendChild(defaultOption);
+
+                field.options.forEach(optionText => {
+
+                    const option = document.createElement("option");
+
                     option.value = optionText;
                     option.textContent = optionText;
+
                     input.appendChild(option);
                 });
 
             } else {
 
+                input = document.createElement("input");
+
                 input.type = field.type;
+                input.dataset.field = field.name;
                 input.placeholder = field.placeholder;
 
                 if (field.type === "number") {
                     input.min = "1";
                     input.step = "1";
                 }
-            }
 
-            input.value = medicine[field.name] || "";
+                if (field.name === "dosage") {
+                    dosageInput = input;
+                }
+            }
 
             wrapper.append(label, input);
             row.appendChild(wrapper);
         });
+
+        // =====================================
+        // 12. AUTOMATIC DOSAGE POPULATION
+        // =====================================
+
+        function updateDosageFromMedicine() {
+
+            if (!medicineSelect || !dosageInput) return;
+
+            const selectedOption =
+                medicineSelect.options[medicineSelect.selectedIndex];
+
+            if (!selectedOption || !selectedOption.value) {
+                dosageInput.value = "";
+                return;
+            }
+
+            const strength = selectedOption.dataset.strength || "";
+
+            // Automatically fill the strength.
+            // The doctor can still edit this field manually.
+            dosageInput.value = strength;
+        }
+
+        medicineSelect.addEventListener("change", () => {
+
+            updateDosageFromMedicine();
+
+        });
+
+        // =====================================
+        // 13. RESTORE SAVED MEDICINE DATA
+        // =====================================
+
+        if (medicine.medicineId) {
+
+            const existingOption = Array.from(
+                medicineSelect.options
+            ).find(option =>
+                option.value === String(medicine.medicineId)
+            );
+
+            // Preserve older prescriptions if the inventory
+            // medicine is no longer available.
+            if (!existingOption) {
+
+                const legacyOption = document.createElement("option");
+
+                legacyOption.value = String(medicine.medicineId);
+                legacyOption.dataset.medicineId = String(medicine.medicineId);
+                legacyOption.dataset.medicineName =
+                    medicine.medicineName || "Previously prescribed medicine";
+
+                legacyOption.dataset.strength = "";
+                legacyOption.textContent =
+                    `${medicine.medicineName} (Previously prescribed)`;
+
+                medicineSelect.appendChild(legacyOption);
+            }
+
+            medicineSelect.value = String(medicine.medicineId);
+
+        } else if (medicine.medicineName) {
+
+            // Backward compatibility for old prescriptions
+            // that only stored medicineName.
+            const matchingMedicine = inventoryMedicines.find(item =>
+                String(item.name || "").trim().toLowerCase() ===
+                String(medicine.medicineName).trim().toLowerCase()
+            );
+
+            if (matchingMedicine) {
+
+                medicineSelect.value = String(matchingMedicine.id);
+
+            } else {
+
+                const legacyOption = document.createElement("option");
+
+                legacyOption.value = `legacy-${Date.now()}-${Math.random()}`;
+                legacyOption.dataset.medicineId = "";
+                legacyOption.dataset.medicineName = medicine.medicineName;
+                legacyOption.dataset.strength = "";
+
+                legacyOption.textContent =
+                    `${medicine.medicineName} (Previously prescribed)`;
+
+                medicineSelect.appendChild(legacyOption);
+                medicineSelect.value = legacyOption.value;
+            }
+        }
+
+        // Restore saved dosage. Do not overwrite a doctor's
+        // previously entered dosage when editing a prescription.
+        if (medicine.dosage) {
+            dosageInput.value = medicine.dosage;
+        } else {
+            updateDosageFromMedicine();
+        }
+
+        // Restore frequency, duration and quantity
+        row.querySelectorAll("[data-field]").forEach(input => {
+
+            const fieldName = input.dataset.field;
+
+            if (
+                fieldName !== "medicineName" &&
+                fieldName !== "dosage"
+            ) {
+                input.value = medicine[fieldName] || "";
+            }
+        });
+
+        // =====================================
+        // 14. REMOVE MEDICINE BUTTON
+        // =====================================
 
         const removeButton = document.createElement("button");
 
@@ -431,7 +634,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 11. GET MEDICINES FROM FORM
+    // 15. GET MEDICINES FROM FORM
     // =====================================
 
     function getMedicinesFromForm() {
@@ -439,12 +642,34 @@ document.addEventListener("DOMContentLoaded", () => {
         const rows = medicineList.querySelectorAll(".medicine-row");
         const medicines = [];
 
-        rows.forEach((row) => {
+        rows.forEach(row => {
 
             const medicine = {};
 
-            row.querySelectorAll("[data-field]").forEach((input) => {
-                medicine[input.dataset.field] = input.value.trim();
+            const medicineSelect =
+                row.querySelector('[data-medicine-select="true"]');
+
+            const selectedOption = medicineSelect
+                ? medicineSelect.options[medicineSelect.selectedIndex]
+                : null;
+
+            if (selectedOption && selectedOption.value) {
+
+                medicine.medicineId =
+                    selectedOption.dataset.medicineId || "";
+
+                medicine.medicineName =
+                    selectedOption.dataset.medicineName ||
+                    selectedOption.textContent.split(" (Stock:")[0];
+            }
+
+            row.querySelectorAll("[data-field]").forEach(input => {
+
+                const fieldName = input.dataset.field;
+
+                if (fieldName === "medicineName") return;
+
+                medicine[fieldName] = input.value.trim();
             });
 
             if (
@@ -462,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 12. SHOW FORM
+    // 16. SHOW FORM
     // =====================================
 
     function openForm() {
@@ -485,7 +710,6 @@ document.addEventListener("DOMContentLoaded", () => {
         prescriptionMessage.textContent = "";
 
         formSection.style.display = "block";
-
         prescriptionDetails.style.display = "none";
 
         formSection.scrollIntoView({
@@ -495,18 +719,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 13. CLOSE FORM
+    // 17. CLOSE FORM
     // =====================================
 
     function closeForm() {
+
         formSection.style.display = "none";
+
         prescriptionForm.reset();
         medicineList.replaceChildren();
+
         prescriptionMessage.textContent = "";
     }
 
     // =====================================
-    // 14. VALIDATE FORM
+    // 18. VALIDATE FORM
     // =====================================
 
     function validateForm() {
@@ -553,50 +780,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 15. SAVE PRESCRIPTION
+    // 19. SAVE PRESCRIPTION
     // =====================================
 
-    prescriptionForm.addEventListener("submit", (event) => {
+    prescriptionForm.addEventListener("submit", event => {
 
         event.preventDefault();
 
         const validationMessage = validateForm();
 
         if (validationMessage) {
+
             prescriptionMessage.textContent = validationMessage;
             prescriptionMessage.style.color = "#dc2626";
+
             return;
         }
 
         const patient = assignedPatients.find(
-            (item) => String(item.id) === String(patientSelect.value)
+            item => String(item.id) === String(patientSelect.value)
         );
 
         if (!patient) {
+
             prescriptionMessage.textContent =
                 "Selected patient could not be found.";
 
             prescriptionMessage.style.color = "#dc2626";
+
             return;
         }
 
         const prescriptions = getPrescriptions();
-
         const existingId = prescriptionIdInput.value;
 
         const existingRecord = existingId
-            ? prescriptions.find(
-                (item) =>
-                    item.id === existingId &&
-                    String(item.doctorId) === doctorId
+            ? prescriptions.find(item =>
+                item.id === existingId &&
+                String(item.doctorId) === doctorId
             )
             : null;
 
         if (existingId && !existingRecord) {
+
             prescriptionMessage.textContent =
                 "Prescription could not be found for editing.";
 
             prescriptionMessage.style.color = "#dc2626";
+
             return;
         }
 
@@ -611,8 +842,8 @@ document.addEventListener("DOMContentLoaded", () => {
             patientEmail: patient.email || "",
             patientPhone: patient.phone || "",
 
-            doctorId: doctorId,
-            doctorEmail: doctorEmail,
+            doctorId,
+            doctorEmail,
             doctorName: doctorNameValue,
 
             prescriptionDate: prescriptionDate.value,
@@ -638,7 +869,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (existingRecord) {
 
                 const index = prescriptions.findIndex(
-                    (item) => item.id === existingId
+                    item => item.id === existingId
                 );
 
                 prescriptions[index] = prescription;
@@ -671,12 +902,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =====================================
-    // 16. GET DOCTOR PRESCRIPTIONS
+    // 20. GET DOCTOR PRESCRIPTIONS
     // =====================================
 
     function getDoctorPrescriptions() {
 
-        return getPrescriptions().filter((prescription) => {
+        return getPrescriptions().filter(prescription => {
 
             const savedDoctorId =
                 String(prescription.doctorId ?? "");
@@ -694,43 +925,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 17. DISPLAY PRESCRIPTIONS
+    // 21. DISPLAY PRESCRIPTIONS
     // =====================================
+
 
     function displayPrescriptions(searchTerm = "") {
 
         const prescriptions = getDoctorPrescriptions();
-
         const searchText = searchTerm.trim().toLowerCase();
-        const fromDate = dateFromInput ? dateFromInput.value : "";
-        const toDate = dateToInput ? dateToInput.value : "";
+
+        const fromDate = prescriptionDateFrom.value;
+        const toDate = prescriptionDateTo.value;
 
         const filtered = prescriptions
-            .filter((prescription) => {
+            .filter(prescription => {
 
-                const prescriptionDate =
-                    String(prescription.prescriptionDate || "");
+                // Search filter
+                const matchesSearch =
+                    String(prescription.id || "").toLowerCase().includes(searchText) ||
+                    String(prescription.patientName || "").toLowerCase().includes(searchText) ||
+                    String(prescription.patientId || "").toLowerCase().includes(searchText) ||
+                    String(prescription.diagnosis || "").toLowerCase().includes(searchText);
 
-                const matchesSearch = (
-                    String(prescription.id || "")
-                        .toLowerCase().includes(searchText) ||
+                // Date filter
+                const date = String(prescription.prescriptionDate || "").slice(0, 10);
 
-                    String(prescription.patientName || "")
-                        .toLowerCase().includes(searchText) ||
-
-                    String(prescription.patientId || "")
-                        .toLowerCase().includes(searchText) ||
-
-                    String(prescription.diagnosis || "")
-                        .toLowerCase().includes(searchText)
-                );
-
-                // ISO date strings (YYYY-MM-DD) can be compared directly.
-                const matchesFromDate =
-                    !fromDate || (prescriptionDate && prescriptionDate >= fromDate);
-
-                const matchesToDate =
-                    !toDate || (prescriptionDate && prescriptionDate <= toDate);
+                const matchesFromDate = !fromDate || date >= fromDate;
+                const matchesToDate = !toDate || date <= toDate;
 
                 return matchesSearch && matchesFromDate && matchesToDate;
             })
@@ -739,10 +960,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     .localeCompare(String(a.prescriptionDate || ""))
             );
 
+        // Statistics remain based on all prescriptions
         totalPrescriptions.textContent = prescriptions.length;
 
         const uniquePatients = new Set(
-            prescriptions.map((item) => String(item.patientId))
+            prescriptions.map(item => String(item.patientId))
         );
 
         patientsPrescribed.textContent = uniquePatients.size;
@@ -762,7 +984,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             cell.textContent = prescriptions.length === 0
                 ? "No prescriptions created yet."
-                : "No matching prescriptions found.";
+                : "No prescriptions found for the selected filters.";
 
             row.appendChild(cell);
             tableBody.appendChild(row);
@@ -770,7 +992,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        filtered.forEach((prescription) => {
+        filtered.forEach(prescription => {
 
             const row = document.createElement("tr");
 
@@ -784,11 +1006,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     : 0
             ];
 
-            values.forEach((value) => {
-
+            values.forEach(value => {
                 const cell = document.createElement("td");
                 cell.textContent = value || "N/A";
-
                 row.appendChild(cell);
             });
 
@@ -820,7 +1040,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 18. CREATE DETAIL ELEMENT
+    // 22. CREATE DETAIL ELEMENT
     // =====================================
 
     function createDetailItem(label, value) {
@@ -840,7 +1060,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 19. SHOW PRESCRIPTION DETAILS
+    // 23. SHOW PRESCRIPTION DETAILS
     // =====================================
 
     function showPrescriptionDetails(prescription) {
@@ -894,7 +1114,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "Frequency",
             "Duration",
             "Quantity"
-        ].forEach((heading) => {
+        ].forEach(heading => {
 
             const th = document.createElement("th");
             th.textContent = heading;
@@ -907,7 +1127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const tbody = document.createElement("tbody");
 
-        (prescription.medicines || []).forEach((medicine) => {
+        (prescription.medicines || []).forEach(medicine => {
 
             const row = document.createElement("tr");
 
@@ -917,7 +1137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 medicine.frequency,
                 medicine.duration,
                 medicine.quantity
-            ].forEach((value) => {
+            ].forEach(value => {
 
                 const cell = document.createElement("td");
                 cell.textContent = value || "N/A";
@@ -942,6 +1162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         instructionHeading.textContent = "General Instructions";
 
         const instructionText = document.createElement("p");
+
         instructionText.textContent =
             prescription.generalInstructions || "No additional instructions.";
 
@@ -958,13 +1179,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 20. EDIT PRESCRIPTION
+    // 24. EDIT PRESCRIPTION
     // =====================================
 
     function editPrescription(prescription) {
 
         const ownedPrescription = getDoctorPrescriptions().find(
-            (item) => item.id === prescription.id
+            item => item.id === prescription.id
         );
 
         if (!ownedPrescription) {
@@ -995,7 +1216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Array.isArray(ownedPrescription.medicines) &&
             ownedPrescription.medicines.length
         ) {
-            ownedPrescription.medicines.forEach((medicine) => {
+            ownedPrescription.medicines.forEach(medicine => {
                 addMedicineRow(medicine);
             });
         } else {
@@ -1012,39 +1233,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================
-    // 21. SEARCH
+    // 25. SEARCH
     // =====================================
 
+
+    // =====================================
+    // SEARCH AND DATE FILTER EVENTS
+    // =====================================
+
+    // Search prescriptions
     searchInput.addEventListener("input", () => {
         displayPrescriptions(searchInput.value);
     });
 
-    if (filterPrescriptionsBtn) {
-        filterPrescriptionsBtn.addEventListener("click", () => {
-            if (
-                dateFromInput.value &&
-                dateToInput.value &&
-                dateFromInput.value > dateToInput.value
-            ) {
-                alert("From Date cannot be later than To Date.");
-                return;
-            }
+    // Apply date filter
+    filterPrescriptionsBtn.addEventListener("click", () => {
 
-            displayPrescriptions(searchInput.value);
-        });
-    }
+        const fromDate = prescriptionDateFrom.value;
+        const toDate = prescriptionDateTo.value;
 
-    if (clearPrescriptionFiltersBtn) {
-        clearPrescriptionFiltersBtn.addEventListener("click", () => {
-            dateFromInput.value = "";
-            dateToInput.value = "";
-            searchInput.value = "";
-            displayPrescriptions();
-        });
-    }
+        if (fromDate && toDate && fromDate > toDate) {
+            alert("From Date cannot be later than To Date.");
+            return;
+        }
+
+        displayPrescriptions(searchInput.value);
+    });
+
+    // Clear all filters
+    clearPrescriptionFiltersBtn.addEventListener("click", () => {
+
+        prescriptionDateFrom.value = "";
+        prescriptionDateTo.value = "";
+
+        displayPrescriptions(searchInput.value);
+    });
+
 
     // =====================================
-    // 22. BUTTON EVENTS
+    // 26. BUTTON EVENTS
     // =====================================
 
     newPrescriptionBtn.addEventListener("click", openForm);
@@ -1056,18 +1283,20 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelPrescriptionBtn.addEventListener("click", closeForm);
 
     closeDetailsBtn.addEventListener("click", () => {
+
         prescriptionDetails.style.display = "none";
         selectedPrescriptionId = null;
+
     });
 
     // =====================================
-    // 23. PRINT PRESCRIPTION
+    // 27. PRINT PRESCRIPTION
     // =====================================
 
     printPrescriptionBtn.addEventListener("click", () => {
 
         const prescription = getDoctorPrescriptions().find(
-            (item) => item.id === selectedPrescriptionId
+            item => item.id === selectedPrescriptionId
         );
 
         if (!prescription) {
@@ -1079,7 +1308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =====================================
-    // 24. SIDEBAR
+    // 28. SIDEBAR
     // =====================================
 
     document.getElementById("menuToggle")
@@ -1090,7 +1319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     // =====================================
-    // 25. LOGOUT
+    // 29. LOGOUT
     // =====================================
 
     document.getElementById("logoutBtn")
@@ -1102,15 +1331,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     // =====================================
-    // 26. STORAGE REFRESH
+    // 30. STORAGE REFRESH
     // =====================================
 
-    window.addEventListener("storage", (event) => {
+    window.addEventListener("storage", event => {
 
         if (
             event.key === "semasacareAppointments" ||
             event.key === "semasacarePatients" ||
-            event.key === "semasacarePrescriptions"
+            event.key === "semasacarePrescriptions" ||
+            event.key === "semasacareMedicines"
         ) {
             populatePatients();
             displayPrescriptions(searchInput.value);
@@ -1118,7 +1348,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =====================================
-    // 27. INITIALIZE
+    // 31. INITIALIZE
     // =====================================
 
     populatePatients();

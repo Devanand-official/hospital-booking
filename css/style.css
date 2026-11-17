@@ -203,7 +203,7 @@ a {
   color: var(--primary);
 }
 
-.hero-text > p {
+.hero-text>p {
   color: var(--text);
   font-size: 17px;
   max-width: 550px;
@@ -236,7 +236,7 @@ a {
   position: relative;
 }
 
-.hero-image > img {
+.hero-image>img {
   width: 100%;
   height: 480px;
   object-fit: cover;
@@ -322,7 +322,7 @@ a {
 ========================= */
 
 .section-heading {
-  text-align: center;
+  /* text-align: center; */
   margin-bottom: 50px;
 }
 
@@ -413,7 +413,7 @@ a {
   box-shadow: var(--shadow);
 }
 
-.doctor-card > img {
+.doctor-card>img {
   width: 100%;
   height: 280px;
   object-fit: cover;
@@ -477,7 +477,7 @@ a {
   border-radius: 20px;
 }
 
-.why-text > p {
+.why-text>p {
   color: var(--text);
   margin-bottom: 25px;
 }
@@ -553,14 +553,14 @@ a {
   margin-bottom: 20px;
 }
 
-.footer-grid > div:not(:first-child) a {
+.footer-grid>div:not(:first-child) a {
   display: block;
   color: #b0c4c4;
   font-size: 13px;
   margin-bottom: 12px;
 }
 
-.footer-grid > div:not(:first-child) p {
+.footer-grid>div:not(:first-child) p {
   color: #b0c4c4;
   font-size: 13px;
   margin-bottom: 12px;

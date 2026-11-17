@@ -30,12 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const patientSelect = document.getElementById("patientSelect");
     const searchInput = document.getElementById("searchRecords");
+    const dateFromInput = document.getElementById("recordDateFrom");
+    const dateToInput = document.getElementById("recordDateTo");
 
     const recordDetails = document.getElementById("recordDetails");
     const recordDetailsContent =
         document.getElementById("recordDetailsContent");
 
     const formMessage = document.getElementById("formMessage");
+    const patientHistorySection = document.getElementById("patientHistorySection");
+    const patientHistoryContent = document.getElementById("patientHistoryContent");
+    let selectedPrintRecord = null;
 
     let assignedPatients = [];
     let medicalRecords = [];
@@ -334,15 +339,20 @@ document.addEventListener("DOMContentLoaded", () => {
     function displayRecords(searchTerm = "") {
 
         const search = searchTerm.trim().toLowerCase();
+        const fromDate = dateFromInput.value;
+        const toDate = dateToInput.value;
 
         const filtered = medicalRecords
             .filter((record) => {
-
-                return (
+                const matchesSearch = (
                     String(record.patientName || "").toLowerCase().includes(search) ||
                     String(record.id || "").toLowerCase().includes(search) ||
                     String(record.diagnosis || "").toLowerCase().includes(search)
                 );
+                const visitDate = String(record.visitDate || "").slice(0, 10);
+                const matchesFrom = !fromDate || visitDate >= fromDate;
+                const matchesTo = !toDate || visitDate <= toDate;
+                return matchesSearch && matchesFrom && matchesTo;
             })
             .sort((a, b) =>
                 String(b.visitDate || "").localeCompare(
@@ -419,7 +429,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 editRecord(record);
             });
 
-            actionCell.append(viewButton, editButton);
+            const historyButton = document.createElement("button");
+            historyButton.type = "button";
+            historyButton.className = "medical-history-btn";
+            historyButton.textContent = "History";
+            historyButton.addEventListener("click", () => {
+                showPatientHistory(record);
+            });
+
+            actionCell.append(viewButton, editButton, historyButton);
             row.appendChild(actionCell);
 
             tableBody.appendChild(row);
@@ -430,6 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showRecordDetails(record) {
 
+        selectedPrintRecord = record;
         recordDetails.style.display = "block";
         recordDetailsContent.replaceChildren();
 
@@ -471,7 +490,72 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 12. EDIT RECORD
+    // 12. PATIENT HISTORY
+
+    function isSamePatient(a, b) {
+        if (a.patientId && b.patientId) return String(a.patientId) === String(b.patientId);
+        if (a.patientEmail && b.patientEmail) return String(a.patientEmail).toLowerCase() === String(b.patientEmail).toLowerCase();
+        return String(a.patientName || "").trim().toLowerCase() === String(b.patientName || "").trim().toLowerCase();
+    }
+
+    function showPatientHistory(record) {
+        const history = medicalRecords
+            .filter((item) => isSamePatient(item, record))
+            .sort((a, b) => String(b.visitDate || "").localeCompare(String(a.visitDate || "")));
+
+        document.getElementById("patientHistoryTitle").textContent = `${record.patientName || "Patient"} - Consultation History`;
+        document.getElementById("patientHistorySubtitle").textContent = `${history.length} consultation record(s)`;
+        patientHistoryContent.replaceChildren();
+
+        if (!history.length) {
+            patientHistoryContent.textContent = "No consultation history found.";
+        } else {
+            const table = document.createElement("table");
+            table.className = "dashboard-table";
+            const thead = document.createElement("thead");
+            const headRow = document.createElement("tr");
+            ["Date", "Record ID", "Diagnosis", "Doctor", "Action"].forEach((label) => {
+                const th = document.createElement("th"); th.textContent = label; headRow.appendChild(th);
+            });
+            thead.appendChild(headRow); table.appendChild(thead);
+            const tbody = document.createElement("tbody");
+            history.forEach((item) => {
+                const tr = document.createElement("tr");
+                [item.visitDate || "N/A", item.id || "N/A", item.diagnosis || "N/A", item.doctorName || "N/A"].forEach((value) => {
+                    const td = document.createElement("td"); td.textContent = value; tr.appendChild(td);
+                });
+                const action = document.createElement("td");
+                const view = document.createElement("button"); view.type = "button"; view.className = "medical-view-btn"; view.textContent = "View";
+                view.addEventListener("click", () => showRecordDetails(item));
+                action.appendChild(view); tr.appendChild(action); tbody.appendChild(tr);
+            });
+            table.appendChild(tbody); patientHistoryContent.appendChild(table);
+        }
+        patientHistorySection.style.display = "block";
+        patientHistorySection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // 13. PRINT SELECTED RECORD
+
+    function printSelectedRecord() {
+        if (!selectedPrintRecord) { alert("Open a medical record before printing."); return; }
+        const record = selectedPrintRecord;
+        const escapeHtml = (value) => String(value ?? "N/A").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '\"': "&quot;", "'": "&#39;" }[char]));
+        const fields = [
+            ["Record ID", record.id], ["Patient Name", record.patientName],
+            ["Patient ID", record.patientId], ["Consultation Date", record.visitDate],
+            ["Doctor", record.doctorName], ["Symptoms", record.symptoms],
+            ["Diagnosis", record.diagnosis], ["Treatment / Advice", record.treatment],
+            ["Doctor's Notes", record.notes], ["Follow-up Date", record.followUpDate || "Not scheduled"]
+        ];
+        const rows = fields.map(([label, value]) => `<section><h3>${escapeHtml(label)}</h3><p>${escapeHtml(value || "N/A")}</p></section>`).join("");
+        const printWindow = window.open("", "_blank", "width=850,height=700");
+        if (!printWindow) { alert("Please allow pop-ups to print this record."); return; }
+        printWindow.document.write(`<!DOCTYPE html><html><head><title>Medical Record ${escapeHtml(record.id)}</title><style>body{font-family:Arial,sans-serif;color:#173f4d;padding:32px;max-width:850px;margin:auto}h1{border-bottom:2px solid #078b8c;padding-bottom:12px}section{padding:10px 0;border-bottom:1px solid #dbe5e8}h3{font-size:13px;color:#078b8c;margin:0 0 6px}p{white-space:pre-wrap;margin:0;line-height:1.5}.print-date{color:#64748b;font-size:12px;margin-bottom:24px}@media print{button{display:none}}</style></head><body><h1>SemasaCare - Medical Record</h1><p class="print-date">Printed on ${escapeHtml(new Date().toLocaleString())}</p>${rows}<script>window.onload=()=>{window.print();};<\/script></body></html>`);
+        printWindow.document.close();
+    }
+
+    // 14. EDIT RECORD
 
     function editRecord(record) {
 
@@ -538,6 +622,26 @@ document.addEventListener("DOMContentLoaded", () => {
         displayRecords(searchInput.value);
     });
 
+    document.getElementById("applyRecordDateFilter").addEventListener("click", () => {
+        if (dateFromInput.value && dateToInput.value && dateFromInput.value > dateToInput.value) {
+            alert("From date cannot be later than To date.");
+            return;
+        }
+        displayRecords(searchInput.value);
+    });
+
+    document.getElementById("clearRecordDateFilter").addEventListener("click", () => {
+        dateFromInput.value = "";
+        dateToInput.value = "";
+        displayRecords(searchInput.value);
+    });
+
+    document.getElementById("printRecordBtn").addEventListener("click", printSelectedRecord);
+
+    document.getElementById("closePatientHistoryBtn").addEventListener("click", () => {
+        patientHistorySection.style.display = "none";
+    });
+
     document.getElementById("menuToggle")
         ?.addEventListener("click", () => {
             document.getElementById("sidebar")
@@ -550,7 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.replace("../login.html");
         });
 
-    // 14. REFRESH
+    // 15. REFRESH
 
     function refreshPage() {
 

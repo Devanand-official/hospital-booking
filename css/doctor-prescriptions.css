@@ -822,3 +822,26 @@
         flex: 1 1 calc(50% - 6px);
     }
 }
+
+/* Medicine inventory dropdown */
+
+.medicine-field select {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid #dce6e9;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #173f4d;
+    outline: none;
+    cursor: pointer;
+}
+
+.medicine-field select:focus {
+    border-color: #078b8c;
+    box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.1);
+}
+
+.medicine-field select option:disabled {
+    color: #999999;
+}

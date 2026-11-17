@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Management | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-prescriptions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/pharmacist/prescriptions.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon"><i class="fas fa-user-nurse"></i></div>
+                <div>
+                    <h3 id="pharmacistName">Pharmacist</h3>
+                    <p>Pharmacist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">PHARMACY</p>
+                <a href="medicines.html" class="menu-item">
+                    <i class="fas fa-pills"></i><span>Medicines</span>
+                </a>
+                <a href="inventory.html" class="menu-item">
+                    <i class="fas fa-boxes-stacked"></i><span>Inventory</span>
+                </a>
+                <a href="prescriptions.html" class="menu-item active">
+                    <i class="fas fa-prescription"></i><span>Prescriptions</span>
+                </a>
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-chart-column"></i><span>Reports</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+            </button>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Prescription Management</h2>
+                        <p>Review and dispense doctor prescriptions</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Pharmacist</h4>
+                        <span>Pharmacist</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Prescriptions</h1>
+                        <p>Manage prescriptions issued by doctors.</p>
+                    </div>
+                </div>
+
+                <div class="pharmacy-rx-stats">
+                    <div class="rx-stat-card">
+                        <div class="rx-stat-icon blue"><i class="fas fa-prescription"></i></div>
+                        <div>
+                            <p>Total Prescriptions</p>
+                            <h2 id="totalRx">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="rx-stat-card">
+                        <div class="rx-stat-icon orange"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <p>Pending</p>
+                            <h2 id="pendingRx">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="rx-stat-card">
+                        <div class="rx-stat-icon purple"><i class="fas fa-spinner"></i></div>
+                        <div>
+                            <p>Partially Dispensed</p>
+                            <h2 id="partialRx">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="rx-stat-card">
+                        <div class="rx-stat-icon green"><i class="fas fa-circle-check"></i></div>
+                        <div>
+                            <p>Dispensed</p>
+                            <h2 id="dispensedRx">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Doctor Prescriptions</h3>
+                            <p id="prescriptionCount">0 prescriptions</p>
+                        </div>
+                    </div>
+
+                    <div class="rx-toolbar">
+                        <div class="rx-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchPrescriptions"
+                                placeholder="Search prescription, patient or doctor...">
+                        </div>
+
+                        <select id="statusFilter" class="rx-filter">
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="partial">Partially Dispensed</option>
+                            <option value="dispensed">Dispensed</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Prescription ID</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Medicines</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prescriptionsTableBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading prescriptions...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PRESCRIPTION DETAILS -->
+                <div class="section-card rx-details-card" id="prescriptionDetails">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Prescription Details</h3>
+                            <p id="selectedPrescriptionLabel">Selected prescription</p>
+                        </div>
+                        <button type="button" class="rx-close-btn" id="closeDetailsBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div id="prescriptionInfo" class="rx-info-grid"></div>
+
+                    <div class="rx-medicine-heading">
+                        <h3>Prescribed Medicines</h3>
+                        <p>Select the corresponding inventory medicine and enter the quantity to dispense.</p>
+                    </div>
+
+                    <div id="dispensingMedicineList"></div>
+
+                    <div id="dispenseMessage" class="rx-message" aria-live="polite"></div>
+
+                    <div class="rx-action-row">
+                        <button type="button" id="dispenseBtn" class="rx-dispense-btn">
+                            <i class="fas fa-pills"></i> Confirm Dispensing
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+</body>
+
+</html>

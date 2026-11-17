@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pharmacist Dashboard | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-dashboard.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/pharmacist/pharmacist.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-nurse"></i>
+                </div>
+                <div>
+                    <h3 id="pharmacistName">Pharmacist</h3>
+                    <p>Pharmacist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item active">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">PHARMACY</p>
+
+                <a href="medicines.html" class="menu-item">
+                    <i class="fas fa-pills"></i>
+                    <span>Medicines</span>
+                </a>
+
+                <a href="inventory.html" class="menu-item">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                    <span class="menu-badge" id="pendingPrescriptionBadge">0</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-chart-column"></i>
+                    <span>Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Pharmacist Dashboard</h2>
+                        <p>Pharmacy overview and management</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Pharmacist</h4>
+                        <span>Pharmacist</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Pharmacy Overview</h1>
+                        <p>Monitor medicines, inventory and prescriptions.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="pharmacy-stats-grid">
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon teal">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div>
+                            <p>Total Medicines</p>
+                            <h2 id="totalMedicines">0</h2>
+                            <span>Registered medicines</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon blue">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+                        <div>
+                            <p>Total Stock Units</p>
+                            <h2 id="totalStock">0</h2>
+                            <span>Available stock quantity</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon orange">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <p>Low Stock</p>
+                            <h2 id="lowStockCount">0</h2>
+                            <span>Medicines requiring attention</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon purple">
+                            <i class="fas fa-prescription"></i>
+                        </div>
+                        <div>
+                            <p>Pending Prescriptions</p>
+                            <h2 id="pendingPrescriptions">0</h2>
+                            <span>Awaiting dispensing</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ALERTS -->
+                <div class="pharmacy-alert-grid">
+
+                    <div class="section-card pharmacy-alert-card">
+                        <div class="section-heading">
+                            <div>
+                                <h3>
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    Low Stock Alerts
+                                </h3>
+                                <p>Medicines that need restocking</p>
+                            </div>
+                            <a href="inventory.html" class="view-all-link">
+                                View Inventory
+                            </a>
+                        </div>
+
+                        <div id="lowStockList" class="pharmacy-alert-list">
+                            <p class="empty-message">No low-stock medicines.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-card pharmacy-alert-card">
+                        <div class="section-heading">
+                            <div>
+                                <h3>
+                                    <i class="fas fa-calendar-xmark"></i>
+                                    Expiring Medicines
+                                </h3>
+                                <p>Medicines expiring within 30 days</p>
+                            </div>
+                            <a href="inventory.html" class="view-all-link">
+                                View Inventory
+                            </a>
+                        </div>
+
+                        <div id="expiringMedicineList" class="pharmacy-alert-list">
+                            <p class="empty-message">No expiry alerts.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <div class="section-card quick-actions-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Quick Actions</h3>
+                            <p>Frequently used pharmacy operations</p>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-quick-actions">
+
+                        <a href="medicines.html" class="quick-action-item">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div>
+                                <strong>Add Medicine</strong>
+                                <span>Register a new medicine</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="inventory.html" class="quick-action-item">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-boxes-stacked"></i>
+                            </div>
+                            <div>
+                                <strong>Manage Inventory</strong>
+                                <span>Monitor medicine stock</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="prescriptions.html" class="quick-action-item">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-prescription"></i>
+                            </div>
+                            <div>
+                                <strong>View Prescriptions</strong>
+                                <span>Review doctor prescriptions</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="reports.html" class="quick-action-item">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <strong>View Reports</strong>
+                                <span>Check pharmacy reports</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- RECENT ACTIVITY -->
+                <div class="section-card recent-activity-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Recent Dispensing Activity</h3>
+                            <p>Latest pharmacy transactions</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table pharmacy-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Patient</th>
+                                    <th>Prescription ID</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentActivityBody">
+                                <tr>
+                                    <td colspan="5" class="empty-message">
+                                        No dispensing activity available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

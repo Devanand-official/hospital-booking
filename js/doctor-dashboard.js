@@ -1,11 +1,12 @@
+
 /* =====================================
    SemasaCare - Doctor Dashboard
+   Updated with automatic data refresh
 ===================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // -------------------------------------
-  // AUTHENTICATION
-  // -------------------------------------
+
+  // 1. AUTHENTICATION
 
   const currentUser = SemasaAuth.getCurrentUser();
 
@@ -15,79 +16,71 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (currentUser.role !== "doctor") {
-    const role = currentUser.role;
-    const validRoles = [
-      "admin",
-      "receptionist",
-      "doctor",
-      "patient",
-      "pharmacist",
-      "laboratory",
-      "accountant",
-    ];
-
-    window.location.href = validRoles.includes(role)
-      ? `${role}-dashboard.html`
-      : "../login.html";
-
+    SemasaAuth.redirectByRole(currentUser.role);
     return;
   }
 
-  // -------------------------------------
-  // ELEMENTS
-  // -------------------------------------
+  // 2. ELEMENTS
 
-  const appointmentsTable = document.getElementById("doctorAppointments");
+  const appointmentsTable =
+    document.getElementById("doctorAppointments");
 
-  // -------------------------------------
-  // CURRENT DATE
-  // -------------------------------------
+  // 3. CURRENT DATE
 
-  const today = new Date();
+  function getTodayString() {
+    const today = new Date();
 
-  const todayString = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, "0"),
-    String(today.getDate()).padStart(2, "0"),
-  ].join("-");
+    return [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, "0"),
+      String(today.getDate()).padStart(2, "0")
+    ].join("-");
+  }
 
-  document.getElementById("currentDate").textContent = today.toLocaleDateString(
-    "en-IN",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  );
+  function updateCurrentDate() {
+    document.getElementById("currentDate").textContent =
+      new Date().toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+  }
 
-  // -------------------------------------
-  // DOCTOR INFORMATION
-  // -------------------------------------
+  // 4. DOCTOR PROFILE
 
   function loadDoctorProfile() {
+
     let profiles = [];
+    let users = [];
 
     try {
       profiles = JSON.parse(
-        localStorage.getItem("semasacareDoctorProfiles") || "[]",
+        localStorage.getItem("semasacareDoctorProfiles") || "[]"
       );
 
-      if (!Array.isArray(profiles)) {
-        profiles = [];
-      }
+      users = JSON.parse(
+        localStorage.getItem("semasacareUsers") || "[]"
+      );
+
+      if (!Array.isArray(profiles)) profiles = [];
+      if (!Array.isArray(users)) users = [];
+
     } catch (error) {
-      console.error("Unable to load doctor profiles:", error);
+      console.error("Profile loading error:", error);
     }
 
-    const profile = profiles.find(
-      (item) => String(item.userId) === String(currentUser.id),
+    const profile = profiles.find(item =>
+      String(item.userId) === String(currentUser.id)
+    );
+
+    const registeredUser = users.find(user =>
+      String(user.id) === String(currentUser.id)
     );
 
     const doctorName = currentUser.name || "Doctor";
 
     document.getElementById("doctorName").textContent = doctorName;
-
     document.getElementById("headerName").textContent = doctorName;
 
     document.getElementById("welcomeHeading").textContent =
@@ -98,24 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("profileEmail").textContent =
       currentUser.email || "Not available";
 
-    // Read phone number from the registered user account
-    let phone = "Not provided";
-
-    try {
-      const users = JSON.parse(localStorage.getItem("semasacareUsers") || "[]");
-
-      const registeredUser = users.find(
-        (user) => String(user.id) === String(currentUser.id),
-      );
-
-      if (registeredUser?.phone) {
-        phone = registeredUser.phone;
-      }
-    } catch (error) {
-      console.error("Unable to load doctor account:", error);
-    }
-
-    document.getElementById("profilePhone").textContent = phone;
+    document.getElementById("profilePhone").textContent =
+      registeredUser?.phone || "Not provided";
 
     document.getElementById("profileSpecialization").textContent =
       profile?.specialization || "Not updated";
@@ -128,42 +105,47 @@ document.addEventListener("DOMContentLoaded", () => {
         ? `${profile.experience} years`
         : "Not updated";
 
-    document.getElementById("profileStatus").textContent = profile
-      ? "Profile available"
-      : "Profile incomplete";
+    document.getElementById("profileStatus").textContent =
+      profile ? "Profile available" : "Profile incomplete";
   }
 
-  // -------------------------------------
-  // APPOINTMENT DATE NORMALIZATION
-  // -------------------------------------
+  // 5. DATE NORMALIZATION
 
   function normalizeDate(value) {
+
     const date = String(value || "").trim();
 
+    // YYYY-MM-DD
     if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
+
       const [year, month, day] = date.split("-").map(Number);
 
       return [
         year,
         String(month).padStart(2, "0"),
-        String(day).padStart(2, "0"),
+        String(day).padStart(2, "0")
       ].join("-");
     }
 
+    // DD-MM-YYYY or DD/MM/YYYY
     if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}$/.test(date)) {
+
       const [day, month, year] = date.split(/[-/]/).map(Number);
 
       return [
         year,
         String(month).padStart(2, "0"),
-        String(day).padStart(2, "0"),
+        String(day).padStart(2, "0")
       ].join("-");
     }
 
     return "";
   }
 
+  // 6. APPOINTMENT TIMESTAMP
+
   function getAppointmentTimestamp(appointment) {
+
     const normalizedDate = normalizeDate(appointment.date);
 
     if (!normalizedDate) return 0;
@@ -173,52 +155,58 @@ document.addEventListener("DOMContentLoaded", () => {
     let hours = 0;
     let minutes = 0;
 
-    const match = time.match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?$/i);
+    const match = time.match(
+      /^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?$/i
+    );
 
     if (match) {
+
       hours = Number(match[1]);
       minutes = Number(match[2]);
 
       const period = match[3]?.toUpperCase();
 
-      if (period === "PM" && hours < 12) {
-        hours += 12;
-      }
-
-      if (period === "AM" && hours === 12) {
-        hours = 0;
-      }
+      if (period === "PM" && hours < 12) hours += 12;
+      if (period === "AM" && hours === 12) hours = 0;
     }
 
+    const [year, month, day] = normalizedDate.split("-").map(Number);
+
     return new Date(
-      `${normalizedDate}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`,
+      year,
+      month - 1,
+      day,
+      hours,
+      minutes
     ).getTime();
   }
 
-  // -------------------------------------
-  // LOAD DOCTOR APPOINTMENTS
-  // -------------------------------------
+  // 7. LOAD APPOINTMENTS
 
   function loadAppointments() {
+
     try {
+
       const data = JSON.parse(
-        localStorage.getItem("semasacareAppointments") || "[]",
+        localStorage.getItem("semasacareAppointments") || "[]"
       );
 
       return Array.isArray(data) ? data : [];
-    } catch (error) {
-      console.error("Unable to load appointments:", error);
 
+    } catch (error) {
+
+      console.error("Unable to load appointments:", error);
       return [];
     }
   }
 
-  // -------------------------------------
-  // MATCH APPOINTMENTS TO LOGGED-IN DOCTOR
-  // -------------------------------------
+  // 8. MATCH APPOINTMENTS TO DOCTOR
 
   function getDoctorAppointments() {
+
     const allAppointments = loadAppointments();
+
+    const doctorId = String(currentUser.id || "");
 
     const doctorName = String(currentUser.name || "")
       .trim()
@@ -228,37 +216,38 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim()
       .toLowerCase();
 
-    return allAppointments.filter((appointment) => {
-      const appointmentDoctorName = String(appointment.doctorName || "")
-        .trim()
-        .toLowerCase();
+    return allAppointments.filter(appointment => {
 
-      const appointmentDoctorEmail = String(appointment.doctorEmail || "")
-        .trim()
-        .toLowerCase();
+      const appointmentDoctorId =
+        String(appointment.doctorId || "");
 
-      const appointmentDoctorId = String(appointment.doctorId || "");
+      const appointmentDoctorEmail =
+        String(appointment.doctorEmail || "")
+          .trim()
+          .toLowerCase();
+
+      const appointmentDoctorName =
+        String(appointment.doctorName || "")
+          .trim()
+          .toLowerCase();
 
       return (
-        (appointment.doctorId !== undefined &&
-          appointmentDoctorId === String(currentUser.id)) ||
-        (appointment.doctorEmail && appointmentDoctorEmail === doctorEmail) ||
-        (appointment.doctorName && appointmentDoctorName === doctorName)
+        (doctorId && appointmentDoctorId === doctorId) ||
+        (doctorEmail && appointmentDoctorEmail === doctorEmail) ||
+        (doctorName && appointmentDoctorName === doctorName)
       );
     });
   }
 
-  // -------------------------------------
-  // STATUS BADGE
-  // -------------------------------------
+  // 9. STATUS BADGE
 
   function createStatusBadge(status) {
+
     const badge = document.createElement("span");
 
-    const safeStatus = String(status || "Pending");
+    const safeStatus = String(status || "Pending").trim();
 
     badge.className = "doctor-appointment-status";
-
     badge.textContent = safeStatus;
 
     const normalized = safeStatus.toLowerCase();
@@ -276,18 +265,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return badge;
   }
 
-  // -------------------------------------
-  // DISPLAY TODAY'S APPOINTMENTS
-  // -------------------------------------
+  // 10. DISPLAY TODAY'S APPOINTMENTS
 
   function renderAppointments(appointments) {
-    appointmentsTable.textContent = "";
+
+    appointmentsTable.replaceChildren();
+
+    const todayString = getTodayString();
 
     const todaysAppointments = appointments
-      .filter((appointment) => normalizeDate(appointment.date) === todayString)
-      .sort((a, b) => getAppointmentTimestamp(a) - getAppointmentTimestamp(b));
+      .filter(appointment =>
+        normalizeDate(appointment.date) === todayString
+      )
+      .sort((a, b) =>
+        getAppointmentTimestamp(a) -
+        getAppointmentTimestamp(b)
+      );
 
-    if (todaysAppointments.length === 0) {
+    if (!todaysAppointments.length) {
+
       const row = document.createElement("tr");
       const cell = document.createElement("td");
 
@@ -301,18 +297,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    todaysAppointments.forEach((appointment) => {
+    todaysAppointments.forEach(appointment => {
+
       const row = document.createElement("tr");
 
       const values = [
         appointment.patientName || "N/A",
         appointment.date || "N/A",
-        appointment.time || "N/A",
+        appointment.time || "N/A"
       ];
 
-      values.forEach((value) => {
-        const cell = document.createElement("td");
+      values.forEach(value => {
 
+        const cell = document.createElement("td");
         cell.textContent = value;
 
         row.appendChild(cell);
@@ -320,52 +317,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const statusCell = document.createElement("td");
 
-      statusCell.appendChild(createStatusBadge(appointment.status));
+      statusCell.appendChild(
+        createStatusBadge(appointment.status)
+      );
 
       row.appendChild(statusCell);
-
       appointmentsTable.appendChild(row);
     });
   }
 
-  // -------------------------------------
-  // UPDATE DASHBOARD STATISTICS
-  // -------------------------------------
+  // 11. UPDATE DASHBOARD STATISTICS
 
   function updateDashboard() {
+
     const appointments = getDoctorAppointments();
 
-    const todaysAppointments = appointments.filter(
-      (appointment) => normalizeDate(appointment.date) === todayString,
-    );
-
-    const pending = todaysAppointments.filter(
-      (appointment) =>
-        String(appointment.status || "Pending").toLowerCase() === "pending",
-    );
-
-    const completed = todaysAppointments.filter(
-      (appointment) =>
-        String(appointment.status || "").toLowerCase() === "completed",
-    );
-
+    const todayString = getTodayString();
     const now = Date.now();
 
-    const upcoming = appointments.filter((appointment) => {
+    const todaysAppointments = appointments.filter(appointment =>
+      normalizeDate(appointment.date) === todayString
+    );
+
+    // Pending appointments across all dates
+    const pending = appointments.filter(appointment =>
+      String(appointment.status || "Pending")
+        .trim()
+        .toLowerCase() === "pending"
+    );
+
+    // Completed appointments across all dates
+    const completed = appointments.filter(appointment =>
+      String(appointment.status || "")
+        .trim()
+        .toLowerCase() === "completed"
+    );
+
+    // Future appointments excluding cancelled/completed/missed
+    const upcoming = appointments.filter(appointment => {
+
       const timestamp = getAppointmentTimestamp(appointment);
+
+      const status = String(appointment.status || "")
+        .trim()
+        .toLowerCase();
 
       return (
         timestamp > now &&
-        !["cancelled", "completed", "missed"].includes(
-          String(appointment.status || "").toLowerCase(),
-        )
+        !["cancelled", "completed", "missed"].includes(status)
       );
     });
 
     document.getElementById("todayAppointments").textContent =
       todaysAppointments.length;
 
-    document.getElementById("pendingAppointments").textContent = pending.length;
+    document.getElementById("pendingAppointments").textContent =
+      pending.length;
 
     document.getElementById("completedAppointments").textContent =
       completed.length;
@@ -374,28 +381,77 @@ document.addEventListener("DOMContentLoaded", () => {
       upcoming.length;
 
     renderAppointments(appointments);
+    updateCurrentDate();
   }
 
-  // -------------------------------------
-  // MOBILE SIDEBAR
-  // -------------------------------------
+  // 12. MOBILE SIDEBAR
 
-  document.getElementById("menuToggle")?.addEventListener("click", () => {
-    document.getElementById("sidebar")?.classList.toggle("active");
+  document.getElementById("menuToggle")
+    ?.addEventListener("click", () => {
+
+      document.getElementById("sidebar")
+        ?.classList.toggle("active");
+    });
+
+  // 13. LOGOUT
+
+  document.getElementById("logoutBtn")
+    ?.addEventListener("click", () => {
+
+      SemasaAuth.logout();
+    });
+
+  // 14. AUTOMATIC DATA REFRESH
+
+  // Changes made in another browser tab
+  window.addEventListener("storage", event => {
+
+    if (
+      event.key === "semasacareAppointments" ||
+      event.key === "semasacareDoctorProfiles" ||
+      event.key === "semasacareUsers" ||
+      event.key === null
+    ) {
+      loadDoctorProfile();
+      updateDashboard();
+    }
   });
 
-  // -------------------------------------
-  // LOGOUT
-  // -------------------------------------
+  // Refresh when returning to this page
+  window.addEventListener("pageshow", () => {
 
-  document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    SemasaAuth.logout();
+    loadDoctorProfile();
+    updateDashboard();
   });
 
-  // -------------------------------------
-  // INITIALIZE
-  // -------------------------------------
+  // Refresh when browser window gets focus
+  window.addEventListener("focus", () => {
+
+    loadDoctorProfile();
+    updateDashboard();
+  });
+
+  // Refresh when the tab becomes visible
+  document.addEventListener("visibilitychange", () => {
+
+    if (!document.hidden) {
+      loadDoctorProfile();
+      updateDashboard();
+    }
+  });
+
+  // Periodic refresh
+  setInterval(() => {
+
+    if (!document.hidden) {
+      updateDashboard();
+    }
+
+  }, 15000);
+
+  // 15. INITIALIZE
 
   loadDoctorProfile();
   updateDashboard();
+
 });
