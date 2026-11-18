@@ -454,4 +454,282 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDoctorProfile();
   updateDashboard();
 
+
+
+  // =====================================
+  // 13. DOCTOR SCHEDULE MANAGEMENT
+  // =====================================
+
+  const SCHEDULE_KEY = "semasacareDoctorSchedules";
+
+  const scheduleForm = document.getElementById("doctorScheduleForm");
+  const leaveDateInput = document.getElementById("leaveDate");
+  const leaveList = document.getElementById("doctorLeaveList");
+
+  function getAllSchedules() {
+    try {
+      const data = JSON.parse(
+        localStorage.getItem(SCHEDULE_KEY) || "{}"
+      );
+
+      return data && typeof data === "object" && !Array.isArray(data)
+        ? data
+        : {};
+
+    } catch (error) {
+      console.error("Unable to load schedules:", error);
+      return {};
+    }
+  }
+
+  function getDoctorSchedule() {
+    const schedules = getAllSchedules();
+
+    return schedules[String(currentUser.id)] || null;
+  }
+
+  function saveDoctorSchedule(schedule) {
+    try {
+      const schedules = getAllSchedules();
+
+      schedules[String(currentUser.id)] = schedule;
+
+      localStorage.setItem(
+        SCHEDULE_KEY,
+        JSON.stringify(schedules)
+      );
+
+      return true;
+
+    } catch (error) {
+      console.error("Unable to save schedule:", error);
+      alert("Unable to save schedule. Check browser storage.");
+      return false;
+    }
+  }
+
+  // Load saved schedule into the form
+  function loadDoctorSchedule() {
+
+    const schedule = getDoctorSchedule();
+
+    if (!schedule) {
+      renderLeaveDates([]);
+      return;
+    }
+
+    document.querySelectorAll(
+      'input[name="workingDays"]'
+    ).forEach(input => {
+      input.checked = schedule.workingDays?.includes(input.value) || false;
+    });
+
+    document.getElementById("dutyStart").value =
+      schedule.dutyStart || "";
+
+    document.getElementById("dutyEnd").value =
+      schedule.dutyEnd || "";
+
+    document.getElementById("breakStart").value =
+      schedule.breakStart || "";
+
+    document.getElementById("breakEnd").value =
+      schedule.breakEnd || "";
+
+    document.getElementById("slotDuration").value =
+      String(schedule.slotDuration || 30);
+
+    renderLeaveDates(schedule.leaveDates || []);
+
+    document.getElementById("scheduleStatus").textContent =
+      "Schedule saved";
+
+    document.getElementById("scheduleStatus")
+      .classList.add("saved");
+  }
+
+  // Save weekly schedule
+  scheduleForm?.addEventListener("submit", event => {
+
+    event.preventDefault();
+
+    const workingDays = Array.from(
+      document.querySelectorAll(
+        'input[name="workingDays"]:checked'
+      )
+    ).map(input => input.value);
+
+    const dutyStart = document.getElementById("dutyStart").value;
+    const dutyEnd = document.getElementById("dutyEnd").value;
+
+    const breakStart = document.getElementById("breakStart").value;
+    const breakEnd = document.getElementById("breakEnd").value;
+
+    const slotDuration = Number(
+      document.getElementById("slotDuration").value
+    );
+
+    if (!workingDays.length) {
+      alert("Please select at least one working day.");
+      return;
+    }
+
+    if (!dutyStart || !dutyEnd || dutyStart >= dutyEnd) {
+      alert("Please enter valid duty hours.");
+      return;
+    }
+
+    if (Boolean(breakStart) !== Boolean(breakEnd)) {
+      alert("Please enter both break start and end times.");
+      return;
+    }
+
+    if (breakStart && breakEnd) {
+
+      if (
+        breakStart >= breakEnd ||
+        breakStart < dutyStart ||
+        breakEnd > dutyEnd
+      ) {
+        alert("Break time must be within your duty hours.");
+        return;
+      }
+    }
+
+    const existingSchedule = getDoctorSchedule();
+
+    const schedule = {
+      doctorId: String(currentUser.id),
+      doctorName: currentUser.name || "Doctor",
+      workingDays,
+      dutyStart,
+      dutyEnd,
+      breakStart,
+      breakEnd,
+      slotDuration,
+      leaveDates: existingSchedule?.leaveDates || [],
+      updatedAt: new Date().toISOString()
+    };
+
+    if (!saveDoctorSchedule(schedule)) return;
+
+    document.getElementById("scheduleStatus").textContent =
+      "Schedule saved";
+
+    document.getElementById("scheduleStatus")
+      .classList.add("saved");
+
+    alert("Your schedule has been saved successfully.");
+  });
+
+  // Render leave dates
+  function renderLeaveDates(dates) {
+
+    leaveList.replaceChildren();
+
+    if (!dates.length) {
+
+      const message = document.createElement("p");
+      message.textContent = "No leave dates added.";
+
+      leaveList.appendChild(message);
+      return;
+    }
+
+    dates.sort();
+
+    dates.forEach(date => {
+
+      const item = document.createElement("div");
+      item.className = "doctor-leave-item";
+
+      const dateText = document.createElement("strong");
+
+      const [year, month, day] = date.split("-");
+
+      dateText.textContent =
+        new Date(Number(year), Number(month) - 1, Number(day))
+          .toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          });
+
+      const removeButton = document.createElement("button");
+
+      removeButton.type = "button";
+      removeButton.className = "remove-leave-btn";
+      removeButton.innerHTML =
+        '<i class="fas fa-trash"></i> Remove';
+
+      removeButton.addEventListener("click", () => {
+        removeLeaveDate(date);
+      });
+
+      item.append(dateText, removeButton);
+
+      leaveList.appendChild(item);
+    });
+  }
+
+  // Add leave date
+  document.getElementById("addLeaveBtn")
+    ?.addEventListener("click", () => {
+
+      const selectedDate = leaveDateInput.value;
+
+      if (!selectedDate) {
+        alert("Please select a leave date.");
+        return;
+      }
+
+      if (selectedDate < getTodayString()) {
+        alert("You cannot add a leave date in the past.");
+        return;
+      }
+
+      const schedule = getDoctorSchedule();
+
+      if (!schedule) {
+        alert("Please save your weekly schedule first.");
+        return;
+      }
+
+      const leaveDates = schedule.leaveDates || [];
+
+      if (leaveDates.includes(selectedDate)) {
+        alert("This leave date is already added.");
+        return;
+      }
+
+      schedule.leaveDates = [...leaveDates, selectedDate];
+      schedule.updatedAt = new Date().toISOString();
+
+      if (!saveDoctorSchedule(schedule)) return;
+
+      leaveDateInput.value = "";
+      renderLeaveDates(schedule.leaveDates);
+
+      alert("Leave date added successfully.");
+    });
+
+  // Remove leave date
+  function removeLeaveDate(date) {
+
+    const schedule = getDoctorSchedule();
+
+    if (!schedule) return;
+
+    schedule.leaveDates = (schedule.leaveDates || [])
+      .filter(item => item !== date);
+
+    schedule.updatedAt = new Date().toISOString();
+
+    if (!saveDoctorSchedule(schedule)) return;
+
+    renderLeaveDates(schedule.leaveDates);
+  }
+
+  // Initialize schedule
+  loadDoctorSchedule();
 });

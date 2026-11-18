@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pharmacy Reports | SemasaCare</title>
+
+    <!-- Existing Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-dashboard.css">
+    <link rel="stylesheet" href="../../css/pharmacist-reports.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Scripts -->
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/pharmacist/reports.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-user-nurse"></i>
+                </div>
+
+                <div>
+                    <h3 id="pharmacistName">Pharmacist</h3>
+                    <p>Pharmacist</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">PHARMACY</p>
+
+                <a href="medicines.html" class="menu-item">
+                    <i class="fas fa-pills"></i>
+                    <span>Medicines</span>
+                </a>
+
+                <a href="inventory.html" class="menu-item">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="prescriptions.html" class="menu-item">
+                    <i class="fas fa-prescription"></i>
+                    <span>Prescriptions</span>
+                    <span class="menu-badge" id="pendingPrescriptionBadge">0</span>
+                </a>
+
+                <a href="reports.html" class="menu-item active">
+                    <i class="fas fa-chart-column"></i>
+                    <span>Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Pharmacy Reports</h2>
+                        <p>Reports and pharmacy analytics</p>
+                    </div>
+
+                </div>
+
+                <div class="header-profile">
+
+                    <div class="header-avatar">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Pharmacist</h4>
+                        <span>Pharmacist</span>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- REPORT CONTENT -->
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+
+                    <div>
+                        <h1>Pharmacy Reports</h1>
+                        <p>Monitor stock, dispensing, medicine expiry and transactions.</p>
+                    </div>
+
+                    <div class="report-actions">
+                        <button class="report-btn secondary" id="printReportBtn">
+                            <i class="fas fa-print"></i>
+                            Print
+                        </button>
+
+                        <button class="report-btn primary" id="exportReportBtn">
+                            <i class="fas fa-download"></i>
+                            Export CSV
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- DATE FILTERS -->
+                <div class="section-card report-filter-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-filter"></i>
+                                Report Filters
+                            </h3>
+                            <p>Select a date range to view pharmacy reports.</p>
+                        </div>
+                    </div>
+
+                    <div class="report-filter-controls">
+
+                        <div class="filter-group">
+                            <label for="reportPeriod">Report Period</label>
+
+                            <select id="reportPeriod">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="year">This Year</option>
+                                <option value="custom">Custom Range</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group" id="customDateFilters" hidden>
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate">
+                        </div>
+
+                        <div class="filter-group" id="customEndDateFilter" hidden>
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate">
+                        </div>
+
+                        <button class="report-btn primary" id="applyFilterBtn">
+                            <i class="fas fa-search"></i>
+                            Apply Filter
+                        </button>
+
+                    </div>
+
+                    <p class="report-period-label" id="reportPeriodLabel">
+                        Showing reports for this month
+                    </p>
+
+                </div>
+
+                <!-- SUMMARY CARDS -->
+                <div class="pharmacy-stats-grid report-stats-grid">
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon teal">
+                            <i class="fas fa-pills"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Medicines</p>
+                            <h2 id="reportTotalMedicines">0</h2>
+                            <span>Registered medicines</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon blue">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Stock Units</p>
+                            <h2 id="reportTotalStock">0</h2>
+                            <span>Available quantity</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon orange">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+
+                        <div>
+                            <p>Low Stock Items</p>
+                            <h2 id="reportLowStock">0</h2>
+                            <span>Requiring restocking</span>
+                        </div>
+                    </div>
+
+                    <div class="pharmacy-stat-card">
+                        <div class="pharmacy-stat-icon purple">
+                            <i class="fas fa-prescription-bottle-medical"></i>
+                        </div>
+
+                        <div>
+                            <p>Dispensed Prescriptions</p>
+                            <h2 id="reportDispensed">0</h2>
+                            <span>Within selected period</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- STOCK REPORT -->
+                <div class="section-card report-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-boxes-stacked"></i>
+                                Stock Report
+                            </h3>
+                            <p>Current medicine inventory overview.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table pharmacy-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine ID</th>
+                                    <th>Medicine Name</th>
+                                    <th>Category</th>
+                                    <th>Available Stock</th>
+                                    <th>Reorder Level</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="stockReportBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        Loading stock report...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- DISPENSING REPORT -->
+                <div class="section-card report-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-prescription"></i>
+                                Dispensing Report
+                            </h3>
+                            <p>Prescription dispensing activity.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table pharmacy-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Prescription ID</th>
+                                    <th>Medicine</th>
+                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="dispensingReportBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading dispensing report...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- EXPIRY REPORT -->
+                <div class="section-card report-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-calendar-xmark"></i>
+                                Medicine Expiry Report
+                            </h3>
+                            <p>Expired and upcoming expiry medicines.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table pharmacy-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Batch Number</th>
+                                    <th>Available Quantity</th>
+                                    <th>Expiry Date</th>
+                                    <th>Days Remaining</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="expiryReportBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        Loading expiry report...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- STOCK TRANSACTIONS -->
+                <div class="section-card report-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-clock-rotate-left"></i>
+                                Stock Transaction Report
+                            </h3>
+                            <p>Medicine stock additions and deductions.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table pharmacy-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Medicine</th>
+                                    <th>Transaction Type</th>
+                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="stockTransactionBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        Loading stock transactions...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

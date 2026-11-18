@@ -229,22 +229,128 @@
           </div>
         </div>
 
-        <!-- SCHEDULE PLACEHOLDER -->
+
+        <!-- DOCTOR SCHEDULE MANAGEMENT -->
         <div class="section-card" id="schedule">
+
           <div class="section-heading">
-            <h2>My Schedule</h2>
+            <div>
+              <h2>My Schedule</h2>
+              <p>Manage your working hours and availability.</p>
+            </div>
+
+            <span class="schedule-status" id="scheduleStatus">
+              Not configured
+            </span>
           </div>
 
-          <div class="doctor-placeholder">
-            <i class="fas fa-calendar-days"></i>
-            <h3>Schedule Management</h3>
-            <p>
-              Your working days, duty hours, breaks and leave management will
-              be available here.
-            </p>
-            <span>Coming in the next module</span>
+          <form id="doctorScheduleForm">
+
+            <!-- WORKING DAYS -->
+            <div class="schedule-group">
+              <h3><i class="fas fa-calendar-week"></i> Working Days</h3>
+
+              <div class="schedule-days">
+
+                <label><input type="checkbox" name="workingDays" value="Monday"> Monday</label>
+                <label><input type="checkbox" name="workingDays" value="Tuesday"> Tuesday</label>
+                <label><input type="checkbox" name="workingDays" value="Wednesday"> Wednesday</label>
+                <label><input type="checkbox" name="workingDays" value="Thursday"> Thursday</label>
+                <label><input type="checkbox" name="workingDays" value="Friday"> Friday</label>
+                <label><input type="checkbox" name="workingDays" value="Saturday"> Saturday</label>
+                <label><input type="checkbox" name="workingDays" value="Sunday"> Sunday</label>
+
+              </div>
+            </div>
+
+            <!-- DUTY HOURS -->
+            <div class="schedule-group">
+
+              <h3><i class="fas fa-clock"></i> Duty Hours</h3>
+
+              <div class="schedule-fields">
+
+                <div>
+                  <label for="dutyStart">Start Time</label>
+                  <input type="time" id="dutyStart" required>
+                </div>
+
+                <div>
+                  <label for="dutyEnd">End Time</label>
+                  <input type="time" id="dutyEnd" required>
+                </div>
+
+                <div>
+                  <label for="slotDuration">Appointment Duration</label>
+                  <select id="slotDuration">
+                    <option value="15">15 Minutes</option>
+                    <option value="20">20 Minutes</option>
+                    <option value="30">30 Minutes</option>
+                    <option value="60">60 Minutes</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- BREAK TIME -->
+            <div class="schedule-group">
+
+              <h3><i class="fas fa-mug-hot"></i> Break Time</h3>
+
+              <div class="schedule-fields">
+
+                <div>
+                  <label for="breakStart">Break Start</label>
+                  <input type="time" id="breakStart">
+                </div>
+
+                <div>
+                  <label for="breakEnd">Break End</label>
+                  <input type="time" id="breakEnd">
+                </div>
+
+              </div>
+
+              <p class="schedule-hint">
+                Leave both fields empty if you do not have a scheduled break.
+              </p>
+
+            </div>
+
+            <div class="schedule-actions">
+              <button type="submit" class="schedule-save-btn">
+                <i class="fas fa-save"></i> Save Schedule
+              </button>
+            </div>
+
+          </form>
+
+          <div class="schedule-group leave-management">
+
+            <h3><i class="fas fa-calendar-xmark"></i> Leave Management</h3>
+
+            <div class="leave-input-row">
+
+              <div>
+                <label for="leaveDate">Select Leave Date</label>
+                <input type="date" id="leaveDate">
+              </div>
+
+              <button type="button" id="addLeaveBtn">
+                <i class="fas fa-plus"></i> Add Leave
+              </button>
+
+            </div>
+
+            <div id="doctorLeaveList" class="doctor-leave-list">
+              <p>No leave dates added.</p>
+            </div>
+
           </div>
+
         </div>
+
 
         <!-- FOOTER INFORMATION -->
         <div class="section-card system-card">

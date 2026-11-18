@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Laboratory Dashboard | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/laboratory-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/laboratory/laboratory.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div>
+                    <h3 id="laboratoryName">Lab Technician</h3>
+                    <p>Laboratory</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item active">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">LABORATORY</p>
+
+                <a href="test-requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Test Requests</span>
+                    <span class="menu-badge" id="pendingLabBadge">0</span>
+                </a>
+
+                <a href="sample-collection.html" class="menu-item">
+                    <i class="fas fa-vial"></i>
+                    <span>Sample Collection</span>
+                </a>
+
+                <a href="test-processing.html" class="menu-item">
+                    <i class="fas fa-microscope"></i>
+                    <span>Test Processing</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Result Entry</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Lab Reports</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Laboratory Dashboard</h2>
+                        <p>Laboratory operations and diagnostic overview</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Lab Technician</h4>
+                        <span>Laboratory Technician</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Laboratory Overview</h1>
+                        <p>Track test requests, samples, processing and diagnostic reports.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="lab-stats-grid">
+                    <article class="lab-stat-card">
+                        <div class="lab-stat-icon teal">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div class="lab-stat-info">
+                            <p>Total Lab Requests</p>
+                            <h2 id="totalLabRequests">0</h2>
+                            <span>All recorded test requests</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-stat-card">
+                        <div class="lab-stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="lab-stat-info">
+                            <p>Awaiting Samples</p>
+                            <h2 id="awaitingSamples">0</h2>
+                            <span>Requests waiting for collection</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-stat-card">
+                        <div class="lab-stat-icon blue">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="lab-stat-info">
+                            <p>Samples Collected</p>
+                            <h2 id="samplesCollected">0</h2>
+                            <span>Recorded sample collections</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-stat-card">
+                        <div class="lab-stat-icon purple">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="lab-stat-info">
+                            <p>Tests In Progress</p>
+                            <h2 id="testsInProgress">0</h2>
+                            <span>Currently being processed</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-stat-card">
+                        <div class="lab-stat-icon green">
+                            <i class="fas fa-file-circle-check"></i>
+                        </div>
+                        <div class="lab-stat-info">
+                            <p>Completed Reports</p>
+                            <h2 id="completedLabReports">0</h2>
+                            <span>Verified or released reports</span>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- TEST REQUESTS -->
+                <section class="section-card lab-section-card">
+                    <div class="section-heading lab-section-heading">
+                        <div>
+                            <h3><i class="fas fa-file-medical"></i> Lab Test Requests</h3>
+                            <p>Recently received requests from doctors</p>
+                        </div>
+                        <a href="test-requests.html" class="view-all-link">View All Requests</a>
+                    </div>
+
+                    <div class="lab-table-toolbar">
+                        <div class="lab-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="requestSearch" placeholder="Search patient, request ID or test..." aria-label="Search lab requests">
+                        </div>
+
+                        <select id="requestStatusFilter" aria-label="Filter lab requests by status">
+                            <option value="all">All Statuses</option>
+                            <option value="awaiting">Awaiting Sample</option>
+                            <option value="collected">Sample Collected</option>
+                            <option value="processing">Processing</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table lab-dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Requested By</th>
+                                    <th>Request Date</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="labRequestsTableBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">Loading lab requests...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="lab-table-note" id="requestTableNote" aria-live="polite"></p>
+                </section>
+
+                <!-- LOWER GRID -->
+                <div class="lab-dashboard-grid">
+
+                    <!-- RECENT SAMPLE COLLECTIONS -->
+                    <section class="section-card lab-section-card">
+                        <div class="section-heading lab-section-heading">
+                            <div>
+                                <h3><i class="fas fa-vial"></i> Recent Sample Collections</h3>
+                                <p>Latest samples registered by the lab</p>
+                            </div>
+                            <a href="sample-collection.html" class="view-all-link">View All</a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="dashboard-table lab-dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sample ID</th>
+                                        <th>Patient</th>
+                                        <th>Sample Type</th>
+                                        <th>Collected</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentSamplesBody">
+                                    <tr>
+                                        <td colspan="4" class="empty-message">No sample collections available.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- COMPLETED REPORTS -->
+                    <section class="section-card lab-section-card">
+                        <div class="section-heading lab-section-heading">
+                            <div>
+                                <h3><i class="fas fa-file-waveform"></i> Recent Lab Reports</h3>
+                                <p>Latest verified or released reports</p>
+                            </div>
+                            <a href="reports.html" class="view-all-link">View All</a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="dashboard-table lab-dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Report ID</th>
+                                        <th>Patient</th>
+                                        <th>Test</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentReportsBody">
+                                    <tr>
+                                        <td colspan="5" class="empty-message">No completed reports available.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <section class="section-card lab-quick-actions-card">
+                    <div class="section-heading lab-section-heading">
+                        <div>
+                            <h3>Quick Actions</h3>
+                            <p>Shortcuts to common laboratory tasks</p>
+                        </div>
+                    </div>
+
+                    <div class="lab-quick-actions">
+                        <a href="test-requests.html" class="lab-quick-action">
+                            <span class="lab-quick-action-icon"><i class="fas fa-clipboard-list"></i></span>
+                            <span class="lab-quick-action-copy">
+                                <strong>Review Requests</strong>
+                                <small>Check new doctor requests</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="sample-collection.html" class="lab-quick-action">
+                            <span class="lab-quick-action-icon"><i class="fas fa-vial-circle-check"></i></span>
+                            <span class="lab-quick-action-copy">
+                                <strong>Record Sample</strong>
+                                <small>Register a collected sample</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="test-processing.html" class="lab-quick-action">
+                            <span class="lab-quick-action-icon"><i class="fas fa-microscope"></i></span>
+                            <span class="lab-quick-action-copy">
+                                <strong>Process Tests</strong>
+                                <small>Update test progress</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="results.html" class="lab-quick-action">
+                            <span class="lab-quick-action-icon"><i class="fas fa-clipboard-check"></i></span>
+                            <span class="lab-quick-action-copy">
+                                <strong>Enter Results</strong>
+                                <small>Record and verify findings</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </section>
+
+            </section>
+        </main>
+    </div>
+</body>
+</html>

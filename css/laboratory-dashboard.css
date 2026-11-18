@@ -1,0 +1,453 @@
+/* ==========================================
+   SEMASACARE - LABORATORY DASHBOARD
+   Page-specific styles. Common layout styles
+   are inherited from dashboard.css.
+========================================== */
+
+.dashboard-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 13px;
+    color: #078b8c;
+    background: #e9f7f6;
+    border: 1px solid #d7efed;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.header-profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.header-profile-info h4 {
+    margin-bottom: 4px;
+    color: #294956;
+    font-size: 13px;
+}
+
+.header-profile-info span {
+    color: #8a9ba3;
+    font-size: 11px;
+}
+
+/* Statistics */
+.lab-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.lab-stat-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    padding: 19px 16px;
+    background: #ffffff;
+    border: 1px solid #edf1f2;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.035);
+}
+
+.lab-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    border-radius: 9px;
+    font-size: 18px;
+}
+
+.lab-stat-icon.teal {
+    color: #078b8c;
+    background: #e4f6f4;
+}
+
+.lab-stat-icon.orange {
+    color: #d58a20;
+    background: #fff3df;
+}
+
+.lab-stat-icon.blue {
+    color: #3985c9;
+    background: #e8f2fc;
+}
+
+.lab-stat-icon.purple {
+    color: #8865cf;
+    background: #f0eaff;
+}
+
+.lab-stat-icon.green {
+    color: #249766;
+    background: #e5f6ed;
+}
+
+.lab-stat-info {
+    min-width: 0;
+}
+
+.lab-stat-info p {
+    margin: 2px 0 7px;
+    color: #82919a;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.lab-stat-info h2 {
+    margin-bottom: 5px;
+    color: #173f4d;
+    font-size: 25px;
+    line-height: 1.1;
+}
+
+.lab-stat-info span {
+    color: #9aa7ad;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* Dashboard sections */
+.lab-section-card {
+    min-width: 0;
+}
+
+.lab-section-heading {
+    align-items: flex-start;
+}
+
+.lab-section-heading h3 {
+    margin-bottom: 6px;
+    color: #173f4d;
+    font-size: 16px;
+}
+
+.lab-section-heading h3 i {
+    margin-right: 7px;
+    color: #078b8c;
+}
+
+.lab-section-heading p {
+    color: #8a9aa1;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.view-all-link {
+    color: #078b8c;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+/* Request toolbar */
+.lab-table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 16px;
+}
+
+.lab-search-box {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: min(360px, 100%);
+    padding: 0 12px;
+    border: 1px solid #dfe8ea;
+    border-radius: 7px;
+    background: #ffffff;
+}
+
+.lab-search-box i {
+    color: #91a2a9;
+    font-size: 12px;
+}
+
+.lab-search-box input {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0;
+    border: none;
+    outline: none;
+    color: #344f58;
+    font: inherit;
+    font-size: 11px;
+}
+
+.lab-search-box:focus-within {
+    border-color: #078b8c;
+    box-shadow: 0 0 0 3px rgba(7, 139, 140, 0.09);
+}
+
+.lab-table-toolbar select {
+    min-width: 155px;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #dfe8ea;
+    border-radius: 7px;
+    outline: none;
+    color: #52656d;
+    background: #ffffff;
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.lab-table-toolbar select:focus {
+    border-color: #078b8c;
+}
+
+/* Tables */
+.lab-dashboard-table {
+    min-width: 720px;
+}
+
+.lab-dashboard-table th {
+    white-space: nowrap;
+}
+
+.lab-dashboard-table td {
+    vertical-align: middle;
+    line-height: 1.45;
+}
+
+.lab-primary-cell {
+    color: #294956 !important;
+    font-weight: 700;
+}
+
+.lab-secondary-cell {
+    display: block;
+    margin-top: 3px;
+    color: #98a6ac;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.lab-status-badge,
+.lab-priority-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.lab-status-badge.awaiting {
+    color: #b87917;
+    background: #fff3dc;
+}
+
+.lab-status-badge.collected {
+    color: #3478b8;
+    background: #e8f2fc;
+}
+
+.lab-status-badge.processing {
+    color: #7656b2;
+    background: #f0eaff;
+}
+
+.lab-status-badge.completed {
+    color: #218653;
+    background: #e3f5eb;
+}
+
+.lab-status-badge.cancelled {
+    color: #c34d4a;
+    background: #fdebea;
+}
+
+.lab-status-badge.neutral {
+    color: #637780;
+    background: #eef2f3;
+}
+
+.lab-priority-badge.urgent,
+.lab-priority-badge.critical {
+    color: #c43d3d;
+    background: #fde9e8;
+}
+
+.lab-priority-badge.high {
+    color: #b87917;
+    background: #fff3dc;
+}
+
+.lab-priority-badge.normal,
+.lab-priority-badge.routine,
+.lab-priority-badge.low {
+    color: #52717c;
+    background: #edf3f5;
+}
+
+.lab-table-note {
+    min-height: 14px;
+    margin-top: 10px;
+    color: #8a9aa1;
+    font-size: 10px;
+}
+
+/* Lower dashboard columns */
+.lab-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 0 20px;
+}
+
+.lab-dashboard-grid .section-card {
+    min-width: 0;
+}
+
+/* Quick actions */
+.lab-quick-actions-card {
+    margin-bottom: 25px;
+}
+
+.lab-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.lab-quick-action {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 15px 12px;
+    color: #49616a;
+    background: #ffffff;
+    border: 1px solid #e7eeee;
+    border-radius: 9px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.lab-quick-action:hover {
+    transform: translateY(-2px);
+    border-color: #078b8c;
+    background: #f3fbfa;
+}
+
+.lab-quick-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    color: #078b8c;
+    background: #e7f6f4;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.lab-quick-action-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.lab-quick-action-copy strong {
+    overflow: hidden;
+    color: #294956;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lab-quick-action-copy small {
+    color: #8a9aa1;
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.lab-quick-action > i {
+    color: #9aabb0;
+    font-size: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1250px) {
+    .lab-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lab-quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 950px) {
+    .lab-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lab-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-date {
+        white-space: normal;
+    }
+
+    .header-profile-info {
+        display: none;
+    }
+
+    .lab-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 11px;
+    }
+
+    .lab-stat-card {
+        align-items: center;
+        padding: 16px;
+    }
+
+    .lab-stat-info h2 {
+        font-size: 23px;
+    }
+
+    .lab-table-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .lab-search-box,
+    .lab-table-toolbar select {
+        width: 100%;
+    }
+
+    .lab-quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .lab-section-heading {
+        align-items: flex-start;
+    }
+}

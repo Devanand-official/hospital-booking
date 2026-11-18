@@ -1,0 +1,272 @@
+/* ==========================================
+   SEMASACARE - PHARMACY REPORTS
+========================================== */
+
+.report-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.report-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 17px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s ease;
+}
+
+.report-btn.primary {
+    background: #0d9488;
+    color: #fff;
+}
+
+.report-btn.primary:hover {
+    background: #0f766e;
+}
+
+.report-btn.secondary {
+    background: #e8eef3;
+    color: #334155;
+}
+
+.report-btn.secondary:hover {
+    background: #dbe4ec;
+}
+
+.report-filter-card {
+    margin-bottom: 22px;
+}
+
+.report-filter-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 170px;
+}
+
+.filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    background: #fff;
+    color: #334155;
+    font-size: 13px;
+    outline: none;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+
+.report-period-label {
+    margin-top: 15px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.report-stats-grid {
+    margin-bottom: 22px;
+}
+
+.report-section {
+    margin-bottom: 22px;
+}
+
+.report-section .section-heading {
+    margin-bottom: 20px;
+}
+
+.report-section .section-heading h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.report-section .section-heading h3 i {
+    color: #0d9488;
+}
+
+.report-section .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.report-section .pharmacy-table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+}
+
+.report-section .pharmacy-table th,
+.report-section .pharmacy-table td {
+    padding: 14px 15px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.report-section .pharmacy-table th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.report-section .pharmacy-table td {
+    color: #475569;
+    font-size: 13px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.report-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.report-status.available,
+.report-status.valid,
+.report-status.dispensed,
+.report-status.completed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.report-status.low,
+.report-status.expiring,
+.report-status.pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.report-status.out,
+.report-status.expired,
+.report-status.cancelled {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.report-status.neutral {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.report-empty {
+    padding: 25px !important;
+    text-align: center !important;
+    color: #94a3b8 !important;
+}
+
+.transaction-in {
+    color: #15803d;
+    font-weight: 700;
+}
+
+.transaction-out {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .report-actions {
+        width: 100%;
+    }
+
+    .report-actions .report-btn {
+        flex: 1;
+    }
+
+    .report-filter-controls {
+        align-items: stretch;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .report-filter-controls>.report-btn {
+        width: 100%;
+    }
+}
+
+/* ==========================================
+   PRINT
+========================================== */
+
+@media print {
+
+    .sidebar,
+    .top-header,
+    .report-actions,
+    .report-filter-card,
+    .menu-toggle {
+        display: none !important;
+    }
+
+    .main-content {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .dashboard-content {
+        padding: 0 !important;
+    }
+
+    .section-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        break-inside: avoid;
+    }
+
+    .report-section {
+        break-inside: auto;
+    }
+
+    .report-section .table-responsive {
+        overflow: visible !important;
+    }
+
+    .report-section .pharmacy-table {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .report-section .pharmacy-table th,
+    .report-section .pharmacy-table td {
+        white-space: normal;
+        font-size: 9px;
+        padding: 7px;
+    }
+
+    body {
+        background: #fff !important;
+    }
+}

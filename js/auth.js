@@ -60,7 +60,7 @@ const SemasaAuth = (() => {
         doctor: "doctor-dashboard.html",
         patient: "patient-dashboard.html",
         pharmacist: "../pharmacist/dashboard.html",
-        laboratory: "laboratory-dashboard.html",
+        laboratory: "../laboratory/dashboard.html",
         accountant: "accountant-dashboard.html"
     };
 
