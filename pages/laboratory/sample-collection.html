@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sample Collection | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/laboratory-samples.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/laboratory/sample-collection.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div>
+                    <h3 id="laboratoryName">Lab Technician</h3>
+                    <p>Laboratory</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">LABORATORY</p>
+
+                <a href="test-requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Test Requests</span>
+                    <span class="menu-badge" id="pendingLabBadge">0</span>
+                </a>
+
+                <a href="sample-collection.html" class="menu-item active">
+                    <i class="fas fa-vial"></i>
+                    <span>Sample Collection</span>
+                </a>
+
+                <a href="test-processing.html" class="menu-item">
+                    <i class="fas fa-microscope"></i>
+                    <span>Test Processing</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Result Entry</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Lab Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Sample Collection</h2>
+                        <p>Register and manage laboratory specimens</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-flask"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Lab Technician</h4>
+                        <span>Laboratory Technician</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Sample Collection</h1>
+                        <p>Manage accepted requests and register collected specimens.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="lab-sample-stats">
+
+                    <article class="lab-sample-stat-card">
+                        <div class="lab-sample-stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div>
+                            <p>Awaiting Collection</p>
+                            <h2 id="awaitingCollectionCount">0</h2>
+                            <span>Accepted requests</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-sample-stat-card">
+                        <div class="lab-sample-stat-icon blue">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div>
+                            <p>Samples Collected</p>
+                            <h2 id="totalSamplesCount">0</h2>
+                            <span>Registered specimens</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-sample-stat-card">
+                        <div class="lab-sample-stat-icon teal">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div>
+                            <p>Collected Today</p>
+                            <h2 id="todaySamplesCount">0</h2>
+                            <span>Today's collections</span>
+                        </div>
+                    </article>
+
+                    <article class="lab-sample-stat-card">
+                        <div class="lab-sample-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p>Collection Records</p>
+                            <h2 id="collectionRecordsCount">0</h2>
+                            <span>Saved sample records</span>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- AWAITING COLLECTION -->
+                <section class="section-card lab-sample-section">
+
+                    <div class="section-heading lab-sample-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-clock"></i>
+                                Requests Awaiting Sample Collection
+                            </h3>
+                            <p>Accepted laboratory requests ready for specimen collection.</p>
+                        </div>
+
+                        <button type="button" class="lab-sample-refresh" id="refreshSamples">
+                            <i class="fas fa-rotate"></i>
+                            Refresh
+                        </button>
+                    </div>
+
+                    <div class="lab-sample-toolbar">
+
+                        <div class="lab-sample-search">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="pendingSearch" placeholder="Search patient, request ID or test..."
+                                aria-label="Search pending sample requests">
+                        </div>
+
+                        <select id="pendingPriorityFilter" aria-label="Filter by priority">
+                            <option value="all">All Priorities</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="normal">Normal</option>
+                            <option value="routine">Routine</option>
+                            <option value="low">Low</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table lab-sample-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Requested By</th>
+                                    <th>Request Date</th>
+                                    <th>Priority</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="pendingSamplesBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading requests...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="lab-sample-table-note" id="pendingTableNote" aria-live="polite"></p>
+
+                </section>
+
+                <!-- COLLECTED SAMPLES -->
+                <section class="section-card lab-sample-section">
+
+                    <div class="section-heading lab-sample-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-vial-circle-check"></i>
+                                Collected Samples
+                            </h3>
+                            <p>Previously registered laboratory specimens.</p>
+                        </div>
+                    </div>
+
+                    <div class="lab-sample-toolbar">
+
+                        <div class="lab-sample-search">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="collectedSearch"
+                                placeholder="Search sample ID, patient or specimen..."
+                                aria-label="Search collected samples">
+                        </div>
+
+                        <select id="specimenFilter" aria-label="Filter by specimen type">
+                            <option value="all">All Specimen Types</option>
+                            <option value="blood">Blood</option>
+                            <option value="urine">Urine</option>
+                            <option value="stool">Stool</option>
+                            <option value="swab">Swab</option>
+                            <option value="sputum">Sputum</option>
+                            <option value="other">Other</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table lab-sample-table">
+                            <thead>
+                                <tr>
+                                    <th>Sample ID</th>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Specimen Type</th>
+                                    <th>Collected Date</th>
+                                    <th>Collected By</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="collectedSamplesBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        No sample collections recorded yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="lab-sample-table-note" id="collectedTableNote" aria-live="polite"></p>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- SAMPLE COLLECTION MODAL -->
+    <div class="lab-sample-modal-overlay" id="sampleModal" aria-hidden="true">
+
+        <div class="lab-sample-modal" role="dialog" aria-modal="true" aria-labelledby="sampleModalTitle">
+
+            <div class="lab-sample-modal-header">
+                <div>
+                    <h3 id="sampleModalTitle">Register Sample</h3>
+                    <p>Enter the specimen collection details.</p>
+                </div>
+
+                <button type="button" class="lab-sample-modal-close" id="closeSampleModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="sampleCollectionForm">
+
+                <div class="lab-sample-modal-body">
+
+                    <div class="lab-sample-request-info">
+                        <div>
+                            <span>Request ID</span>
+                            <strong id="modalRequestId">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Patient</span>
+                            <strong id="modalPatientName">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Requested Tests</span>
+                            <strong id="modalTestName">-</strong>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="selectedRequestId">
+
+                    <!-- <div class="lab-form-group">
+                        <label for="sampleId">Sample ID</label>
+                        <input type="text" id="sampleId" placeholder="Auto-generated sample ID" readonly required>
+                    </div>
+
+                    <div class="lab-form-group">
+                        <label for="specimenType">Specimen Type *</label>
+                        <select id="specimenType" required>
+                            <option value="">Select specimen type</option>
+                            <option value="Blood">Blood</option>
+                            <option value="Urine">Urine</option>
+                            <option value="Stool">Stool</option>
+                            <option value="Swab">Swab</option>
+                            <option value="Sputum">Sputum</option>
+                            <option value="Saliva">Saliva</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div> -->
+
+                    <!-- <div class="lab-form-group">
+                        <label for="collectionDate">Collection Date *</label>
+                        <input type="date" id="collectionDate" required>
+                    </div>
+
+                    <div class="lab-form-group">
+                        <label for="collectionTime">Collection Time *</label>
+                        <input type="time" id="collectionTime" required>
+                    </div>
+
+                    <div class="lab-form-group full-width" id="otherSpecimenGroup" hidden>
+                        <label for="otherSpecimen">Specify Specimen *</label>
+                        <input type="text" id="otherSpecimen" placeholder="Enter specimen type">
+                    </div> -->
+
+                    <!-- <div class="lab-form-group full-width">
+                        <label for="collectionNotes">Collection Notes</label>
+                        <textarea id="collectionNotes" rows="3"
+                            placeholder="Enter collection observations or notes..."></textarea>
+                    </div> -->
+
+                    <!-- MULTIPLE SPECIMENS -->
+                    <div class="lab-form-group full-width">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                            <label style="margin:0;">Specimen Details *</label>
+
+                            <button type="button" class="lab-sample-btn secondary" id="addSpecimenBtn">
+                                <i class="fas fa-plus"></i> Add Specimen
+                            </button>
+                        </div>
+
+                        <div id="specimenEntries" style="margin-top:15px;">
+                            <!-- Specimen rows are added using JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="lab-form-group full-width">
+                        <label>Collected By</label>
+                        <input type="text" id="collectedBy" readonly>
+                    </div>
+
+                </div>
+
+                <div class="lab-sample-modal-footer">
+                    <button type="button" class="lab-sample-btn secondary" id="cancelSample">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="lab-sample-btn primary">
+                        <i class="fas fa-save"></i>
+                        Save Sample
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,792 @@
+/* =====================================================
+   SEMASACARE - LABORATORY TEST PROCESSING
+   File: css/laboratory-processing.css
+===================================================== */
+
+/* ---------- PAGE LAYOUT ---------- */
+
+.dashboard-content {
+    padding: 25px 28px;
+    background: #f4f7fb;
+    min-height: calc(100vh - 75px);
+}
+
+.page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    color: #172b4d;
+    font-size: 25px;
+    font-weight: 700;
+    margin: 0 0 7px;
+}
+
+.page-heading p {
+    color: #718096;
+    font-size: 13px;
+    margin: 0;
+}
+
+.dashboard-date {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 15px;
+    background: #fff;
+    border: 1px solid #e5eaf1;
+    border-radius: 9px;
+    color: #52647c;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.dashboard-date i {
+    color: #2878e8;
+}
+
+
+/* ---------- STATISTICS ---------- */
+
+.lab-processing-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.lab-processing-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    padding: 21px;
+    background: #fff;
+    border: 1px solid #e8edf4;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(35, 55, 80, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lab-processing-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(35, 55, 80, 0.08);
+}
+
+.lab-processing-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 49px;
+    height: 49px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    font-size: 19px;
+}
+
+.lab-processing-stat-icon.orange {
+    color: #d97706;
+    background: #fff4dc;
+}
+
+.lab-processing-stat-icon.blue {
+    color: #2563eb;
+    background: #e9f1ff;
+}
+
+.lab-processing-stat-icon.green {
+    color: #16a34a;
+    background: #e7f8ed;
+}
+
+.lab-processing-stat-icon.teal {
+    color: #0d9488;
+    background: #e1f7f5;
+}
+
+.lab-processing-stat-card>div:last-child {
+    min-width: 0;
+}
+
+.lab-processing-stat-card p {
+    color: #718096;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0 0 7px;
+}
+
+.lab-processing-stat-card h2 {
+    color: #172b4d;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 5px;
+}
+
+.lab-processing-stat-card span {
+    color: #9aa6b5;
+    font-size: 11px;
+}
+
+
+/* ---------- SECTION CARDS ---------- */
+
+.lab-processing-section {
+    background: #fff;
+    border: 1px solid #e8edf4;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px rgba(35, 55, 80, 0.035);
+    min-width: 0;
+}
+
+.lab-processing-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 21px;
+}
+
+.lab-processing-section .section-heading h3 {
+    color: #253858;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 7px;
+}
+
+.lab-processing-section .section-heading h3 i {
+    color: #2878e8;
+    margin-right: 7px;
+}
+
+.lab-processing-section .section-heading p {
+    color: #8290a3;
+    font-size: 12px;
+    margin: 0;
+}
+
+
+/* ---------- REFRESH BUTTON ---------- */
+
+.lab-processing-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid #dce5f0;
+    border-radius: 8px;
+    background: #fff;
+    color: #43546b;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lab-processing-refresh:hover {
+    color: #2563eb;
+    background: #f0f6ff;
+    border-color: #b9d2fa;
+}
+
+
+/* ---------- TOOLBAR ---------- */
+
+.lab-processing-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.lab-processing-search {
+    position: relative;
+    flex: 1;
+    min-width: 230px;
+    max-width: 390px;
+}
+
+.lab-processing-search i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #98a5b5;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.lab-processing-search input {
+    width: 100%;
+    height: 41px;
+    padding: 0 13px 0 37px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #34445b;
+    font-family: inherit;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.lab-processing-search input::placeholder {
+    color: #a3adba;
+}
+
+.lab-processing-toolbar select {
+    min-width: 155px;
+    height: 41px;
+    padding: 0 12px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #52647c;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.lab-processing-toolbar input:focus,
+.lab-processing-toolbar select:focus {
+    border-color: #4389ed;
+    box-shadow: 0 0 0 3px rgba(40, 120, 232, 0.09);
+}
+
+
+/* ---------- TABLE ---------- */
+
+.lab-processing-section .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 7px;
+}
+
+.lab-processing-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: #fff;
+}
+
+.lab-processing-table thead {
+    background: #f4f7fa;
+}
+
+.lab-processing-table th {
+    padding: 14px 12px;
+    color: #65758b;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+    white-space: nowrap;
+    border-bottom: 1px solid #e7edf4;
+}
+
+.lab-processing-table td {
+    padding: 15px 12px;
+    color: #53647a;
+    font-size: 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.lab-processing-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.lab-processing-table tbody tr:hover {
+    background: #f9fbfe;
+}
+
+.lab-processing-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.lab-processing-table .sample-id {
+    color: #2878e8;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.lab-processing-table .patient-name {
+    color: #253858;
+    font-weight: 600;
+}
+
+.lab-processing-table .patient-subtext {
+    color: #99a5b4;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.lab-processing-table .test-name {
+    color: #42536a;
+    line-height: 1.5;
+}
+
+
+/* ---------- PROCESSING STATUS ---------- */
+
+.processing-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.processing-status.pending {
+    color: #a16207;
+    background: #fff3cd;
+}
+
+.processing-status.in-progress {
+    color: #1d4ed8;
+    background: #e5efff;
+}
+
+.processing-status.completed {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+
+/* ---------- TABLE ACTION ---------- */
+
+.processing-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 0 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2878e8;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.processing-action:hover {
+    background: #1762cb;
+    box-shadow: 0 3px 8px rgba(40, 120, 232, 0.2);
+}
+
+.processing-action.secondary {
+    color: #2563eb;
+    background: #eaf2ff;
+}
+
+.processing-action.secondary:hover {
+    background: #d8e7ff;
+}
+
+
+/* ---------- EMPTY STATE ---------- */
+
+.lab-processing-table .empty-message,
+.lab-processing-table .empty-state {
+    padding: 35px 15px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.lab-processing-table .empty-state i {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 25px;
+    color: #aab7c7;
+}
+
+.lab-processing-table .empty-state p {
+    margin: 0;
+}
+
+.lab-processing-table-note {
+    margin: 15px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid #edf1f5;
+    color: #8794a5;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   PROCESSING MODAL
+===================================================== */
+
+/* Hidden by default */
+
+.lab-processing-modal-overlay {
+    display: none !important;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 30, 50, 0.58);
+    backdrop-filter: blur(3px);
+    overflow-y: auto;
+}
+
+/* Visible when JavaScript adds active */
+
+.lab-processing-modal-overlay.active {
+    display: flex !important;
+}
+
+/* Modal container */
+
+.lab-processing-modal {
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    max-height: calc(100vh - 40px);
+    margin: auto;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+    animation: labModalAppear 0.22s ease;
+}
+
+@keyframes labModalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ---------- MODAL HEADER ---------- */
+
+.lab-processing-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 21px 24px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.lab-processing-modal-header h3 {
+    color: #253858;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.lab-processing-modal-header p {
+    color: #8492a5;
+    font-size: 12px;
+    margin: 0;
+}
+
+.lab-processing-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 7px;
+    background: #f1f4f8;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lab-processing-modal-close:hover {
+    color: #dc2626;
+    background: #feecec;
+}
+
+
+/* ---------- MODAL BODY ---------- */
+
+.lab-processing-modal-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+    padding: 23px 24px;
+}
+
+/* Sample information */
+
+.lab-processing-sample-info {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    padding: 17px;
+    margin-bottom: 4px;
+    border: 1px solid #e7edf5;
+    border-radius: 10px;
+    background: #f7f9fc;
+}
+
+.lab-processing-sample-info>div {
+    min-width: 0;
+}
+
+.lab-processing-sample-info span {
+    display: block;
+    margin-bottom: 5px;
+    color: #8996a8;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+}
+
+.lab-processing-sample-info strong {
+    display: block;
+    color: #30435e;
+    font-size: 12px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+
+/* ---------- FORM FIELDS ---------- */
+
+.lab-processing-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.lab-processing-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.lab-processing-form-group label {
+    color: #46566d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.lab-processing-form-group input,
+.lab-processing-form-group select,
+.lab-processing-form-group textarea {
+    display: block;
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #dce4ee;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #34445b;
+    font-family: inherit;
+    font-size: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.lab-processing-form-group textarea {
+    min-height: 95px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.lab-processing-form-group input:focus,
+.lab-processing-form-group select:focus,
+.lab-processing-form-group textarea:focus {
+    border-color: #4389ed;
+    box-shadow: 0 0 0 3px rgba(40, 120, 232, 0.09);
+}
+
+.lab-processing-form-group input[readonly] {
+    background: #f4f6f9;
+    color: #718096;
+    cursor: not-allowed;
+}
+
+.lab-processing-form-group input:disabled {
+    background: #f1f4f8;
+    color: #9aa6b5;
+    cursor: not-allowed;
+}
+
+.lab-processing-form-group input::placeholder,
+.lab-processing-form-group textarea::placeholder {
+    color: #a6b0bd;
+}
+
+
+/* ---------- MODAL FOOTER ---------- */
+
+.lab-processing-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 17px 24px;
+    border-top: 1px solid #edf1f5;
+    background: #fff;
+}
+
+.lab-processing-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lab-processing-btn.secondary {
+    color: #596a80;
+    background: #edf1f6;
+}
+
+.lab-processing-btn.secondary:hover {
+    background: #e0e7ef;
+}
+
+.lab-processing-btn.primary {
+    color: #fff;
+    background: #2878e8;
+}
+
+.lab-processing-btn.primary:hover {
+    background: #1762cb;
+    box-shadow: 0 3px 9px rgba(40, 120, 232, 0.2);
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1100px) {
+    .lab-processing-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-content {
+        padding: 18px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lab-processing-section {
+        padding: 16px;
+    }
+
+    .lab-processing-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lab-processing-refresh {
+        width: 100%;
+    }
+
+    .lab-processing-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .lab-processing-search {
+        max-width: none;
+        width: 100%;
+    }
+
+    .lab-processing-toolbar select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .dashboard-content {
+        padding: 13px;
+    }
+
+    .lab-processing-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .lab-processing-stat-card {
+        padding: 16px;
+    }
+
+    .lab-processing-modal-overlay {
+        padding: 10px;
+    }
+
+    .lab-processing-modal {
+        max-height: calc(100vh - 20px);
+    }
+
+    .lab-processing-modal-header {
+        padding: 17px;
+    }
+
+    .lab-processing-modal-body {
+        grid-template-columns: 1fr;
+        padding: 17px;
+        gap: 15px;
+    }
+
+    .lab-processing-sample-info {
+        grid-template-columns: 1fr 1fr;
+        padding: 13px;
+        gap: 13px;
+    }
+
+    .lab-processing-form-group.full-width {
+        grid-column: auto;
+    }
+
+    .lab-processing-modal-footer {
+        flex-direction: column-reverse;
+        padding: 15px 17px;
+    }
+
+    .lab-processing-btn {
+        width: 100%;
+    }
+}

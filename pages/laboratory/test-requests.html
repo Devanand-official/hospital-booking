@@ -38,7 +38,6 @@
             </div>
 
             <nav class="sidebar-menu">
-
                 <p class="menu-heading">MAIN MENU</p>
 
                 <a href="dashboard.html" class="menu-item">
@@ -73,7 +72,6 @@
                     <i class="fas fa-file-waveform"></i>
                     <span>Lab Reports</span>
                 </a>
-
             </nav>
 
             <button class="logout-btn" id="logoutBtn" type="button">
@@ -88,7 +86,6 @@
 
             <!-- HEADER -->
             <header class="top-header">
-
                 <div class="header-left">
                     <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
@@ -96,7 +93,7 @@
 
                     <div>
                         <h2>Test Requests</h2>
-                        <p>Review diagnostic test requests from doctors</p>
+                        <p>Manage diagnostic test requests from doctors</p>
                     </div>
                 </div>
 
@@ -104,115 +101,117 @@
                     <div class="header-avatar">
                         <i class="fas fa-flask"></i>
                     </div>
-
                     <div class="header-profile-info">
                         <h4 id="headerName">Lab Technician</h4>
                         <span>Laboratory Technician</span>
                     </div>
                 </div>
-
             </header>
 
-            <section class="dashboard-content lab-requests-content">
+            <section class="dashboard-content">
 
                 <!-- PAGE HEADING -->
-                <div class="page-heading lab-requests-heading">
+                <div class="page-heading">
                     <div>
                         <h1>Laboratory Test Requests</h1>
-                        <p>View and review test requests submitted by doctors.</p>
+                        <p>Review, accept and manage test requests submitted by doctors.</p>
                     </div>
 
-                    <div class="requests-date" id="requestsDate">
+                    <div class="dashboard-date" id="dashboardDate">
                         <i class="fas fa-calendar-days"></i>
                         <span>Loading date...</span>
                     </div>
                 </div>
 
-                <!-- SUMMARY CARDS -->
+                <!-- STATISTICS -->
                 <div class="lab-request-stats">
 
-                    <article class="lab-request-stat">
-                        <div class="request-stat-icon total">
+                    <article class="lab-request-stat-card">
+                        <div class="lab-request-stat-icon teal">
                             <i class="fas fa-file-medical"></i>
                         </div>
                         <div>
                             <p>Total Requests</p>
                             <h2 id="totalRequests">0</h2>
+                            <span>All recorded requests</span>
                         </div>
                     </article>
 
-                    <article class="lab-request-stat">
-                        <div class="request-stat-icon awaiting">
+                    <article class="lab-request-stat-card">
+                        <div class="lab-request-stat-icon orange">
                             <i class="fas fa-hourglass-half"></i>
                         </div>
                         <div>
-                            <p>Awaiting Sample</p>
-                            <h2 id="awaitingRequests">0</h2>
+                            <p>Pending Review</p>
+                            <h2 id="pendingRequests">0</h2>
+                            <span>Awaiting lab action</span>
                         </div>
                     </article>
 
-                    <article class="lab-request-stat">
-                        <div class="request-stat-icon processing">
-                            <i class="fas fa-microscope"></i>
+                    <article class="lab-request-stat-card">
+                        <div class="lab-request-stat-icon blue">
+                            <i class="fas fa-vial"></i>
                         </div>
                         <div>
-                            <p>Processing</p>
-                            <h2 id="processingRequests">0</h2>
+                            <p>Awaiting Sample</p>
+                            <h2 id="acceptedRequests">0</h2>
+                            <span>Accepted requests</span>
                         </div>
                     </article>
 
-                    <article class="lab-request-stat">
-                        <div class="request-stat-icon completed">
-                            <i class="fas fa-circle-check"></i>
+                    <article class="lab-request-stat-card">
+                        <div class="lab-request-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
                         </div>
                         <div>
                             <p>Completed</p>
                             <h2 id="completedRequests">0</h2>
+                            <span>Completed test requests</span>
                         </div>
                     </article>
 
                 </div>
 
-                <!-- REQUESTS TABLE -->
-                <section class="section-card lab-requests-card">
+                <!-- REQUEST TABLE -->
+                <section class="section-card lab-request-section">
 
-                    <div class="section-heading lab-requests-section-heading">
+                    <div class="section-heading lab-request-heading">
                         <div>
                             <h3>
-                                <i class="fas fa-clipboard-list"></i>
+                                <i class="fas fa-list-check"></i>
                                 All Test Requests
                             </h3>
-                            <p>Requests recorded in the laboratory system</p>
+                            <p>Review requests and update their status.</p>
                         </div>
 
-                        <span class="request-count" id="requestCount">0 Requests</span>
+                        <button type="button" class="lab-refresh-btn" id="refreshRequests">
+                            <i class="fas fa-rotate"></i>
+                            Refresh
+                        </button>
                     </div>
 
-                    <!-- SEARCH AND FILTER -->
-                    <div class="requests-toolbar">
+                    <!-- FILTERS -->
+                    <div class="lab-request-toolbar">
 
-                        <div class="requests-search">
+                        <div class="lab-request-search">
                             <i class="fas fa-search"></i>
                             <input type="search" id="requestSearch"
-                                placeholder="Search request ID, patient, doctor or test..."
+                                placeholder="Search patient, request ID, doctor or test..."
                                 aria-label="Search test requests">
                         </div>
 
-                        <div class="requests-filter">
-                            <label for="requestStatusFilter">Status</label>
-                            <select id="requestStatusFilter">
+                        <div class="lab-request-filters">
+                            <select id="statusFilter" aria-label="Filter by status">
                                 <option value="all">All Statuses</option>
+                                <option value="pending">Pending Review</option>
                                 <option value="awaiting">Awaiting Sample</option>
                                 <option value="collected">Sample Collected</option>
                                 <option value="processing">Processing</option>
                                 <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
+                                <option value="rejected">Rejected</option>
                             </select>
-                        </div>
 
-                        <div class="requests-filter">
-                            <label for="requestPriorityFilter">Priority</label>
-                            <select id="requestPriorityFilter">
+                            <select id="priorityFilter" aria-label="Filter by priority">
                                 <option value="all">All Priorities</option>
                                 <option value="urgent">Urgent</option>
                                 <option value="critical">Critical</option>
@@ -227,8 +226,7 @@
 
                     <!-- TABLE -->
                     <div class="table-responsive">
-                        <table class="dashboard-table lab-requests-table">
-
+                        <table class="dashboard-table lab-request-table">
                             <thead>
                                 <tr>
                                     <th>Request ID</th>
@@ -249,59 +247,45 @@
                                     </td>
                                 </tr>
                             </tbody>
-
                         </table>
                     </div>
 
-                    <div class="requests-table-footer">
-                        <p id="requestsTableNote" aria-live="polite"></p>
+                    <div class="lab-request-table-footer">
+                        <p id="requestTableNote" aria-live="polite"></p>
                     </div>
 
                 </section>
 
-                <!-- INFORMATION NOTE -->
-                <div class="requests-info-note">
-                    <i class="fas fa-circle-info"></i>
-                    <p>
-                        Test requests are displayed here for review.
-                        Sample collection and test progress are managed in their
-                        respective laboratory sections.
-                    </p>
-                </div>
-
             </section>
-
         </main>
     </div>
 
     <!-- REQUEST DETAILS MODAL -->
-    <div class="request-modal-overlay" id="requestModal" aria-hidden="true">
+    <div class="lab-modal-overlay" id="requestModal" aria-hidden="true">
+        <div class="lab-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 
-        <div class="request-modal" role="dialog" aria-modal="true" aria-labelledby="modalRequestTitle">
-
-            <div class="request-modal-header">
+            <div class="lab-modal-header">
                 <div>
-                    <span>LABORATORY REQUEST DETAILS</span>
-                    <h2 id="modalRequestTitle">Request Details</h2>
+                    <h3 id="modalTitle">Request Details</h3>
+                    <p>Review the selected laboratory request.</p>
                 </div>
 
-                <button type="button" class="modal-close-btn" id="closeRequestModal" aria-label="Close request details">
-                    <i class="fas fa-xmark"></i>
+                <button type="button" class="lab-modal-close" id="closeModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <div class="request-modal-body" id="requestModalBody">
-                <!-- Details are inserted by JavaScript -->
+            <div class="lab-modal-body" id="requestDetails">
+                <!-- Details populated by JavaScript -->
             </div>
 
-            <div class="request-modal-footer">
-                <button type="button" class="modal-done-btn" id="doneRequestModal">
+            <div class="lab-modal-footer" id="modalActions">
+                <button type="button" class="lab-btn secondary" id="modalCloseBtn">
                     Close
                 </button>
             </div>
 
         </div>
-
     </div>
 
 </body>

@@ -602,3 +602,403 @@
         width: 100%;
     }
 }
+
+/* ==========================================
+   LABORATORY TEST ORDER SECTION
+========================================== */
+
+.lab-order-section {
+    margin-top: 12px;
+    padding: 22px;
+    background: #f7fbfb;
+    border: 1px solid #dceaea;
+    border-radius: 12px;
+}
+
+.lab-order-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.lab-order-heading h3 {
+    color: #173f4d;
+    font-size: 17px;
+    margin: 0 0 6px;
+}
+
+.lab-order-heading h3 i {
+    color: #078b8c;
+    margin-right: 7px;
+}
+
+.lab-order-heading p {
+    color: #82919a;
+    font-size: 13px;
+    margin: 0;
+}
+
+.lab-order-tag {
+    background: #e7f5f4;
+    color: #078b8c;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.lab-test-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.lab-test-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #dce5e8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #334155;
+    transition: 0.2s ease;
+}
+
+.lab-test-option:hover {
+    border-color: #078b8c;
+    background: #f0fafa;
+}
+
+.lab-test-option input {
+    width: 16px;
+    height: 16px;
+    accent-color: #078b8c;
+    flex-shrink: 0;
+}
+
+.lab-order-fields {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 18px;
+}
+
+.lab-order-fields .form-group {
+    min-width: 0;
+}
+
+.lab-order-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.lab-send-request-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #078b8c;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.lab-send-request-btn:hover {
+    background: #066f70;
+}
+
+.lab-send-request-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#labRequestMessage {
+    margin: 0;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .lab-test-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lab-order-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .lab-order-heading {
+        flex-direction: column;
+    }
+}
+
+/* =========================================
+   LABORATORY TEST ORDERS - LAYOUT FIX
+========================================= */
+
+.lab-order-section {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.lab-test-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lab-test-option {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 65px;
+    box-sizing: border-box;
+
+    padding: 16px 18px !important;
+    border: 1px solid #d8e2e8;
+    border-radius: 9px;
+    background: #ffffff;
+
+    text-align: left !important;
+    cursor: pointer;
+}
+
+/* Checkbox positioning */
+.lab-test-option input[type="checkbox"] {
+    position: static !important;
+    display: inline-block !important;
+
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+}
+
+/* Test name */
+.lab-test-option span {
+    display: block;
+    flex: 1;
+    min-width: 0;
+
+    color: #173f4d;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+
+    text-align: left !important;
+    overflow-wrap: break-word;
+}
+
+/* Hover effect */
+.lab-test-option:hover {
+    border-color: #078b8c;
+    background: #f0fafa;
+}
+
+/* Selected test */
+.lab-test-option:has(input:checked) {
+    border-color: #078b8c;
+    background: #eaf7f6;
+}
+
+/* Priority and clinical notes */
+.lab-order-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 18px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Tablet and mobile */
+@media (max-width: 768px) {
+    .lab-test-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .lab-order-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .lab-test-option {
+        min-height: 58px;
+        padding: 12px !important;
+    }
+
+    .lab-test-option span {
+        font-size: 13px;
+    }
+}
+
+/* =========================================
+   DOCTOR LAB REQUEST HISTORY
+========================================= */
+
+.doctor-lab-history {
+    margin-top: 25px;
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lab-history-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.lab-history-heading h3 {
+    color: #173f4d;
+    font-size: 19px;
+    margin: 0 0 7px;
+}
+
+.lab-history-heading h3 i {
+    color: #078b8c;
+    margin-right: 8px;
+}
+
+.lab-history-heading p {
+    color: #82919a;
+    font-size: 13px;
+    margin: 0;
+}
+
+.lab-history-count {
+    background: #e8f6f5;
+    color: #078b8c;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.lab-history-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.lab-history-toolbar input,
+.lab-history-toolbar select {
+    min-height: 42px;
+    padding: 10px 13px;
+    border: 1px solid #d8e2e8;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    color: #173f4d;
+    font-size: 13px;
+}
+
+.lab-history-toolbar input {
+    flex: 1;
+    min-width: 0;
+}
+
+.lab-history-toolbar select {
+    min-width: 170px;
+}
+
+.lab-history-toolbar input:focus,
+.lab-history-toolbar select:focus {
+    border-color: #078b8c;
+}
+
+.doctor-lab-history-table {
+    width: 100%;
+    min-width: 750px;
+}
+
+.doctor-lab-history-table th {
+    white-space: nowrap;
+}
+
+.doctor-lab-history-table td {
+    vertical-align: middle;
+}
+
+.doctor-lab-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.doctor-lab-status.awaiting {
+    background: #fff3dc;
+    color: #b7791f;
+}
+
+.doctor-lab-status.collected {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.doctor-lab-status.processing {
+    background: #f0e8ff;
+    color: #7542b8;
+}
+
+.doctor-lab-status.completed {
+    background: #e2f5e9;
+    color: #21834a;
+}
+
+.doctor-lab-status.cancelled {
+    background: #fde8e8;
+    color: #c0392b;
+}
+
+.doctor-lab-status.neutral {
+    background: #edf0f2;
+    color: #65737b;
+}
+
+@media (max-width: 650px) {
+    .lab-history-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lab-history-toolbar {
+        flex-direction: column;
+    }
+
+    .lab-history-toolbar select {
+        width: 100%;
+    }
+
+    .doctor-lab-history {
+        padding: 16px;
+    }
+}

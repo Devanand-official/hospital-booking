@@ -16,6 +16,7 @@
 
     <script src="../../js/auth.js" defer></script>
     <script src="../../js/doctor-medical-records.js" defer></script>
+    <script src="../../js/doctor-lab-history.js" defer></script>
 </head>
 
 <body>
@@ -183,6 +184,106 @@
                                 <textarea id="diagnosis" rows="3" placeholder="Enter diagnosis" required></textarea>
                             </div>
 
+
+                            <!-- LABORATORY TEST ORDERING -->
+                            <div class="form-group full-width lab-order-section">
+
+                                <div class="lab-order-heading">
+                                    <div>
+                                        <h3><i class="fas fa-flask"></i> Laboratory Test Orders</h3>
+                                        <p>Choose the investigations required for this patient.</p>
+                                    </div>
+                                    <span class="lab-order-tag">Optional</span>
+                                </div>
+
+                                <div class="lab-test-grid">
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Complete Blood Count (CBC)">
+                                        <span>Complete Blood Count (CBC)</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Blood Glucose">
+                                        <span>Blood Glucose</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="HbA1c">
+                                        <span>HbA1c</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Lipid Profile">
+                                        <span>Lipid Profile</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Liver Function Test (LFT)">
+                                        <span>Liver Function Test (LFT)</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Kidney Function Test (KFT)">
+                                        <span>Kidney Function Test (KFT)</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Thyroid Profile">
+                                        <span>Thyroid Profile</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Urine Routine Examination">
+                                        <span>Urine Routine Examination</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="Electrolytes">
+                                        <span>Electrolytes</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="labTest" value="ESR">
+                                        <span>ESR</span>
+                                    </label>
+
+                                </div>
+
+                                <div class="lab-order-fields">
+
+                                    <div class="form-group">
+                                        <label for="labPriority">Test Priority</label>
+                                        <select id="labPriority">
+                                            <option value="Routine">Routine</option>
+                                            <option value="Low">Low</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="High">High</option>
+                                            <option value="Urgent">Urgent</option>
+                                            <option value="Critical">Critical</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="labClinicalNotes">Clinical Notes for Laboratory</label>
+                                        <textarea id="labClinicalNotes" rows="3"
+                                            placeholder="Additional information relevant to the requested tests"></textarea>
+                                    </div>
+
+                                </div>
+
+                                <div class="lab-order-actions">
+                                    <button type="button" id="sendLabRequestBtn" class="lab-send-request-btn">
+                                        <i class="fas fa-paper-plane"></i> Send Lab Request
+                                    </button>
+
+                                    <p id="labRequestMessage" class="form-message" aria-live="polite"></p>
+                                </div>
+
+                            </div>
+                            <!-- END LABORATORY TEST ORDERING -->
+
+
                             <div class="form-group full-width">
                                 <label for="treatment">Treatment / Advice</label>
                                 <textarea id="treatment" rows="3" placeholder="Enter treatment or advice"></textarea>
@@ -218,6 +319,62 @@
 
                 </div>
 
+
+                <!-- LABORATORY REQUEST HISTORY -->
+                <section class="section-card doctor-lab-history">
+                    <div class="lab-history-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-flask"></i>
+                                Laboratory Request History
+                            </h3>
+                            <p>Track laboratory tests requested for your patients.</p>
+                        </div>
+
+                        <span class="lab-history-count" id="doctorLabRequestCount">0 Requests</span>
+                    </div>
+
+                    <div class="lab-history-toolbar">
+                        <input type="search" id="doctorLabSearch" placeholder="Search patient, request ID or test..."
+                            aria-label="Search laboratory requests">
+
+                        <select id="doctorLabStatusFilter" aria-label="Filter by request status">
+                            <option value="all">All Statuses</option>
+                            <option value="awaiting">Awaiting Sample</option>
+                            <option value="collected">Sample Collected</option>
+                            <option value="processing">Processing</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table doctor-lab-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Tests</th>
+                                    <th>Request Date</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="doctorLabHistoryBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        Loading laboratory requests...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+
+
                 <!-- RECORD LIST -->
                 <div class="section-card">
 
@@ -231,12 +388,14 @@
                     <div class="medical-toolbar">
                         <div class="medical-search">
                             <i class="fas fa-search"></i>
-                            <input type="text" id="searchRecords" placeholder="Search patient name, record ID or diagnosis...">
+                            <input type="text" id="searchRecords"
+                                placeholder="Search patient name, record ID or diagnosis...">
                         </div>
                         <div class="medical-date-filters">
                             <label>From <input type="date" id="recordDateFrom"></label>
                             <label>To <input type="date" id="recordDateTo"></label>
-                            <button type="button" id="applyRecordDateFilter" class="medical-filter-btn"><i class="fas fa-filter"></i> Filter</button>
+                            <button type="button" id="applyRecordDateFilter" class="medical-filter-btn"><i
+                                    class="fas fa-filter"></i> Filter</button>
                             <button type="button" id="clearRecordDateFilter" class="medical-clear-btn">Clear</button>
                         </div>
                     </div>
@@ -282,8 +441,10 @@
                         </div>
 
                         <div class="medical-detail-actions">
-                            <button type="button" id="printRecordBtn" class="medical-print-btn"><i class="fas fa-print"></i> Print</button>
-                            <button type="button" id="closeDetailsBtn" class="medical-close-btn" aria-label="Close details">
+                            <button type="button" id="printRecordBtn" class="medical-print-btn"><i
+                                    class="fas fa-print"></i> Print</button>
+                            <button type="button" id="closeDetailsBtn" class="medical-close-btn"
+                                aria-label="Close details">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -300,7 +461,8 @@
                             <h3 id="patientHistoryTitle">Patient Consultation History</h3>
                             <p id="patientHistorySubtitle">All consultations for the selected patient</p>
                         </div>
-                        <button type="button" id="closePatientHistoryBtn" class="medical-close-btn" aria-label="Close patient history">
+                        <button type="button" id="closePatientHistoryBtn" class="medical-close-btn"
+                            aria-label="Close patient history">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>

@@ -336,11 +336,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("logoutBtn")
         .addEventListener("click", function () {
 
-            if (confirm("Are you sure you want to logout?")) {
-                SemasaAuth.logout();
-                window.location.href = "../login.html";
-            }
-        });
+            // if (confirm("Are you sure you want to logout?")) {
+            SemasaAuth.logout();
+            // window.location.href = "../login.html";
+        }
+        );
 
     // =====================================
     // 13. INITIALIZE DASHBOARD

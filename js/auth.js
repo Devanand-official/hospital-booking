@@ -200,14 +200,43 @@ const SemasaAuth = (() => {
 
     // Logout
     function logout() {
+
+        const confirmLogout = window.confirm(
+            "Are you sure you want to logout?"
+        );
+
+        // If Cancel is clicked, stay on the current page
+        if (!confirmLogout) {
+            return;
+        }
+
+        // Clear session
         localStorage.removeItem("semasacareSession");
 
         const currentPath = window.location.pathname;
 
-        if (currentPath.includes("/dashboards/")) {
-            window.location.href = "../login.html";
+        const roleFolders = [
+            "/admin/",
+            "/dashboards/",
+            "/doctor/",
+            "/laboratory/",
+            "/pharmacist/"
+        ];
+
+        const isRolePage = roleFolders.some(folder =>
+            currentPath.includes(folder)
+        );
+
+        if (isRolePage) {
+            window.location.href = new URL(
+                "../login.html",
+                window.location.href
+            ).href;
         } else {
-            window.location.href = "login.html";
+            window.location.href = new URL(
+                "login.html",
+                window.location.href
+            ).href;
         }
     }
 

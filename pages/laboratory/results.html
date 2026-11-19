@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Entry | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/laboratory-results.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/laboratory/results.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div>
+                    <h3 id="laboratoryName">Lab Technician</h3>
+                    <p>Laboratory</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">LABORATORY</p>
+                <a href="test-requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i><span>Test Requests</span>
+                    <span class="menu-badge" id="pendingLabBadge">0</span>
+                </a>
+                <a href="sample-collection.html" class="menu-item">
+                    <i class="fas fa-vial"></i><span>Sample Collection</span>
+                </a>
+                <a href="test-processing.html" class="menu-item">
+                    <i class="fas fa-microscope"></i><span>Test Processing</span>
+                </a>
+                <a href="results.html" class="menu-item active">
+                    <i class="fas fa-clipboard-check"></i><span>Result Entry</span>
+                </a>
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i><span>Lab Reports</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+            </button>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Laboratory Result Entry</h2>
+                        <p>Record and manage diagnostic test results</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Lab Technician</h4>
+                        <span>Laboratory Technician</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Result Entry</h1>
+                        <p>Enter findings for completed laboratory tests.</p>
+                    </div>
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="result-stats">
+                    <article class="result-stat-card">
+                        <div class="result-stat-icon blue">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div>
+                            <p>Ready for Results</p>
+                            <h2 id="readyResultCount">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="result-stat-card">
+                        <div class="result-stat-icon orange">
+                            <i class="fas fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <p>Draft Results</p>
+                            <h2 id="draftResultCount">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="result-stat-card">
+                        <div class="result-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p>Submitted Results</p>
+                            <h2 id="submittedResultCount">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="result-stat-card">
+                        <div class="result-stat-icon purple">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <p>Total Results</p>
+                            <h2 id="totalResultCount">0</h2>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- READY FOR RESULT ENTRY -->
+                <section class="section-card result-section">
+                    <div class="section-heading result-heading">
+                        <div>
+                            <h3><i class="fas fa-clipboard-list"></i> Samples Ready for Result Entry</h3>
+                            <p>Only completed processing samples are listed here.</p>
+                        </div>
+                    </div>
+
+                    <div class="result-toolbar">
+                        <div class="result-search">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="resultSearch" placeholder="Search sample, patient or test...">
+                        </div>
+
+                        <select id="resultStatusFilter">
+                            <option value="all">All Results</option>
+                            <option value="not-entered">Not Entered</option>
+                            <option value="draft">Draft</option>
+                            <option value="submitted">Submitted</option>
+                        </select>
+
+                        <button class="result-refresh-btn" id="refreshResults" type="button">
+                            <i class="fas fa-rotate"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table result-table">
+                            <thead>
+                                <tr>
+                                    <th>Sample ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Specimen</th>
+                                    <th>Completed Date</th>
+                                    <th>Result Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="readyResultsBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">Loading samples...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="result-table-note" id="readyResultsNote"></p>
+                </section>
+
+                <!-- RECENT RESULTS -->
+                <section class="section-card result-section">
+                    <div class="section-heading result-heading">
+                        <div>
+                            <h3><i class="fas fa-file-circle-check"></i> Recent Result Entries</h3>
+                            <p>Previously recorded laboratory results.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table result-table">
+                            <thead>
+                                <tr>
+                                    <th>Result ID</th>
+                                    <th>Sample ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Result</th>
+                                    <th>Entered Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentResultsBody">
+                                <tr>
+                                    <td colspan="8" class="empty-message">No results recorded yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- RESULT MODAL -->
+    <div class="result-modal-overlay" id="resultModal">
+        <div class="result-modal">
+            <div class="result-modal-header">
+                <div>
+                    <h2 id="resultModalTitle">Enter Test Result</h2>
+                    <p>Record the diagnostic findings below.</p>
+                </div>
+                <button type="button" id="closeResultModal" class="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="resultForm">
+                <input type="hidden" id="resultSampleId">
+                <input type="hidden" id="existingResultId">
+
+                <div class="result-patient-info">
+                    <div>
+                        <span>Sample ID</span>
+                        <strong id="modalResultSample">-</strong>
+                    </div>
+                    <div>
+                        <span>Request ID</span>
+                        <strong id="modalResultRequest">-</strong>
+                    </div>
+                    <div>
+                        <span>Patient</span>
+                        <strong id="modalResultPatient">-</strong>
+                    </div>
+                    <div>
+                        <span>Test</span>
+                        <strong id="modalResultTest">-</strong>
+                    </div>
+                    <div>
+                        <span>Specimen</span>
+                        <strong id="modalResultSpecimen">-</strong>
+                    </div>
+                    <div>
+                        <span>Processing Completed</span>
+                        <strong id="modalResultCompletedDate">-</strong>
+                    </div>
+                </div>
+
+                <div class="result-form-grid">
+                    <div class="result-form-group">
+                        <label for="testResult">Test Result *</label>
+                        <input type="text" id="testResult" required placeholder="Enter result value">
+                    </div>
+
+                    <div class="result-form-group">
+                        <label for="resultUnit">Unit</label>
+                        <input type="text" id="resultUnit" placeholder="e.g. mg/dL, g/dL">
+                    </div>
+
+                    <div class="result-form-group">
+                        <label for="referenceRange">Reference Range</label>
+                        <input type="text" id="referenceRange" placeholder="e.g. 70 - 100">
+                    </div>
+
+                    <div class="result-form-group">
+                        <label for="resultFlag">Result Interpretation</label>
+                        <select id="resultFlag">
+                            <option value="Normal">Normal</option>
+                            <option value="Low">Low</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                        </select>
+                    </div>
+
+                    <div class="result-form-group full-width">
+                        <label for="resultRemarks">Remarks / Observations</label>
+                        <textarea id="resultRemarks" rows="3"
+                            placeholder="Enter additional laboratory observations..."></textarea>
+                    </div>
+
+                    <div class="result-form-group">
+                        <label for="resultEnteredBy">Entered By</label>
+                        <input type="text" id="resultEnteredBy" readonly>
+                    </div>
+
+                    <div class="result-form-group">
+                        <label for="resultEntryDate">Entry Date</label>
+                        <input type="date" id="resultEntryDate" readonly>
+                    </div>
+                </div>
+
+                <div class="result-modal-actions">
+                    <button type="button" class="result-cancel-btn" id="cancelResult">
+                        Cancel
+                    </button>
+                    <button type="button" class="result-draft-btn" id="saveResultDraft">
+                        <i class="fas fa-save"></i> Save Draft
+                    </button>
+                    <button type="submit" class="result-submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Result
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

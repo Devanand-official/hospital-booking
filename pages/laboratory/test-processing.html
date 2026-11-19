@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Test Processing | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/laboratory-processing.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/laboratory/test-processing.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+
+                <div>
+                    <h3 id="laboratoryName">Lab Technician</h3>
+                    <p>Laboratory</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">LABORATORY</p>
+
+                <a href="test-requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Test Requests</span>
+                    <span class="menu-badge" id="pendingLabBadge">0</span>
+                </a>
+
+                <a href="sample-collection.html" class="menu-item">
+                    <i class="fas fa-vial"></i>
+                    <span>Sample Collection</span>
+                </a>
+
+                <a href="test-processing.html" class="menu-item active">
+                    <i class="fas fa-microscope"></i>
+                    <span>Test Processing</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Result Entry</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Lab Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+
+                        <i class="fas fa-bars"></i>
+
+                    </button>
+
+                    <div>
+                        <h2>Test Processing</h2>
+                        <p>Process collected laboratory specimens</p>
+                    </div>
+
+                </div>
+
+                <div class="header-profile">
+
+                    <div class="header-avatar">
+                        <i class="fas fa-flask"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Lab Technician</h4>
+                        <span>Laboratory Technician</span>
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+
+                    <div>
+                        <h1>Test Processing</h1>
+                        <p>
+                            Manage collected samples and laboratory test processing.
+                        </p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+
+                </div>
+
+
+                <!-- STATISTICS -->
+                <div class="lab-processing-stats">
+
+                    <article class="lab-processing-stat-card">
+
+                        <div class="lab-processing-stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+
+                        <div>
+                            <p>Pending Processing</p>
+                            <h2 id="pendingProcessingCount">0</h2>
+                            <span>Collected samples</span>
+                        </div>
+
+                    </article>
+
+
+                    <article class="lab-processing-stat-card">
+
+                        <div class="lab-processing-stat-icon blue">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+
+                        <div>
+                            <p>Currently Processing</p>
+                            <h2 id="currentlyProcessingCount">0</h2>
+                            <span>Tests in progress</span>
+                        </div>
+
+                    </article>
+
+
+                    <article class="lab-processing-stat-card">
+
+                        <div class="lab-processing-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+
+                        <div>
+                            <p>Completed Today</p>
+                            <h2 id="completedProcessingCount">0</h2>
+                            <span>Completed tests</span>
+                        </div>
+
+                    </article>
+
+
+                    <article class="lab-processing-stat-card">
+
+                        <div class="lab-processing-stat-icon teal">
+                            <i class="fas fa-vials"></i>
+                        </div>
+
+                        <div>
+                            <p>Total Samples</p>
+                            <h2 id="totalProcessingSamples">0</h2>
+                            <span>Registered specimens</span>
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- SAMPLE PROCESSING TABLE -->
+                <section class="section-card lab-processing-section">
+
+                    <div class="section-heading lab-processing-heading">
+
+                        <div>
+                            <h3>
+                                <i class="fas fa-microscope"></i>
+                                Samples Ready for Processing
+                            </h3>
+
+                            <p>
+                                View collected specimens and manage their processing status.
+                            </p>
+                        </div>
+
+                        <button type="button" class="lab-processing-refresh" id="refreshProcessing">
+
+                            <i class="fas fa-rotate"></i>
+                            Refresh
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- SEARCH AND FILTER -->
+                    <div class="lab-processing-toolbar">
+
+                        <div class="lab-processing-search">
+
+                            <i class="fas fa-search"></i>
+
+                            <input type="search" id="processingSearch"
+                                placeholder="Search sample ID, patient or test..." aria-label="Search samples">
+
+                        </div>
+
+
+                        <select id="processingStatusFilter" aria-label="Filter processing status">
+
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="completed">Completed</option>
+
+                        </select>
+
+
+                        <select id="processingSpecimenFilter" aria-label="Filter specimen type">
+
+                            <option value="all">All Specimen Types</option>
+                            <option value="blood">Blood</option>
+                            <option value="urine">Urine</option>
+                            <option value="stool">Stool</option>
+                            <option value="swab">Swab</option>
+                            <option value="sputum">Sputum</option>
+                            <option value="other">Other</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table lab-processing-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Sample ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Specimen</th>
+                                    <th>Collected Date</th>
+                                    <th>Processing Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="processingSamplesBody">
+
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading collected samples...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <p class="lab-processing-table-note" id="processingTableNote" aria-live="polite"></p>
+
+                </section>
+
+
+                <!-- COMPLETED PROCESSING -->
+                <section class="section-card lab-processing-section">
+
+                    <div class="section-heading">
+
+                        <div>
+                            <h3>
+                                <i class="fas fa-clipboard-check"></i>
+                                Completed Processing
+                            </h3>
+
+                            <p>
+                                Tests completed and awaiting result entry.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table lab-processing-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Sample ID</th>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Test</th>
+                                    <th>Completed Date</th>
+                                    <th>Processed By</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="completedProcessingBody">
+
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        No completed processing records yet.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- PROCESSING MODAL -->
+    <div class="lab-processing-modal-overlay" id="processingModal" aria-hidden="true">
+
+        <div class="lab-processing-modal" role="dialog" aria-modal="true" aria-labelledby="processingModalTitle">
+
+
+            <!-- MODAL HEADER -->
+            <div class="lab-processing-modal-header">
+
+                <div>
+                    <h3 id="processingModalTitle">Test Processing</h3>
+                    <p>Review sample details and update processing information.</p>
+                </div>
+
+                <button type="button" class="lab-processing-modal-close" id="closeProcessingModal"
+                    aria-label="Close modal">
+
+                    <i class="fas fa-times"></i>
+
+                </button>
+
+            </div>
+
+
+            <form id="processingForm">
+
+                <div class="lab-processing-modal-body">
+
+
+                    <!-- SAMPLE INFORMATION -->
+                    <div class="lab-processing-sample-info">
+
+                        <div>
+                            <span>Sample ID</span>
+                            <strong id="modalSampleId">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Request ID</span>
+                            <strong id="modalProcessingRequestId">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Patient</span>
+                            <strong id="modalProcessingPatient">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Laboratory Test</span>
+                            <strong id="modalProcessingTest">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Specimen</span>
+                            <strong id="modalProcessingSpecimen">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Collected Date</span>
+                            <strong id="modalProcessingCollectionDate">-</strong>
+                        </div>
+
+                    </div>
+
+
+                    <input type="hidden" id="processingSampleId">
+
+
+                    <!-- PROCESSING STATUS -->
+                    <div class="lab-processing-form-group">
+
+                        <label for="processingStatus">
+                            Processing Status *
+                        </label>
+
+                        <select id="processingStatus" required>
+
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Completed">Completed</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PROCESSING START -->
+                    <div class="lab-processing-form-group">
+
+                        <label for="processingStartDate">
+                            Processing Start Date *
+                        </label>
+
+                        <input type="date" id="processingStartDate" required>
+
+                    </div>
+
+
+                    <div class="lab-processing-form-group">
+
+                        <label for="processingStartTime">
+                            Processing Start Time *
+                        </label>
+
+                        <input type="time" id="processingStartTime" required>
+
+                    </div>
+
+
+                    <!-- PROCESSING COMPLETION -->
+                    <div class="lab-processing-form-group">
+
+                        <label for="processingEndDate">
+                            Completion Date
+                        </label>
+
+                        <input type="date" id="processingEndDate">
+
+                    </div>
+
+
+                    <div class="lab-processing-form-group">
+
+                        <label for="processingEndTime">
+                            Completion Time
+                        </label>
+
+                        <input type="time" id="processingEndTime">
+
+                    </div>
+
+
+                    <!-- TECHNICIAN -->
+                    <div class="lab-processing-form-group full-width">
+
+                        <label for="processedBy">
+                            Processed By
+                        </label>
+
+                        <input type="text" id="processedBy" readonly>
+
+                    </div>
+
+
+                    <!-- OBSERVATIONS -->
+                    <div class="lab-processing-form-group full-width">
+
+                        <label for="processingObservations">
+                            Processing Observations
+                        </label>
+
+                        <textarea id="processingObservations" rows="4"
+                            placeholder="Enter processing observations, equipment details or remarks..."></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- MODAL FOOTER -->
+                <div class="lab-processing-modal-footer">
+
+                    <button type="button" class="lab-processing-btn secondary" id="cancelProcessing">
+
+                        Cancel
+
+                    </button>
+
+                    <button type="submit" class="lab-processing-btn primary">
+
+                        <i class="fas fa-save"></i>
+                        Save Processing
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

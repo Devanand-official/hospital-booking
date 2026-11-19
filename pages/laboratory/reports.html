@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratory Reports | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/laboratory-reports.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>SemasaCare</h2>
+                <button id="menuToggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="test-requests.html">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Test Requests</span>
+                </a>
+                <a href="sample-collection.html">
+                    <i class="fas fa-vial"></i>
+                    <span>Sample Collection</span>
+                </a>
+                <a href="test-processing.html">
+                    <i class="fas fa-microscope"></i>
+                    <span>Test Processing</span>
+                </a>
+                <a href="results.html">
+                    <i class="fas fa-flask"></i>
+                    <span>Result Entry</span>
+                </a>
+                <a href="reports.html" class="active">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <span>Lab Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="dashboard-header">
+                <div>
+                    <h1>Laboratory Reports</h1>
+                    <p>Review, verify and release laboratory reports.</p>
+                </div>
+
+                <div class="header-profile">
+                    <div class="profile-info">
+                        <strong id="headerName">Laboratory Staff</strong>
+                        <span>Laboratory Department</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="report-welcome">
+                <div>
+                    <h2>Report Management</h2>
+                    <p>Verify submitted test results and manage released reports.</p>
+                </div>
+                <div class="report-date">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="dashboardDate"></span>
+                </div>
+            </section>
+
+            <!-- STATISTICS -->
+            <section class="report-stats">
+                <div class="report-stat-card">
+                    <div class="stat-icon pending-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <span>Awaiting Verification</span>
+                        <h3 id="pendingReportCount">0</h3>
+                    </div>
+                </div>
+
+                <div class="report-stat-card">
+                    <div class="stat-icon verified-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <span>Verified Reports</span>
+                        <h3 id="verifiedReportCount">0</h3>
+                    </div>
+                </div>
+
+                <div class="report-stat-card">
+                    <div class="stat-icon released-icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div>
+                        <span>Released Reports</span>
+                        <h3 id="releasedReportCount">0</h3>
+                    </div>
+                </div>
+
+                <div class="report-stat-card">
+                    <div class="stat-icon total-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div>
+                        <span>Total Reports</span>
+                        <h3 id="totalReportCount">0</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PENDING VERIFICATION -->
+            <section class="report-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Results Awaiting Verification</h2>
+                        <p>Review submitted results before releasing reports.</p>
+                    </div>
+                </div>
+
+                <div class="report-toolbar">
+                    <div class="report-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="pendingSearch" placeholder="Search patient, sample ID or test...">
+                    </div>
+                    <button class="report-refresh-btn" id="refreshReports">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="report-table-wrapper">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Sample ID</th>
+                                <th>Patient</th>
+                                <th>Test</th>
+                                <th>Specimen</th>
+                                <th>Result</th>
+                                <th>Entered By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingReportsBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    No results awaiting verification.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- RELEASED REPORTS -->
+            <section class="report-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Released Laboratory Reports</h2>
+                        <p>View and print verified laboratory reports.</p>
+                    </div>
+                </div>
+
+                <div class="report-toolbar">
+                    <div class="report-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="releasedSearch" placeholder="Search report ID, patient or test...">
+                    </div>
+
+                    <select id="releasedStatusFilter">
+                        <option value="all">All Reports</option>
+                        <option value="Released">Released</option>
+                    </select>
+                </div>
+
+                <div class="report-table-wrapper">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Patient</th>
+                                <th>Test</th>
+                                <th>Sample ID</th>
+                                <th>Verified By</th>
+                                <th>Released Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="releasedReportsBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    No released reports found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- RESULT REVIEW MODAL -->
+    <div class="report-modal" id="reviewModal" aria-hidden="true">
+        <div class="report-modal-content">
+
+            <div class="report-modal-header">
+                <div>
+                    <h2>Review Laboratory Result</h2>
+                    <p>Review the submitted result before verification.</p>
+                </div>
+                <button type="button" id="closeReviewModal" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="review-details">
+                <div class="review-item">
+                    <span>Patient Name</span>
+                    <strong id="reviewPatient">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Sample ID</span>
+                    <strong id="reviewSampleId">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Request ID</span>
+                    <strong id="reviewRequestId">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Test Name</span>
+                    <strong id="reviewTestName">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Specimen</span>
+                    <strong id="reviewSpecimen">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Result</span>
+                    <strong id="reviewResult">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Reference Range</span>
+                    <strong id="reviewReference">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Result Flag</span>
+                    <strong id="reviewFlag">-</strong>
+                </div>
+                <div class="review-item">
+                    <span>Entered By</span>
+                    <strong id="reviewEnteredBy">-</strong>
+                </div>
+                <div class="review-item full-width">
+                    <span>Remarks</span>
+                    <p id="reviewRemarks">-</p>
+                </div>
+            </div>
+
+            <div class="verification-notice">
+                <i class="fas fa-info-circle"></i>
+                Verify the result only after reviewing the entered information.
+            </div>
+
+            <div class="report-modal-actions">
+                <button type="button" class="btn-secondary" id="cancelReview">
+                    Cancel
+                </button>
+                <button type="button" class="btn-verify" id="verifyReleaseBtn">
+                    <i class="fas fa-check-circle"></i>
+                    Verify & Release Report
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- REPORT VIEW MODAL -->
+    <div class="report-modal" id="viewReportModal" aria-hidden="true">
+        <div class="report-modal-content printable-report">
+
+            <div class="report-modal-header no-print">
+                <h2>Laboratory Report</h2>
+                <button type="button" id="closeViewReport" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="printableReportContent">
+                <div class="print-report-heading">
+                    <h1>SemasaCare Hospital</h1>
+                    <h2>Laboratory Investigation Report</h2>
+                    <p>Laboratory Department</p>
+                </div>
+
+                <div class="print-report-body" id="reportPrintDetails"></div>
+
+                <div class="print-report-footer">
+                    <p>This is a computer-generated laboratory report.</p>
+                    <p>Verified and released through SemasaCare.</p>
+                </div>
+            </div>
+
+            <div class="report-modal-actions no-print">
+                <button type="button" class="btn-secondary" id="closeReportView">
+                    Close
+                </button>
+                <button type="button" class="btn-verify" id="printReportBtn">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/laboratory/reports.js"></script>
+
+</body>
+
+</html>
