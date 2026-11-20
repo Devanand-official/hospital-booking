@@ -16,64 +16,99 @@
 
     <div class="dashboard-container">
 
+
+        <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>SemasaCare</h2>
-                <button id="menuToggle" class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
             </div>
 
-            <nav class="sidebar-nav">
-                <a href="dashboard.html">
-                    <i class="fas fa-chart-line"></i>
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div>
+                    <h3 id="laboratoryName">Lab Technician</h3>
+                    <p>Laboratory</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="test-requests.html">
+
+                <p class="menu-heading">LABORATORY</p>
+
+                <a href="test-requests.html" class="menu-item">
                     <i class="fas fa-file-medical"></i>
                     <span>Test Requests</span>
                 </a>
-                <a href="sample-collection.html">
+
+                <a href="sample-collection.html" class="menu-item">
                     <i class="fas fa-vial"></i>
                     <span>Sample Collection</span>
                 </a>
-                <a href="test-processing.html">
+
+                <a href="test-processing.html" class="menu-item">
                     <i class="fas fa-microscope"></i>
                     <span>Test Processing</span>
                 </a>
-                <a href="results.html">
-                    <i class="fas fa-flask"></i>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-check"></i>
                     <span>Result Entry</span>
                 </a>
-                <a href="reports.html" class="active">
-                    <i class="fas fa-file-medical-alt"></i>
+
+                <a href="reports.html" class="menu-item active">
+                    <i class="fas fa-file-waveform"></i>
                     <span>Lab Reports</span>
                 </a>
             </nav>
 
-            <div class="sidebar-footer">
-                <button id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
-            </div>
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
         </aside>
+
 
         <main class="main-content">
 
-            <header class="dashboard-header">
-                <div>
-                    <h1>Laboratory Reports</h1>
-                    <p>Review, verify and release laboratory reports.</p>
+
+            <!-- TOP NAVBAR -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Laboratory Reports</h2>
+                        <p>Review, verify and release laboratory reports</p>
+                    </div>
                 </div>
 
                 <div class="header-profile">
-                    <div class="profile-info">
-                        <strong id="headerName">Laboratory Staff</strong>
-                        <span>Laboratory Department</span>
+                    <div class="header-avatar">
+                        <i class="fas fa-flask"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Lab Technician</h4>
+                        <span>Laboratory Technician</span>
                     </div>
                 </div>
+
             </header>
+
 
             <section class="report-welcome">
                 <div>

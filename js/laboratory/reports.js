@@ -721,6 +721,28 @@
     // 14. SIDEBAR AND LOGOUT
     // --------------------------------------------------
 
+    // const menuToggle = document.getElementById("menuToggle");
+    // const sidebar = document.getElementById("sidebar");
+
+    // if (menuToggle && sidebar) {
+    //     menuToggle.addEventListener("click", function () {
+    //         sidebar.classList.toggle("active");
+    //     });
+    // }
+
+    // document.getElementById("logoutBtn")
+    //     .addEventListener("click", function () {
+    //         const confirmed = confirm("Are you sure you want to logout?");
+
+    //         if (!confirmed) return;
+
+    //         SemasaAuth.logout();
+    //         window.location.href = "../login.html";
+    //     });
+
+
+    /* SIDEBAR TOGGLE */
+
     const menuToggle = document.getElementById("menuToggle");
     const sidebar = document.getElementById("sidebar");
 
@@ -730,15 +752,31 @@
         });
     }
 
-    document.getElementById("logoutBtn")
-        .addEventListener("click", function () {
-            const confirmed = confirm("Are you sure you want to logout?");
+    if (sidebar) {
+        sidebar.querySelectorAll(".menu-item").forEach(function (link) {
+            link.addEventListener("click", function () {
+                sidebar.classList.remove("active");
+            });
+        });
+    }
 
-            if (!confirmed) return;
+    /* LOGOUT */
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            const shouldLogout = window.confirm(
+                "Are you sure you want to logout?"
+            );
+
+            if (!shouldLogout) return;
 
             SemasaAuth.logout();
             window.location.href = "../login.html";
         });
+    }
+
 
     // --------------------------------------------------
     // 15. DATE AND PROFILE
