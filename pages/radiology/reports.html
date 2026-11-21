@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiology Reports | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-reports.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/reports.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item active">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button type="button" class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Radiology Reports</h2>
+                        <p>Review and manage diagnostic imaging reports</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Radiology Reports</h1>
+                        <p>Review submitted imaging results and manage report status.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span></span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="report-stats-grid">
+
+                    <div class="report-stat-card">
+                        <div class="report-stat-icon blue">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <div>
+                            <p>Awaiting Review</p>
+                            <h2 id="awaitingReviewCount">0</h2>
+                            <span>Submitted results</span>
+                        </div>
+                    </div>
+
+                    <div class="report-stat-card">
+                        <div class="report-stat-icon orange">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div>
+                            <p>Draft Reports</p>
+                            <h2 id="draftReportCount">0</h2>
+                            <span>Reports saved as draft</span>
+                        </div>
+                    </div>
+
+                    <div class="report-stat-card">
+                        <div class="report-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p>Released Reports</p>
+                            <h2 id="releasedReportCount">0</h2>
+                            <span>Approved reports</span>
+                        </div>
+                    </div>
+
+                    <div class="report-stat-card">
+                        <div class="report-stat-icon purple">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <p>Total Reports</p>
+                            <h2 id="totalReportCount">0</h2>
+                            <span>Reports generated</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RESULTS WAITING FOR REPORT -->
+                <section class="report-section-card">
+
+                    <div class="report-section-heading">
+                        <div>
+                            <h3><i class="fas fa-clipboard-check"></i> Results Awaiting Report</h3>
+                            <p>Submitted imaging results ready for report preparation.</p>
+                        </div>
+
+                        <button type="button" class="report-refresh-btn" id="refreshReports">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="report-toolbar">
+                        <div class="report-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="pendingReportSearch"
+                                placeholder="Search patient, result ID or examination...">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Result ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Result Date</th>
+                                    <th>Recorded By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingReportsBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No results awaiting report.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="report-table-note" id="pendingReportsNote">
+                        No pending results.
+                    </p>
+
+                </section>
+
+                <!-- GENERATED REPORTS -->
+                <section class="report-section-card">
+
+                    <div class="report-section-heading">
+                        <div>
+                            <h3><i class="fas fa-folder-open"></i> Generated Reports</h3>
+                            <p>Review saved drafts and released reports.</p>
+                        </div>
+                    </div>
+
+                    <div class="report-toolbar">
+                        <div class="report-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="generatedReportSearch"
+                                placeholder="Search report ID, patient or examination...">
+                        </div>
+
+                        <select id="reportStatusFilter">
+                            <option value="all">All Statuses</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Released">Released</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Report ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Report Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="generatedReportsBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No reports generated.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="report-table-note" id="generatedReportsNote">
+                        No reports available.
+                    </p>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- CREATE / EDIT REPORT MODAL -->
+    <div class="report-modal" id="reportModal">
+        <div class="report-modal-content">
+
+            <div class="report-modal-header">
+                <div>
+                    <h3 id="reportModalTitle">Prepare Radiology Report</h3>
+                    <p>Review the submitted result and prepare the report.</p>
+                </div>
+                <button type="button" class="report-close-btn" id="closeReportModal">
+                    &times;
+                </button>
+            </div>
+
+            <div class="report-patient-info">
+                <div>
+                    <span>Result ID</span>
+                    <strong id="modalResultId">-</strong>
+                </div>
+                <div>
+                    <span>Patient</span>
+                    <strong id="modalPatientName">-</strong>
+                </div>
+                <div>
+                    <span>Patient ID</span>
+                    <strong id="modalPatientId">-</strong>
+                </div>
+                <div>
+                    <span>Examination</span>
+                    <strong id="modalExamination">-</strong>
+                </div>
+                <div>
+                    <span>Referring Doctor</span>
+                    <strong id="modalDoctorName">-</strong>
+                </div>
+                <div>
+                    <span>Result Date</span>
+                    <strong id="modalResultDate">-</strong>
+                </div>
+            </div>
+
+            <div class="report-source-result">
+                <h4><i class="fas fa-file-medical"></i> Submitted Findings</h4>
+
+                <div class="report-source-block">
+                    <span>Findings</span>
+                    <p id="sourceFindings">-</p>
+                </div>
+
+                <div class="report-source-block">
+                    <span>Impression / Conclusion</span>
+                    <p id="sourceImpression">-</p>
+                </div>
+
+                <div class="report-source-block">
+                    <span>Recommendations</span>
+                    <p id="sourceRecommendations">-</p>
+                </div>
+            </div>
+
+            <form id="reportForm">
+                <input type="hidden" id="reportResultId">
+
+                <div class="report-form-group">
+                    <label for="reportTitle">Report Title <span>*</span></label>
+                    <input type="text" id="reportTitle" placeholder="e.g. Chest X-ray Report" required>
+                </div>
+
+                <div class="report-form-group">
+                    <label for="reportContent">Report Summary <span>*</span></label>
+                    <textarea id="reportContent" rows="5"
+                        placeholder="Prepare the report summary based on the submitted findings..." required></textarea>
+                </div>
+
+                <div class="report-form-group">
+                    <label for="reviewerName">Reviewer's Name</label>
+                    <input type="text" id="reviewerName" placeholder="Enter authorized reviewer's name">
+                </div>
+
+                <p class="report-form-message" id="reportFormMessage"></p>
+
+                <div class="report-modal-actions">
+                    <button type="button" class="report-cancel-btn" id="cancelReport">
+                        Cancel
+                    </button>
+
+                    <button type="button" class="report-draft-btn" id="saveReportDraft">
+                        <i class="fas fa-save"></i> Save Draft
+                    </button>
+
+                    <button type="submit" class="report-release-btn">
+                        <i class="fas fa-check-circle"></i> Release Report
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- VIEW REPORT MODAL -->
+    <div class="report-modal" id="viewReportModal">
+        <div class="report-modal-content">
+
+            <div class="report-modal-header">
+                <div>
+                    <h3>Radiology Report Details</h3>
+                    <p>Report information and approval status.</p>
+                </div>
+                <button type="button" class="report-close-btn" id="closeViewReport">
+                    &times;
+                </button>
+            </div>
+
+            <div class="report-details-grid">
+                <div><span>Report ID</span><strong id="viewReportId">-</strong></div>
+                <div><span>Patient</span><strong id="viewReportPatient">-</strong></div>
+                <div><span>Examination</span><strong id="viewReportExamination">-</strong></div>
+                <div><span>Report Date</span><strong id="viewReportDate">-</strong></div>
+                <div><span>Status</span><strong id="viewReportStatus">-</strong></div>
+                <div><span>Reviewer</span><strong id="viewReportReviewer">-</strong></div>
+
+                <div class="report-detail-block">
+                    <span>Report Summary</span>
+                    <p id="viewReportContent">-</p>
+                </div>
+            </div>
+
+            <div class="report-modal-actions">
+                <button type="button" class="report-cancel-btn" id="closeViewReportBtn">
+                    Close
+                </button>
+            </div>
+            <button type="button" class="report-action-btn report-print-btn" id="printViewReport">
+                <i class="fas fa-print"></i>
+                Print Report
+            </button>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

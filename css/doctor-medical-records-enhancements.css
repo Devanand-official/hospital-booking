@@ -1,14 +1,134 @@
 /* SemasaCare Doctor Medical Records - enhancements */
-.medical-toolbar{display:flex;flex-direction:column;gap:14px;margin:18px 0}
-.medical-date-filters{display:flex;align-items:end;flex-wrap:wrap;gap:10px}
-.medical-date-filters label{display:flex;flex-direction:column;gap:6px;color:#173f4d;font-size:13px;font-weight:600}
-.medical-date-filters input{min-height:40px;padding:8px 10px;border:1px solid #d5e1e5;border-radius:7px;color:#173f4d;background:#fff}
-.medical-filter-btn,.medical-clear-btn,.medical-print-btn,.medical-history-btn{border:0;border-radius:7px;padding:10px 13px;cursor:pointer;font-weight:600;font-size:13px}
-.medical-filter-btn,.medical-print-btn{background:#078b8c;color:#fff}
-.medical-clear-btn{background:#e8eff2;color:#173f4d}
-.medical-history-btn{background:#e5f6f4;color:#087b79;margin-left:5px}
-.medical-detail-actions{display:flex;align-items:center;gap:10px}
-.patient-history-card{display:none;margin-top:22px}
-.patient-history-card .dashboard-table{width:100%}
-.medical-detail-actions .medical-close-btn{margin-left:0}
-@media(max-width:700px){.medical-date-filters{align-items:stretch}.medical-date-filters label{flex:1 1 130px}.medical-date-filters button{flex:1 1 auto}.medical-history-btn{margin:5px 0 0 5px}.medical-toolbar .medical-search{width:100%}}
+.medical-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 18px 0
+}
+
+.medical-date-filters {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 10px
+}
+
+.medical-date-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #173f4d;
+    font-size: 13px;
+    font-weight: 600
+}
+
+.medical-date-filters input {
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #d5e1e5;
+    border-radius: 7px;
+    color: #173f4d;
+    background: #fff
+}
+
+.medical-filter-btn,
+.medical-clear-btn,
+.medical-print-btn,
+.medical-history-btn {
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 13px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px
+}
+
+.medical-filter-btn,
+.medical-print-btn {
+    background: #078b8c;
+    color: #fff
+}
+
+.medical-clear-btn {
+    background: #e8eff2;
+    color: #173f4d
+}
+
+.medical-history-btn {
+    background: #e5f6f4;
+    color: #087b79;
+    margin-left: 5px
+}
+
+.medical-detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.patient-history-card {
+    display: none;
+    margin-top: 22px
+}
+
+.patient-history-card .dashboard-table {
+    width: 100%
+}
+
+.medical-detail-actions .medical-close-btn {
+    margin-left: 0
+}
+
+@media(max-width:700px) {
+    .medical-date-filters {
+        align-items: stretch
+    }
+
+    .medical-date-filters label {
+        flex: 1 1 130px
+    }
+
+    .medical-date-filters button {
+        flex: 1 1 auto
+    }
+
+    .medical-history-btn {
+        margin: 5px 0 0 5px
+    }
+
+    .medical-toolbar .medical-search {
+        width: 100%
+    }
+}
+
+/* Radiology order section */
+
+.radiology-order-section {
+    margin-top: 24px;
+    padding: 22px;
+    border: 1px solid #d7e8eb;
+    border-radius: 12px;
+    background: #f8fcfd;
+}
+
+.radiology-order-section .lab-order-heading h3 {
+    color: #103b49;
+}
+
+.radiology-order-section .lab-order-heading h3 i {
+    color: #078b8c;
+}
+
+.radiology-order-section .lab-test-option:has(input:checked) {
+    border-color: #078b8c;
+    background: #e8f7f6;
+}
+
+.radiology-order-section .lab-send-request-btn {
+    background: #078b8c;
+}
+
+.radiology-order-section .lab-send-request-btn:hover {
+    /* background: #078b8c; */
+    background: #103b49;
+}

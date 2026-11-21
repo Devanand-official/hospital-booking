@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Radiology Dashboard | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-dashboard.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/dashboard.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item active">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP NAVBAR -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Radiology Dashboard</h2>
+                        <p>Radiology operations and diagnostic overview</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- DASHBOARD CONTENT -->
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Radiology Overview</h1>
+                        <p>Manage imaging requests, schedules, procedures and diagnostic reports.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="radiology-stats-grid">
+
+                    <article class="radiology-stat-card">
+                        <div class="radiology-stat-icon teal">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div class="radiology-stat-info">
+                            <p>Total Imaging Requests</p>
+                            <h2 id="totalRadiologyRequests">0</h2>
+                            <span>All recorded requests</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-stat-card">
+                        <div class="radiology-stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="radiology-stat-info">
+                            <p>Pending Requests</p>
+                            <h2 id="pendingRadiologyRequests">0</h2>
+                            <span>Awaiting review or scheduling</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-stat-card">
+                        <div class="radiology-stat-icon blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="radiology-stat-info">
+                            <p>Scheduled Today</p>
+                            <h2 id="scheduledToday">0</h2>
+                            <span>Today's imaging appointments</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-stat-card">
+                        <div class="radiology-stat-icon purple">
+                            <i class="fas fa-x-ray"></i>
+                        </div>
+                        <div class="radiology-stat-info">
+                            <p>Imaging In Progress</p>
+                            <h2 id="imagingInProgress">0</h2>
+                            <span>Ongoing procedures</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-stat-card">
+                        <div class="radiology-stat-icon green">
+                            <i class="fas fa-file-circle-check"></i>
+                        </div>
+                        <div class="radiology-stat-info">
+                            <p>Completed Reports</p>
+                            <h2 id="completedRadiologyReports">0</h2>
+                            <span>Finalized reports</span>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- IMAGING REQUESTS -->
+                <section class="section-card radiology-section-card">
+
+                    <div class="section-heading radiology-section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-file-medical"></i>
+                                Recent Imaging Requests
+                            </h3>
+                            <p>Recently received imaging requests from doctors</p>
+                        </div>
+
+                        <a href="requests.html" class="view-all-link">
+                            View All Requests
+                        </a>
+                    </div>
+
+                    <div class="radiology-table-toolbar">
+                        <div class="radiology-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="requestSearch"
+                                placeholder="Search patient, request ID or examination..."
+                                aria-label="Search imaging requests">
+                        </div>
+
+                        <select id="requestStatusFilter" aria-label="Filter requests by status">
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table radiology-dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Requested By</th>
+                                    <th>Request Date</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="radiologyRequestsBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading imaging requests...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="radiology-table-note" id="requestTableNote" aria-live="polite"></p>
+
+                </section>
+
+                <!-- LOWER GRID -->
+                <div class="radiology-dashboard-grid">
+
+                    <!-- TODAY'S SCHEDULE -->
+                    <section class="section-card radiology-section-card">
+
+                        <div class="section-heading radiology-section-heading">
+                            <div>
+                                <h3>
+                                    <i class="fas fa-calendar-check"></i>
+                                    Today's Imaging Schedule
+                                </h3>
+                                <p>Patients scheduled for imaging today</p>
+                            </div>
+
+                            <a href="scheduling.html" class="view-all-link">
+                                View All
+                            </a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="dashboard-table radiology-dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Examination</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="todayScheduleBody">
+                                    <tr>
+                                        <td colspan="4" class="empty-message">
+                                            No imaging schedules for today.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </section>
+
+                    <!-- RECENT REPORTS -->
+                    <section class="section-card radiology-section-card">
+
+                        <div class="section-heading radiology-section-heading">
+                            <div>
+                                <h3>
+                                    <i class="fas fa-file-waveform"></i>
+                                    Recent Radiology Reports
+                                </h3>
+                                <p>Latest finalized diagnostic reports</p>
+                            </div>
+
+                            <a href="reports.html" class="view-all-link">
+                                View All
+                            </a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="dashboard-table radiology-dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Report ID</th>
+                                        <th>Patient</th>
+                                        <th>Examination</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="recentRadiologyReportsBody">
+                                    <tr>
+                                        <td colspan="5" class="empty-message">
+                                            No radiology reports available.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <section class="section-card radiology-quick-actions-card">
+
+                    <div class="section-heading radiology-section-heading">
+                        <div>
+                            <h3>Quick Actions</h3>
+                            <p>Shortcuts to common radiology tasks</p>
+                        </div>
+                    </div>
+
+                    <div class="radiology-quick-actions">
+
+                        <a href="requests.html" class="radiology-quick-action">
+                            <span class="radiology-quick-action-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </span>
+                            <span class="radiology-quick-action-copy">
+                                <strong>Review Requests</strong>
+                                <small>Review new doctor requests</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="scheduling.html" class="radiology-quick-action">
+                            <span class="radiology-quick-action-icon">
+                                <i class="fas fa-calendar-plus"></i>
+                            </span>
+                            <span class="radiology-quick-action-copy">
+                                <strong>Schedule Imaging</strong>
+                                <small>Manage imaging appointments</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="imaging.html" class="radiology-quick-action">
+                            <span class="radiology-quick-action-icon">
+                                <i class="fas fa-x-ray"></i>
+                            </span>
+                            <span class="radiology-quick-action-copy">
+                                <strong>Manage Imaging</strong>
+                                <small>Update procedure progress</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="results.html" class="radiology-quick-action">
+                            <span class="radiology-quick-action-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </span>
+                            <span class="radiology-quick-action-copy">
+                                <strong>Enter Findings</strong>
+                                <small>Record diagnostic findings</small>
+                            </span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                    </div>
+                </section>
+
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

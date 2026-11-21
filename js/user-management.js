@@ -331,4 +331,22 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSummary();
     filterUsers();
 
+    /* =========================================
+       19. LOGOUT
+    ========================================= */
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            const shouldLogout = window.confirm(
+                "Are you sure you want to logout?"
+            );
+
+            if (!shouldLogout) return;
+
+            SemasaAuth.logout();
+            window.location.href = "../login.html";
+        });
+    }
+
 });

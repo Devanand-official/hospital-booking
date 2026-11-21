@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Imaging Requests | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-requests.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/requests.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item active">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP NAVBAR -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Imaging Requests</h2>
+                        <p>Review and manage doctor imaging requests</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Imaging Requests</h1>
+                        <p>Review, accept and manage imaging requests received from doctors.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="request-stats-grid">
+
+                    <article class="request-stat-card">
+                        <div class="request-stat-icon teal">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <p>Total Requests</p>
+                            <h2 id="totalRequests">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="request-stat-card">
+                        <div class="request-stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div>
+                            <p>Pending Review</p>
+                            <h2 id="pendingRequests">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="request-stat-card">
+                        <div class="request-stat-icon blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <p>Scheduled</p>
+                            <h2 id="scheduledRequests">0</h2>
+                        </div>
+                    </article>
+
+                    <article class="request-stat-card">
+                        <div class="request-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p>Completed</p>
+                            <h2 id="completedRequests">0</h2>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- REQUEST MANAGEMENT -->
+                <section class="section-card request-management-card">
+
+                    <div class="section-heading request-section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-list-check"></i>
+                                All Imaging Requests
+                            </h3>
+                            <p>View and manage imaging orders submitted by doctors.</p>
+                        </div>
+
+                        <button type="button" class="request-refresh-btn" id="refreshRequests">
+                            <i class="fas fa-rotate"></i>
+                            Refresh
+                        </button>
+                    </div>
+
+                    <!-- FILTERS -->
+                    <div class="request-toolbar">
+
+                        <div class="request-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="requestSearch"
+                                placeholder="Search patient, request ID or examination..."
+                                aria-label="Search imaging requests">
+                        </div>
+
+                        <select id="statusFilter" aria-label="Filter by status">
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+
+                        <select id="priorityFilter" aria-label="Filter by priority">
+                            <option value="all">All Priorities</option>
+                            <option value="routine">Routine</option>
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="critical">Critical</option>
+                        </select>
+
+                    </div>
+
+                    <!-- REQUEST TABLE -->
+                    <div class="table-responsive">
+                        <table class="dashboard-table request-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient Details</th>
+                                    <th>Examination</th>
+                                    <th>Requested By</th>
+                                    <th>Request Date</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="requestsTableBody">
+                                <tr>
+                                    <td colspan="8" class="empty-message">
+                                        Loading imaging requests...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <div class="request-table-footer">
+                        <span id="requestCount">0 requests found</span>
+                    </div>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- =====================================
+     REQUEST DETAILS MODAL
+===================================== -->
+
+    <div class="request-modal" id="requestDetailsModal" aria-hidden="true">
+
+        <div class="request-modal-content">
+
+            <div class="request-modal-header">
+                <div>
+                    <h2>Imaging Request Details</h2>
+                    <p>Review the doctor's imaging order.</p>
+                </div>
+
+                <button type="button" class="modal-close-btn" id="closeRequestModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="request-modal-body">
+
+                <div class="request-detail-grid">
+
+                    <div class="request-detail-item">
+                        <span>Request ID</span>
+                        <strong id="detailRequestId">-</strong>
+                    </div>
+
+                    <div class="request-detail-item">
+                        <span>Request Date</span>
+                        <strong id="detailRequestDate">-</strong>
+                    </div>
+
+                    <div class="request-detail-item">
+                        <span>Patient Name</span>
+                        <strong id="detailPatientName">-</strong>
+                    </div>
+
+                    <div class="request-detail-item">
+                        <span>Patient ID</span>
+                        <strong id="detailPatientId">-</strong>
+                    </div>
+
+                    <div class="request-detail-item">
+                        <span>Doctor</span>
+                        <strong id="detailDoctorName">-</strong>
+                    </div>
+
+                    <div class="request-detail-item">
+                        <span>Priority</span>
+                        <strong id="detailPriority">-</strong>
+                    </div>
+
+                    <div class="request-detail-item full-width">
+                        <span>Imaging Examination</span>
+                        <strong id="detailExamination">-</strong>
+                    </div>
+
+                    <div class="request-detail-item full-width">
+                        <span>Clinical Indication</span>
+                        <p id="detailClinicalNotes">No clinical notes provided.</p>
+                    </div>
+
+                    <div class="request-detail-item full-width">
+                        <span>Additional Instructions</span>
+                        <p id="detailInstructions">No additional instructions.</p>
+                    </div>
+
+                </div>
+
+                <div class="request-modal-actions">
+
+                    <button type="button" class="request-action-btn reject" id="rejectRequestBtn">
+                        <i class="fas fa-times"></i>
+                        Reject Request
+                    </button>
+
+                    <button type="button" class="request-action-btn accept" id="acceptRequestBtn">
+                        <i class="fas fa-check"></i>
+                        Accept Request
+                    </button>
+
+                </div>
+
+                <p class="request-modal-note" id="requestModalNote" aria-live="polite"></p>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

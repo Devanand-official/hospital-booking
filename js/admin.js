@@ -220,109 +220,109 @@ document.addEventListener("DOMContentLoaded", function () {
         return Number.isNaN(timestamp) ? 0 : timestamp;
     }
     // ==========================================
-// NORMALIZE APPOINTMENT DATE
-// ==========================================
+    // NORMALIZE APPOINTMENT DATE
+    // ==========================================
 
-function normalizeAppointmentDate(dateValue) {
+    function normalizeAppointmentDate(dateValue) {
 
-    const date = String(dateValue || "").trim();
+        const date = String(dateValue || "").trim();
 
-    // YYYY-MM-DD
-    if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
+        // YYYY-MM-DD
+        if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
 
-        const [year, month, day] = date.split("-").map(Number);
+            const [year, month, day] = date.split("-").map(Number);
 
-        return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        }
+
+        // DD-MM-YYYY or DD/MM/YYYY
+        if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}$/.test(date)) {
+
+            const [day, month, year] = date.split(/[-/]/).map(Number);
+
+            return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        }
+
+        return "";
     }
-
-    // DD-MM-YYYY or DD/MM/YYYY
-    if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}$/.test(date)) {
-
-        const [day, month, year] = date.split(/[-/]/).map(Number);
-
-        return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    }
-
-    return "";
-}
 
     // ==========================================
-// DISPLAY TODAY'S APPOINTMENTS
-// READ-ONLY ADMIN VIEW
-// ==========================================
+    // DISPLAY TODAY'S APPOINTMENTS
+    // READ-ONLY ADMIN VIEW
+    // ==========================================
 
-const todayAppointments =
-    document.getElementById("recentAppointments");
+    const todayAppointments =
+        document.getElementById("recentAppointments");
 
-if (todayAppointments) {
+    if (todayAppointments) {
 
-    todayAppointments.textContent = "";
+        todayAppointments.textContent = "";
 
-    const today = new Date();
+        const today = new Date();
 
-    const todayDate = [
-        today.getFullYear(),
-        String(today.getMonth() + 1).padStart(2, "0"),
-        String(today.getDate()).padStart(2, "0")
-    ].join("-");
+        const todayDate = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
 
-    // Filter today's appointments and sort by time
-    const todaysList = [...appointments]
-        .filter(appointment => {
-            return normalizeAppointmentDate(appointment.date) === todayDate;
-        })
-        .sort((a, b) => {
-            return getAppointmentTimestamp(a) -
-                   getAppointmentTimestamp(b);
-        });
-
-    if (todaysList.length === 0) {
-
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-
-        cell.colSpan = 5;
-        cell.textContent = "No appointments scheduled for today.";
-        cell.style.textAlign = "center";
-
-        row.appendChild(cell);
-        todayAppointments.appendChild(row);
-
-    } else {
-
-        todaysList.forEach(appointment => {
-
-            const row = document.createElement("tr");
-
-            const values = [
-                appointment.patientName || "N/A",
-                appointment.doctorName || "N/A",
-                appointment.date || "N/A",
-                appointment.time || "N/A",
-                appointment.status || "Pending"
-            ];
-
-            values.forEach((value, index) => {
-
-                const cell = document.createElement("td");
-                cell.textContent = value;
-
-                if (index === 4) {
-                    cell.classList.add(
-                        "status",
-                        String(value)
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")
-                    );
-                }
-
-                row.appendChild(cell);
+        // Filter today's appointments and sort by time
+        const todaysList = [...appointments]
+            .filter(appointment => {
+                return normalizeAppointmentDate(appointment.date) === todayDate;
+            })
+            .sort((a, b) => {
+                return getAppointmentTimestamp(a) -
+                    getAppointmentTimestamp(b);
             });
 
+        if (todaysList.length === 0) {
+
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 5;
+            cell.textContent = "No appointments scheduled for today.";
+            cell.style.textAlign = "center";
+
+            row.appendChild(cell);
             todayAppointments.appendChild(row);
-        });
+
+        } else {
+
+            todaysList.forEach(appointment => {
+
+                const row = document.createElement("tr");
+
+                const values = [
+                    appointment.patientName || "N/A",
+                    appointment.doctorName || "N/A",
+                    appointment.date || "N/A",
+                    appointment.time || "N/A",
+                    appointment.status || "Pending"
+                ];
+
+                values.forEach((value, index) => {
+
+                    const cell = document.createElement("td");
+                    cell.textContent = value;
+
+                    if (index === 4) {
+                        cell.classList.add(
+                            "status",
+                            String(value)
+                                .toLowerCase()
+                                .replace(/\s+/g, "-")
+                        );
+                    }
+
+                    row.appendChild(cell);
+                });
+
+                todayAppointments.appendChild(row);
+            });
+        }
     }
-}
     // ==========================================
     // MOBILE SIDEBAR
     // ==========================================
@@ -347,17 +347,23 @@ if (todayAppointments) {
         });
     }
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-
+    /* =========================================
+   19. LOGOUT
+========================================= */
     const logoutBtn = document.getElementById("logoutBtn");
 
     if (logoutBtn) {
-
         logoutBtn.addEventListener("click", function () {
+            const shouldLogout = window.confirm(
+                "Are you sure you want to logout?"
+            );
+
+            if (!shouldLogout) return;
+
             SemasaAuth.logout();
+            window.location.href = "../login.html";
         });
     }
+
 
 });

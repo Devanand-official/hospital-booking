@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Imaging | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-imaging.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/imaging.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item active">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP NAVBAR -->
+            <header class="top-header">
+
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Imaging Procedures</h2>
+                        <p>Manage and monitor imaging procedures</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Imaging Procedures</h1>
+                        <p>
+                            Perform scheduled imaging examinations and
+                            update procedure progress.
+                        </p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="imaging-stats-grid">
+
+                    <article class="imaging-stat-card">
+                        <div class="imaging-stat-icon blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="imaging-stat-info">
+                            <p>Scheduled Procedures</p>
+                            <h2 id="scheduledImagingCount">0</h2>
+                            <span>Awaiting imaging</span>
+                        </div>
+                    </article>
+
+                    <article class="imaging-stat-card">
+                        <div class="imaging-stat-icon orange">
+                            <i class="fas fa-x-ray"></i>
+                        </div>
+                        <div class="imaging-stat-info">
+                            <p>In Progress</p>
+                            <h2 id="inProgressImagingCount">0</h2>
+                            <span>Ongoing procedures</span>
+                        </div>
+                    </article>
+
+                    <article class="imaging-stat-card">
+                        <div class="imaging-stat-icon green">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                        <div class="imaging-stat-info">
+                            <p>Completed Today</p>
+                            <h2 id="completedTodayCount">0</h2>
+                            <span>Completed procedures</span>
+                        </div>
+                    </article>
+
+                    <article class="imaging-stat-card">
+                        <div class="imaging-stat-icon purple">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <div class="imaging-stat-info">
+                            <p>Total Procedures</p>
+                            <h2 id="totalImagingCount">0</h2>
+                            <span>Recorded imaging procedures</span>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- IMAGING QUEUE -->
+                <section class="section-card imaging-section-card">
+
+                    <div class="section-heading imaging-section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-list-check"></i>
+                                Imaging Queue
+                            </h3>
+                            <p>
+                                Procedures scheduled and ready for imaging.
+                            </p>
+                        </div>
+
+                        <button type="button" class="imaging-refresh-btn" id="refreshImaging">
+                            <i class="fas fa-rotate"></i>
+                            Refresh
+                        </button>
+                    </div>
+
+                    <div class="imaging-table-toolbar">
+
+                        <div class="imaging-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="imagingSearch"
+                                placeholder="Search patient, schedule ID or examination...">
+                        </div>
+
+                        <select id="imagingStatusFilter">
+                            <option value="all">All Statuses</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="in progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table radiology-dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Schedule ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="imagingQueueBody">
+                                <tr>
+                                    <td colspan="8" class="empty-message">
+                                        Loading imaging queue...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="imaging-table-note" id="imagingQueueNote" aria-live="polite"></p>
+
+                </section>
+
+                <!-- RECENT PROCEDURES -->
+                <section class="section-card imaging-section-card">
+
+                    <div class="section-heading imaging-section-heading">
+                        <div>
+                            <h3>
+                                <i class="fas fa-clock-rotate-left"></i>
+                                Recent Imaging Procedures
+                            </h3>
+                            <p>Recently completed imaging examinations.</p>
+                        </div>
+
+                        <a href="results.html" class="view-all-link">
+                            Go to Results
+                        </a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="dashboard-table radiology-dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Schedule ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Technician</th>
+                                    <th>Completed At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentImagingBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">
+                                        No completed procedures available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- IMAGING PROCEDURE MODAL -->
+    <div class="imaging-modal" id="imagingModal">
+
+        <div class="imaging-modal-content">
+
+            <div class="imaging-modal-header">
+                <div>
+                    <h3 id="imagingModalTitle">Imaging Procedure</h3>
+                    <p>Update the imaging procedure details.</p>
+                </div>
+
+                <button type="button" class="imaging-close-btn" id="closeImagingModal">
+                    &times;
+                </button>
+            </div>
+
+            <!-- PATIENT INFORMATION -->
+            <div class="imaging-patient-info">
+
+                <div>
+                    <span>Schedule ID</span>
+                    <strong id="modalScheduleId">—</strong>
+                </div>
+
+                <div>
+                    <span>Patient Name</span>
+                    <strong id="modalPatientName">—</strong>
+                </div>
+
+                <div>
+                    <span>Patient ID</span>
+                    <strong id="modalPatientId">—</strong>
+                </div>
+
+                <div>
+                    <span>Examination</span>
+                    <strong id="modalExamination">—</strong>
+                </div>
+
+                <div>
+                    <span>Appointment Date</span>
+                    <strong id="modalAppointmentDate">—</strong>
+                </div>
+
+                <div>
+                    <span>Appointment Time</span>
+                    <strong id="modalAppointmentTime">—</strong>
+                </div>
+
+                <div>
+                    <span>Imaging Room</span>
+                    <strong id="modalRoom">—</strong>
+                </div>
+
+                <div>
+                    <span>Assigned Technician</span>
+                    <strong id="modalTechnician">—</strong>
+                </div>
+
+            </div>
+
+            <form id="imagingForm">
+
+                <input type="hidden" id="imagingScheduleId">
+
+                <div class="imaging-form-group">
+                    <label for="procedureStatus">Procedure Status</label>
+                    <select id="procedureStatus" required>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="imaging-form-group">
+                    <label for="procedureTechnician">Technician Name</label>
+                    <input type="text" id="procedureTechnician" placeholder="Enter technician name" required>
+                </div>
+
+                <div class="imaging-form-group">
+                    <label for="procedureNotes">Procedure Notes</label>
+                    <textarea id="procedureNotes" rows="4" placeholder="Enter procedure-related notes..."></textarea>
+                </div>
+
+                <p class="imaging-form-message" id="imagingFormMessage" aria-live="polite"></p>
+
+                <div class="imaging-modal-actions">
+                    <button type="button" class="imaging-cancel-btn" id="cancelImaging">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="imaging-save-btn">
+                        <i class="fas fa-save"></i>
+                        Save Procedure
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- PROCEDURE DETAILS MODAL -->
+    <div class="imaging-modal" id="imagingDetailsModal">
+
+        <div class="imaging-modal-content">
+
+            <div class="imaging-modal-header">
+                <div>
+                    <h3>Procedure Details</h3>
+                    <p>Completed imaging procedure information.</p>
+                </div>
+
+                <button type="button" class="imaging-close-btn" id="closeImagingDetails">
+                    &times;
+                </button>
+            </div>
+
+            <div class="imaging-details-grid">
+
+                <div>
+                    <span>Schedule ID</span>
+                    <strong id="detailImagingScheduleId">—</strong>
+                </div>
+
+                <div>
+                    <span>Patient</span>
+                    <strong id="detailImagingPatient">—</strong>
+                </div>
+
+                <div>
+                    <span>Examination</span>
+                    <strong id="detailImagingExamination">—</strong>
+                </div>
+
+                <div>
+                    <span>Technician</span>
+                    <strong id="detailImagingTechnician">—</strong>
+                </div>
+
+                <div>
+                    <span>Completed At</span>
+                    <strong id="detailImagingCompletedAt">—</strong>
+                </div>
+
+                <div class="imaging-detail-notes">
+                    <span>Procedure Notes</span>
+                    <p id="detailImagingNotes">—</p>
+                </div>
+
+            </div>
+
+            <div class="imaging-modal-actions">
+                <button type="button" class="imaging-save-btn" id="closeImagingDetailsBtn">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

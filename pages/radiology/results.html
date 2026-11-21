@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiology Results | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-results.css">
+    <!-- <link rel="stylesheet" href="../../css/radiology-imaging.css"> -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/results.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item active">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button type="button" class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2>Radiology Results</h2>
+                        <p>Enter and manage imaging findings</p>
+                    </div>
+                </div>
+
+                <div class="header-profile">
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+                </div>
+            </header>
+
+
+            <section class="page-content">
+
+                <div class="results-page-heading">
+                    <div>
+                        <h1>Imaging Results</h1>
+                        <p>Review completed imaging procedures and record diagnostic findings.</p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span></span>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="results-stats-grid">
+
+                    <div class="results-stat-card">
+                        <div class="results-stat-icon blue">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="results-stat-info">
+                            <p>Awaiting Results</p>
+                            <h2 id="awaitingResultsCount">0</h2>
+                            <span>Completed procedures without findings</span>
+                        </div>
+                    </div>
+
+                    <div class="results-stat-card">
+                        <div class="results-stat-icon orange">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="results-stat-info">
+                            <p>Draft Results</p>
+                            <h2 id="draftResultsCount">0</h2>
+                            <span>Findings saved as draft</span>
+                        </div>
+                    </div>
+
+                    <div class="results-stat-card">
+                        <div class="results-stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="results-stat-info">
+                            <p>Results Completed</p>
+                            <h2 id="completedResultsCount">0</h2>
+                            <span>Findings submitted</span>
+                        </div>
+                    </div>
+
+                    <div class="results-stat-card">
+                        <div class="results-stat-icon purple">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div class="results-stat-info">
+                            <p>Total Results</p>
+                            <h2 id="totalResultsCount">0</h2>
+                            <span>Recorded imaging results</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PROCEDURES AWAITING RESULTS -->
+                <section class="results-section-card">
+
+                    <div class="results-section-heading">
+                        <div>
+                            <h3><i class="fas fa-list-check"></i> Procedures Awaiting Results</h3>
+                            <p>Completed imaging procedures that require findings entry.</p>
+                        </div>
+
+                        <button class="results-refresh-btn" id="refreshResults" type="button">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="results-toolbar">
+                        <div class="results-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="procedureSearch"
+                                placeholder="Search patient, schedule ID or examination...">
+                        </div>
+
+                        <select id="procedurePriorityFilter">
+                            <option value="all">All Priorities</option>
+                            <option value="routine">Routine</option>
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+
+                    <div class="results-table-wrapper">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Schedule ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Completed Date</th>
+                                    <th>Priority</th>
+                                    <th>Technician</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="awaitingResultsBody">
+                                <tr>
+                                    <td colspan="7" class="empty-state">
+                                        No procedures awaiting results.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="results-table-note" id="awaitingResultsNote">
+                        No pending procedures.
+                    </p>
+
+                </section>
+
+                <!-- RECENT RESULTS -->
+                <section class="results-section-card">
+
+                    <div class="results-section-heading">
+                        <div>
+                            <h3><i class="fas fa-file-medical-alt"></i> Recent Imaging Results</h3>
+                            <p>Previously recorded diagnostic findings.</p>
+                        </div>
+                    </div>
+
+                    <div class="results-toolbar">
+                        <div class="results-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="savedResultSearch" placeholder="Search saved results...">
+                        </div>
+
+                        <select id="resultStatusFilter">
+                            <option value="all">All Statuses</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="results-table-wrapper">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Result ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Result Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="savedResultsBody">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        No imaging results recorded.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="results-table-note" id="savedResultsNote">
+                        No saved results available.
+                    </p>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- ENTER RESULT MODAL -->
+    <div class="results-modal" id="resultModal">
+        <div class="results-modal-content">
+
+            <div class="results-modal-header">
+                <div>
+                    <h3 id="resultModalTitle">Enter Imaging Findings</h3>
+                    <p>Record the findings for this imaging procedure.</p>
+                </div>
+                <button type="button" class="results-close-btn" id="closeResultModal">
+                    &times;
+                </button>
+            </div>
+
+            <div class="results-patient-info">
+                <div>
+                    <span>Schedule ID</span>
+                    <strong id="modalScheduleId">-</strong>
+                </div>
+                <div>
+                    <span>Patient</span>
+                    <strong id="modalPatientName">-</strong>
+                </div>
+                <div>
+                    <span>Patient ID</span>
+                    <strong id="modalPatientId">-</strong>
+                </div>
+                <div>
+                    <span>Examination</span>
+                    <strong id="modalExamination">-</strong>
+                </div>
+                <div>
+                    <span>Referring Doctor</span>
+                    <strong id="modalDoctorName">-</strong>
+                </div>
+                <div>
+                    <span>Completed Date</span>
+                    <strong id="modalCompletedDate">-</strong>
+                </div>
+            </div>
+
+            <form id="resultForm">
+                <input type="hidden" id="resultScheduleId">
+
+                <div class="results-form-group">
+                    <label for="findings">Findings <span>*</span></label>
+                    <textarea id="findings" rows="5" placeholder="Enter detailed imaging observations and findings..."
+                        required></textarea>
+                </div>
+
+                <div class="results-form-group">
+                    <label for="impression">Impression / Conclusion <span>*</span></label>
+                    <textarea id="impression" rows="3" placeholder="Enter the radiological impression or conclusion..."
+                        required></textarea>
+                </div>
+
+                <div class="results-form-group">
+                    <label for="recommendations">Recommendations</label>
+                    <textarea id="recommendations" rows="2" placeholder="Enter recommendations, if any..."></textarea>
+                </div>
+
+                <div class="results-form-group">
+                    <label for="resultNotes">Additional Notes</label>
+                    <textarea id="resultNotes" rows="2" placeholder="Optional notes..."></textarea>
+                </div>
+
+                <p class="results-form-message" id="resultFormMessage"></p>
+
+                <div class="results-modal-actions">
+                    <button type="button" class="results-cancel-btn" id="cancelResult">
+                        Cancel
+                    </button>
+
+                    <button type="button" class="results-draft-btn" id="saveDraftBtn">
+                        <i class="fas fa-save"></i> Save Draft
+                    </button>
+
+                    <button type="submit" class="results-submit-btn">
+                        <i class="fas fa-check"></i> Submit Result
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- VIEW RESULT MODAL -->
+    <div class="results-modal" id="viewResultModal">
+        <div class="results-modal-content">
+
+            <div class="results-modal-header">
+                <div>
+                    <h3>Imaging Result Details</h3>
+                    <p>Review the recorded findings.</p>
+                </div>
+                <button type="button" class="results-close-btn" id="closeViewResult">
+                    &times;
+                </button>
+            </div>
+
+            <div class="results-details-grid">
+                <div><span>Result ID</span><strong id="viewResultId">-</strong></div>
+                <div><span>Patient</span><strong id="viewPatientName">-</strong></div>
+                <div><span>Examination</span><strong id="viewExamination">-</strong></div>
+                <div><span>Result Date</span><strong id="viewResultDate">-</strong></div>
+                <div><span>Status</span><strong id="viewResultStatus">-</strong></div>
+                <div><span>Recorded By</span><strong id="viewRecordedBy">-</strong></div>
+
+                <div class="result-detail-block">
+                    <span>Findings</span>
+                    <p id="viewFindings">-</p>
+                </div>
+
+                <div class="result-detail-block">
+                    <span>Impression / Conclusion</span>
+                    <p id="viewImpression">-</p>
+                </div>
+
+                <div class="result-detail-block">
+                    <span>Recommendations</span>
+                    <p id="viewRecommendations">-</p>
+                </div>
+
+                <div class="result-detail-block">
+                    <span>Additional Notes</span>
+                    <p id="viewNotes">-</p>
+                </div>
+            </div>
+
+            <div class="results-modal-actions">
+                <button type="button" class="results-cancel-btn" id="closeViewResultBtn">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

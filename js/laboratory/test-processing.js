@@ -971,31 +971,41 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.form?.addEventListener("submit", saveProcessing);
 
 
+
     /* =========================================
        19. LOGOUT
     ========================================= */
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    elements.logoutButton?.addEventListener("click", () => {
-        const confirmLogout = confirm(
-            "Are you sure you want to logout?"
-        );
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            const shouldLogout = window.confirm(
+                "Are you sure you want to logout?"
+            );
 
-        if (!confirmLogout) return;
+            if (!shouldLogout) return;
 
-        localStorage.removeItem("semasacareSession");
-
-        window.location.href = "../login.html";
-    });
-
+            SemasaAuth.logout();
+            window.location.href = "../login.html";
+        });
+    }
 
     /* =========================================
-       20. MOBILE SIDEBAR
+       20. SIDEBAR MENU
     ========================================= */
 
     elements.menuToggle?.addEventListener("click", () => {
         elements.sidebar?.classList.toggle("active");
     });
 
+    // Close sidebar after selecting a menu item
+    elements.sidebar?.querySelectorAll(".menu-item").forEach(link => {
+
+        link.addEventListener("click", () => {
+            elements.sidebar.classList.remove("active");
+        });
+
+    });
 
     /* =========================================
        21. STORAGE SYNCHRONIZATION

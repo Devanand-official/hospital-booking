@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Radiology Scheduling | SemasaCare</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/radiology-scheduling.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/radiology/scheduling.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>SemasaCare</span>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-icon">
+                    <i class="fas fa-x-ray"></i>
+                </div>
+
+                <div>
+                    <h3 id="radiologyName">Radiology Technician</h3>
+                    <p>Radiology Department</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="menu-heading">RADIOLOGY</p>
+
+                <a href="requests.html" class="menu-item">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Imaging Requests</span>
+                    <span class="menu-badge" id="pendingRadiologyBadge">0</span>
+                </a>
+
+                <a href="scheduling.html" class="menu-item active">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Scheduling</span>
+                </a>
+
+                <a href="imaging.html" class="menu-item">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Imaging</span>
+                </a>
+
+                <a href="results.html" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Results</span>
+                </a>
+
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-waveform"></i>
+                    <span>Radiology Reports</span>
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP NAVBAR -->
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div>
+                        <h2>Radiology Scheduling</h2>
+                        <p>Manage imaging appointments and schedules</p>
+                    </div>
+
+                </div>
+
+                <div class="header-profile">
+
+                    <div class="header-avatar">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+
+                    <div class="header-profile-info">
+                        <h4 id="headerName">Radiology Technician</h4>
+                        <span>Radiology Department</span>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <section class="dashboard-content">
+
+                <!-- PAGE HEADING -->
+                <div class="page-heading">
+
+                    <div>
+                        <h1>Imaging Schedule</h1>
+                        <p>
+                            Schedule accepted imaging requests and manage
+                            upcoming diagnostic appointments.
+                        </p>
+                    </div>
+
+                    <div class="dashboard-date" id="dashboardDate">
+                        <i class="fas fa-calendar-days"></i>
+                        <span>Loading date...</span>
+                    </div>
+
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="radiology-schedule-stats">
+
+                    <article class="radiology-schedule-stat-card">
+                        <div class="radiology-schedule-stat-icon teal">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+
+                        <div class="radiology-schedule-stat-info">
+                            <p>Awaiting Scheduling</p>
+                            <h2 id="awaitingSchedulingCount">0</h2>
+                            <span>Accepted requests</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-schedule-stat-card">
+                        <div class="radiology-schedule-stat-icon blue">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+
+                        <div class="radiology-schedule-stat-info">
+                            <p>Scheduled Today</p>
+                            <h2 id="scheduledTodayCount">0</h2>
+                            <span>Today's appointments</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-schedule-stat-card">
+                        <div class="radiology-schedule-stat-icon orange">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+
+                        <div class="radiology-schedule-stat-info">
+                            <p>Upcoming Appointments</p>
+                            <h2 id="upcomingAppointmentsCount">0</h2>
+                            <span>Future appointments</span>
+                        </div>
+                    </article>
+
+                    <article class="radiology-schedule-stat-card">
+                        <div class="radiology-schedule-stat-icon green">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+
+                        <div class="radiology-schedule-stat-info">
+                            <p>Completed Schedules</p>
+                            <h2 id="completedSchedulesCount">0</h2>
+                            <span>Completed imaging</span>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- ACCEPTED REQUESTS -->
+                <section class="section-card radiology-schedule-section">
+
+                    <div class="section-heading radiology-schedule-heading">
+
+                        <div>
+                            <h3>
+                                <i class="fas fa-calendar-plus"></i>
+                                Accepted Requests
+                            </h3>
+
+                            <p>
+                                Imaging requests approved and awaiting
+                                appointment scheduling.
+                            </p>
+                        </div>
+
+                        <button type="button" class="schedule-refresh-btn" id="refreshAcceptedRequests">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+
+                    </div>
+
+                    <div class="radiology-schedule-toolbar">
+
+                        <div class="radiology-schedule-search">
+                            <i class="fas fa-search"></i>
+
+                            <input type="search" id="acceptedRequestSearch"
+                                placeholder="Search patient, request ID or examination..."
+                                aria-label="Search accepted requests">
+                        </div>
+
+                        <select id="acceptedPriorityFilter" aria-label="Filter by priority">
+                            <option value="all">All Priorities</option>
+                            <option value="routine">Routine</option>
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="critical">Critical</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table radiology-schedule-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Requested By</th>
+                                    <th>Priority</th>
+                                    <th>Accepted Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="acceptedRequestsBody">
+                                <tr>
+                                    <td colspan="7" class="empty-message">
+                                        Loading accepted requests...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <p class="radiology-schedule-table-note" id="acceptedRequestsNote" aria-live="polite"></p>
+
+                </section>
+
+                <!-- UPCOMING SCHEDULES -->
+                <section class="section-card radiology-schedule-section">
+
+                    <div class="section-heading radiology-schedule-heading">
+
+                        <div>
+                            <h3>
+                                <i class="fas fa-calendar-check"></i>
+                                Upcoming Imaging Appointments
+                            </h3>
+
+                            <p>
+                                View and manage scheduled imaging appointments.
+                            </p>
+                        </div>
+
+                        <span class="schedule-count" id="scheduleCount">
+                            0 appointments
+                        </span>
+
+                    </div>
+
+                    <div class="radiology-schedule-toolbar">
+
+                        <div class="radiology-schedule-search">
+                            <i class="fas fa-search"></i>
+
+                            <input type="search" id="scheduleSearch" placeholder="Search patient or examination..."
+                                aria-label="Search scheduled appointments">
+                        </div>
+
+                        <select id="scheduleStatusFilter" aria-label="Filter schedules by status">
+                            <option value="all">All Statuses</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="in progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table radiology-schedule-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Schedule ID</th>
+                                    <th>Patient</th>
+                                    <th>Examination</th>
+                                    <th>Schedule Date</th>
+                                    <th>Time</th>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="upcomingSchedulesBody">
+                                <tr>
+                                    <td colspan="8" class="empty-message">
+                                        No imaging appointments scheduled.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <p class="radiology-schedule-table-note" id="upcomingSchedulesNote" aria-live="polite"></p>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- SCHEDULE APPOINTMENT MODAL -->
+    <div class="radiology-schedule-modal" id="scheduleModal" aria-hidden="true">
+
+        <div class="radiology-schedule-modal-content">
+
+            <div class="radiology-schedule-modal-header">
+
+                <div>
+                    <h2>Schedule Imaging Appointment</h2>
+                    <p>Assign an appointment date, time and room.</p>
+                </div>
+
+                <button type="button" class="schedule-modal-close" id="closeScheduleModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+
+            </div>
+
+            <form id="scheduleForm">
+
+                <div class="radiology-schedule-modal-body">
+
+                    <!-- REQUEST DETAILS -->
+                    <div class="schedule-request-summary">
+
+                        <h3>
+                            <i class="fas fa-file-medical"></i>
+                            Request Information
+                        </h3>
+
+                        <div class="schedule-summary-grid">
+
+                            <div>
+                                <span>Request ID</span>
+                                <strong id="scheduleRequestId">N/A</strong>
+                            </div>
+
+                            <div>
+                                <span>Patient</span>
+                                <strong id="schedulePatientName">N/A</strong>
+                            </div>
+
+                            <div>
+                                <span>Examination</span>
+                                <strong id="scheduleExamination">N/A</strong>
+                            </div>
+
+                            <div>
+                                <span>Priority</span>
+                                <strong id="schedulePriority">N/A</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="scheduleRequestKey">
+
+                    <!-- APPOINTMENT DATE -->
+                    <div class="schedule-form-grid">
+
+                        <div class="schedule-form-group">
+
+                            <label for="scheduleDate">
+                                Appointment Date
+                                <span>*</span>
+                            </label>
+
+                            <input type="date" id="scheduleDate" name="scheduleDate" required>
+
+                        </div>
+
+                        <!-- APPOINTMENT TIME -->
+                        <div class="schedule-form-group">
+
+                            <label for="scheduleTime">
+                                Appointment Time
+                                <span>*</span>
+                            </label>
+
+                            <input type="time" id="scheduleTime" name="scheduleTime" required>
+
+                        </div>
+
+                        <!-- ROOM -->
+                        <div class="schedule-form-group">
+
+                            <label for="scheduleRoom">
+                                Imaging Room
+                                <span>*</span>
+                            </label>
+
+                            <select id="scheduleRoom" name="scheduleRoom" required>
+
+                                <option value="">Select Room</option>
+                                <option value="X-Ray Room 1">X-Ray Room 1</option>
+                                <option value="X-Ray Room 2">X-Ray Room 2</option>
+                                <option value="CT Scan Room">CT Scan Room</option>
+                                <option value="MRI Room">MRI Room</option>
+                                <option value="Ultrasound Room">Ultrasound Room</option>
+                                <option value="Mammography Room">Mammography Room</option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- TECHNICIAN -->
+                        <div class="schedule-form-group">
+
+                            <label for="scheduleTechnician">
+                                Assigned Technician
+                                <span>*</span>
+                            </label>
+
+                            <input type="text" id="scheduleTechnician" name="scheduleTechnician"
+                                placeholder="Enter technician name" required>
+
+                        </div>
+
+                        <!-- NOTES -->
+                        <div class="schedule-form-group full-width">
+
+                            <label for="scheduleNotes">
+                                Scheduling Notes
+                            </label>
+
+                            <textarea id="scheduleNotes" name="scheduleNotes" rows="3"
+                                placeholder="Enter preparation instructions or additional notes..."></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <p class="schedule-form-message" id="scheduleFormMessage" aria-live="polite"></p>
+
+                </div>
+
+                <!-- MODAL FOOTER -->
+                <div class="radiology-schedule-modal-footer">
+
+                    <button type="button" class="schedule-cancel-btn" id="cancelSchedule">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="schedule-submit-btn" id="confirmScheduleBtn">
+                        <i class="fas fa-calendar-check"></i>
+                        Confirm Schedule
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- VIEW SCHEDULE DETAILS MODAL -->
+    <div class="radiology-schedule-modal" id="scheduleDetailsModal" aria-hidden="true">
+
+        <div class="radiology-schedule-modal-content">
+
+            <div class="radiology-schedule-modal-header">
+
+                <div>
+                    <h2>Appointment Details</h2>
+                    <p>Review scheduled imaging information.</p>
+                </div>
+
+                <button type="button" class="schedule-modal-close" id="closeScheduleDetails" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+
+            </div>
+
+            <div class="radiology-schedule-modal-body">
+
+                <div class="schedule-summary-grid details-grid">
+
+                    <div>
+                        <span>Schedule ID</span>
+                        <strong id="detailScheduleId">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Request ID</span>
+                        <strong id="detailScheduleRequestId">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Patient</span>
+                        <strong id="detailSchedulePatient">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Examination</span>
+                        <strong id="detailScheduleExamination">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Date</span>
+                        <strong id="detailScheduleDate">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Time</span>
+                        <strong id="detailScheduleTime">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Room</span>
+                        <strong id="detailScheduleRoom">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Technician</span>
+                        <strong id="detailScheduleTechnician">N/A</strong>
+                    </div>
+
+                    <div>
+                        <span>Status</span>
+                        <strong id="detailScheduleStatus">N/A</strong>
+                    </div>
+
+                    <div class="full-width">
+                        <span>Scheduling Notes</span>
+                        <strong id="detailScheduleNotes">No notes available.</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="radiology-schedule-modal-footer">
+
+                <button type="button" class="schedule-cancel-btn" id="closeScheduleDetailsBtn">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

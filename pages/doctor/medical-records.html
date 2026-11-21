@@ -283,6 +283,98 @@
                             </div>
                             <!-- END LABORATORY TEST ORDERING -->
 
+                            <!-- RADIOLOGY IMAGING ORDERS -->
+                            <div class="form-group full-width radiology-order-section">
+
+                                <div class="lab-order-heading">
+                                    <div>
+                                        <h3><i class="fas fa-x-ray"></i> Radiology Imaging Orders</h3>
+                                        <p>Request imaging examinations for the selected patient.</p>
+                                    </div>
+                                    <span class="lab-order-tag">Optional</span>
+                                </div>
+
+                                <div class="lab-test-grid">
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="X-Ray">
+                                        <span>X-Ray</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="Ultrasound">
+                                        <span>Ultrasound</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="CT Scan">
+                                        <span>CT Scan</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="MRI Scan">
+                                        <span>MRI Scan</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="Mammography">
+                                        <span>Mammography</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="Fluoroscopy">
+                                        <span>Fluoroscopy</span>
+                                    </label>
+
+                                    <label class="lab-test-option">
+                                        <input type="checkbox" name="radiologyExamination" value="DEXA Scan">
+                                        <span>DEXA Scan</span>
+                                    </label>
+
+                                </div>
+
+                                <div class="lab-order-fields">
+
+                                    <div class="form-group">
+                                        <label for="radiologyPriority">Imaging Priority</label>
+                                        <select id="radiologyPriority">
+                                            <option value="Routine">Routine</option>
+                                            <option value="Low">Low</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="High">High</option>
+                                            <option value="Urgent">Urgent</option>
+                                            <option value="Critical">Critical</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="radiologyClinicalNotes">Clinical Notes</label>
+                                        <textarea id="radiologyClinicalNotes" rows="3"
+                                            placeholder="Reason for imaging and relevant clinical details">
+            </textarea>
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label for="radiologyInstructions">Special Instructions</label>
+                                        <textarea id="radiologyInstructions" rows="2"
+                                            placeholder="Preparation instructions or other requirements">
+            </textarea>
+                                    </div>
+
+                                </div>
+
+                                <div class="lab-order-actions">
+                                    <button type="button" id="sendRadiologyRequestBtn" class="lab-send-request-btn">
+                                        <i class="fas fa-paper-plane"></i> Send Radiology Request
+                                    </button>
+
+                                    <p id="radiologyRequestMessage" class="form-message" aria-live="polite">
+                                    </p>
+                                </div>
+
+                            </div>
+                            <!-- END RADIOLOGY IMAGING ORDERS -->
+
 
                             <div class="form-group full-width">
                                 <label for="treatment">Treatment / Advice</label>

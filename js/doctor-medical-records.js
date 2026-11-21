@@ -60,6 +60,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const labRequestMessage =
         document.getElementById("labRequestMessage");
 
+    // Radiology order elements
+    const sendRadiologyRequestBtn =
+        document.getElementById("sendRadiologyRequestBtn");
+
+    const radiologyPriority =
+        document.getElementById("radiologyPriority");
+
+    const radiologyClinicalNotes =
+        document.getElementById("radiologyClinicalNotes");
+
+    const radiologyInstructions =
+        document.getElementById("radiologyInstructions");
+
+    const radiologyRequestMessage =
+        document.getElementById("radiologyRequestMessage");
+
     // Patient history elements
     const patientHistorySection =
         document.getElementById("patientHistorySection");
@@ -85,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const RECORDS_KEY = "semasacareMedicalRecords";
     const LAB_REQUESTS_KEY = "semasacareLabRequests";
+    const RADIOLOGY_REQUESTS_KEY = "semasacareRadiologyRequests";
 
     function readStorage(key) {
 
@@ -153,6 +170,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function getRadiologyRequests() {
+        return readStorage(RADIOLOGY_REQUESTS_KEY);
+    }
+
+    function saveRadiologyRequests(requests) {
+        try {
+            localStorage.setItem(
+                RADIOLOGY_REQUESTS_KEY,
+                JSON.stringify(requests)
+            );
+
+            return true;
+
+        } catch (error) {
+            console.error("Unable to save radiology request:", error);
+            return false;
+        }
+    }
+
+    function generateRadiologyRequestId() {
+        const requests = getRadiologyRequests();
+
+        let requestId;
+
+        do {
+            requestId =
+                "RAD-" +
+                Date.now().toString().slice(-8) +
+                Math.floor(Math.random() * 100);
+
+        } while (
+            requests.some(item =>
+                String(item.requestId || item.id) === requestId
+            )
+        );
+
+        return requestId;
+    }
 
     function generateLabRequestId() {
 
@@ -412,6 +467,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("visitDate").value =
             getLocalDateString();
+        // Reset Radiology order fields
+        document.querySelectorAll(
+            'input[name="radiologyExamination"]'
+        ).forEach(input => {
+            input.checked = false;
+        });
+
+        if (radiologyPriority) {
+            radiologyPriority.value = "Routine";
+        }
+
+        if (radiologyClinicalNotes) {
+            radiologyClinicalNotes.value = "";
+        }
+
+        if (radiologyInstructions) {
+            radiologyInstructions.value = "";
+        }
+
+        if (radiologyRequestMessage) {
+            radiologyRequestMessage.textContent = "";
+        }
     }
 
 
@@ -759,6 +836,153 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    // =====================================
+    // SEND RADIOLOGY REQUEST
+    // =====================================
+
+    sendRadiologyRequestBtn?.addEventListener("click", function () {
+
+        if (radiologyRequestMessage) {
+            radiologyRequestMessage.textContent = "";
+            radiologyRequestMessage.style.color = "#dc2626";
+        }
+
+        // Validate selected patient
+        const selectedPatient = assignedPatients.find(
+            patient =>
+                String(patient._key) === String(patientSelect.value)
+        );
+
+        if (!selectedPatient) {
+            radiologyRequestMessage.textContent =
+                "Please select a valid patient first.";
+            return;
+        }
+
+        // Get selected examinations
+        const selectedExaminations = Array.from(
+            document.querySelectorAll(
+                'input[name="radiologyExamination"]:checked'
+            )
+        ).map(input => input.value);
+
+        if (selectedExaminations.length === 0) {
+            radiologyRequestMessage.textContent =
+                "Please select at least one imaging examination.";
+            return;
+        }
+
+        // Validate diagnosis
+        const diagnosis = diagnosisInput.value.trim();
+
+        if (!diagnosis) {
+            radiologyRequestMessage.textContent =
+                "Please enter the diagnosis before sending the radiology request.";
+            return;
+        }
+
+        const requests = getRadiologyRequests();
+
+        const requestId = generateRadiologyRequestId();
+        const currentDate = getLocalDateString();
+        const currentTimestamp = new Date().toISOString();
+
+        const symptoms = symptomsInput.value.trim();
+        const additionalNotes =
+            radiologyClinicalNotes?.value.trim() || "";
+
+        // Build request using the Radiology module's expected fields
+        const radiologyRequest = {
+
+            id: requestId,
+            requestId: requestId,
+
+            patientId: selectedPatient.id || "",
+            patientName: selectedPatient.name || "Unknown Patient",
+            patientEmail: selectedPatient.email || "",
+            patientPhone: selectedPatient.phone || "",
+
+            doctorId: doctorId,
+            doctorEmail: doctorEmail,
+            doctorName: currentUser.name || "Doctor",
+
+            examinations: selectedExaminations,
+            examination: selectedExaminations.join(", "),
+
+            priority: radiologyPriority?.value || "Routine",
+
+            clinicalNotes: [
+                "Symptoms: " + (symptoms || "Not specified"),
+                "Diagnosis: " + diagnosis,
+                "Additional notes: " + (additionalNotes || "None")
+            ].join("\n"),
+
+            instructions: radiologyInstructions?.value.trim() || "",
+
+            requestDate: currentDate,
+            requestedAt: currentTimestamp,
+            createdAt: currentTimestamp,
+
+            medicalRecordId:
+                document.getElementById("recordId").value || "",
+
+            status: "Pending",
+
+            source: "Doctor Medical Records"
+        };
+
+        try {
+            requests.push(radiologyRequest);
+
+            if (!saveRadiologyRequests(requests)) {
+                throw new Error("Unable to save radiology request.");
+            }
+
+            // Notify other scripts in the same browser tab
+            window.dispatchEvent(
+                new CustomEvent("semasacare:radiologyRequestsUpdated", {
+                    detail: {
+                        requestId: requestId
+                    }
+                })
+            );
+
+            // Reset Radiology order fields
+            document.querySelectorAll(
+                'input[name="radiologyExamination"]:checked'
+            ).forEach(input => {
+                input.checked = false;
+            });
+
+            if (radiologyPriority) {
+                radiologyPriority.value = "Routine";
+            }
+
+            if (radiologyClinicalNotes) {
+                radiologyClinicalNotes.value = "";
+            }
+
+            if (radiologyInstructions) {
+                radiologyInstructions.value = "";
+            }
+
+            radiologyRequestMessage.style.color = "#078b8c";
+
+            radiologyRequestMessage.textContent =
+                `Radiology request ${requestId} sent successfully.`;
+
+            alert(
+                "Radiology request sent successfully!\n" +
+                "Request ID: " + requestId
+            );
+
+        } catch (error) {
+            console.error("Radiology request error:", error);
+
+            radiologyRequestMessage.textContent =
+                "Unable to send the radiology request. Please try again.";
+        }
+    });
 
     // =====================================
     // 11. DISPLAY MEDICAL RECORDS

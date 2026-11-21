@@ -50,7 +50,14 @@ const SemasaAuth = (() => {
             email: "accountant@semasacare.com",
             password: "Accountant@123",
             role: "accountant"
-        }
+        },
+        {
+            id: 8,
+            name: "Radiology Technician",
+            email: "radiology@semasacare.com",
+            password: "Radio@123",
+            role: "radiology"
+        },
     ];
 
     // Dashboard pages for each role
@@ -61,7 +68,8 @@ const SemasaAuth = (() => {
         patient: "patient-dashboard.html",
         pharmacist: "../pharmacist/dashboard.html",
         laboratory: "../laboratory/dashboard.html",
-        accountant: "accountant-dashboard.html"
+        radiology: "../radiology/dashboard.html",
+        accountant: "accountant-dashboard.html",
     };
 
     // Get registered users from localStorage
@@ -220,7 +228,8 @@ const SemasaAuth = (() => {
             "/dashboards/",
             "/doctor/",
             "/laboratory/",
-            "/pharmacist/"
+            "/pharmacist/",
+            "/radiology/"
         ];
 
         const isRolePage = roleFolders.some(folder =>
